@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+import './privatgruppe.dart';
+
+class StyleDecorator {
+  static const textstil = TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold);
+  //const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold);
+}
+
 class TableExampleApp extends StatelessWidget {
   const TableExampleApp({super.key});
 
@@ -13,65 +20,44 @@ class TableExampleApp extends StatelessWidget {
     );
   }
 }
+/*
+ TODO Make table work
+ ! First add return-to-front-page button
+ ? Background canvas?
+ * Music playing
+*/
 
 class TableExample extends StatelessWidget {
   const TableExample({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Table(
-      border: TableBorder.all(),
-      columnWidths: const <int, TableColumnWidth>{
-        0: IntrinsicColumnWidth(),
-        1: FlexColumnWidth(),
-        2: FixedColumnWidth(64),
-      },
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: <TableRow>[
-        TableRow(
-          children: <Widget>[
-            Container(
-              height: 32,
-              color: Colors.green,
-            ),
-            TableCell(
-              verticalAlignment: TableCellVerticalAlignment.top,
-              child: Container(
-                height: 32,
-                width: 32,
-                color: Colors.red,
-              ),
-            ),
-            Container(
-              height: 64,
-              color: Colors.blue,
-            ),
-          ],
-        ),
-        TableRow(
-          decoration: const BoxDecoration(
-            color: Colors.grey,
+    try{
+    return DataTable(
+      columns: <DataColumn>[
+        for (var name in wirhier.names)
+        DataColumn(  
+          label: Expanded(
+          child: Text(name, style: StyleDecorator.textstil),
           ),
-          children: <Widget>[
-            Container(
-              height: 64,
-              width: 128,
-              color: Colors.purple,
-            ),
-            Container(
-              height: 32,
-              color: Colors.yellow,
-            ),
-            Center(
-              child: Container(
-                height: 32,
-                width: 32,
-                color: Colors.orange,
-              ),
-            ),
+        ),
+      ],
+      rows: <DataRow>[
+        for (int j=0; j<3; j++)
+        const // TODO make dynamic
+        DataRow(
+          cells: <DataCell>[
+            DataCell(Text('0')),
+            DataCell(Text('0')),
+            DataCell(Text('0')),
+            DataCell(Text('0')),
           ],
         ),
       ],
     );
+
   }
-}
+    catch (exception){
+    return Text(exception.toString());
+  }
+}}
