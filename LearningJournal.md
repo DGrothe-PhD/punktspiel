@@ -21,3 +21,9 @@
   - update table and sums per player
   - annotate who's opening each round,\
     stop discussions on that part 😀
+
+## 28.10.2024
+
+* Experimenting with file reading and parameterized constructors
+* Dumped data table to restart with text
+* Design decision: Minimum task fulfilment
