@@ -1,4 +1,6 @@
 # Miscellaneous
+privat*
+#assets/data/*
 *.class
 *.log
 *.pyc

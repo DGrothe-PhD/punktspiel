@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import './table.dart';
+import './calc.dart';
 
 void main() {
   runApp(const MyApp());
-  //runApp(const TableExampleApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -59,7 +58,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TableExample tableExample = const TableExample();
+  final List<Teilnehmer> gruppe = [];
+  // Having the group prepared here, the table is generated first, that is, empty.
+  // I dont quite understand it, it is against what I've remembered from c++ OOP.
+  //List names = ["Eins", "Zwei", "Drei", "Vier" ];
+
+  _MyHomePageState(){
+    /*
+    for(int i=0;i<3; i++){
+      gruppe.add(Teilnehmer(name: names[i]));
+    }*/
+  }
   TableExampleApp punkteTabelle = const TableExampleApp();
   int _counter = 0;
 
@@ -128,10 +137,13 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            ElevatedButton(
+            SizedBox(
+              width: 100,
+              height: 50,
+              child: ElevatedButton(
               onPressed: showPoints,
               child: const Text("Tabelle"),
-            ),
+            ),),
           ],
         ),
       ),

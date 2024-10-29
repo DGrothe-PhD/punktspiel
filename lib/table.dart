@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import './privatgruppe.dart';
+import './calc.dart';
 
 class StyleDecorator {
   static const textstil = TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold);
@@ -15,7 +14,7 @@ class TableExampleApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text('Table Sample')),
-        body: const TableExample(),
+        body: TableExample(),
       ),
     );
   }
@@ -28,36 +27,25 @@ class TableExampleApp extends StatelessWidget {
 */
 
 class TableExample extends StatelessWidget {
-  const TableExample({super.key});
+  final List<Teilnehmer> gruppe = [];
+  final List names = ["Eins", "Zwei", "Drei", "Vier" ];
+  TableExample({super.key});
 
   @override
   Widget build(BuildContext context) {
-    try{
-    return DataTable(
-      columns: <DataColumn>[
-        for (var name in wirhier.names)
-        DataColumn(  
-          label: Expanded(
-          child: Text(name, style: StyleDecorator.textstil),
-          ),
-        ),
-      ],
-      rows: <DataRow>[
-        for (int j=0; j<3; j++)
-        const // TODO make dynamic
-        DataRow(
-          cells: <DataCell>[
-            DataCell(Text('0')),
-            DataCell(Text('0')),
-            DataCell(Text('0')),
-            DataCell(Text('0')),
-          ],
-        ),
-      ],
-    );
-
+    try {
+      for(int i=0;i<3; i++){
+        gruppe.add(Teilnehmer(name: names[i]));
+      }
+      String placeholder = "Hallo erstmal\n";
+      for(var player in gruppe){
+        placeholder += "${player.name}: ${player.punkte.toString()}\n";
+        placeholder += " - Punkte insgesamt: ${player.sumPoints()}\n\n";
+      }
+      return Text(placeholder);
   }
     catch (exception){
-    return Text(exception.toString());
+      //Make exception readable.
+      return Text(exception.toString());
   }
 }}
