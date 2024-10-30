@@ -2,17 +2,13 @@
 
 ## 25.10.2024
 
-* Installed SDK and VSCode Extension for Flutter
-* Created template app
-* ✨New GitHub repo, got an idea 💡
+* Installed SDK and VSCode Extension for Flutter, created template app
 * Explored Text input field updating a displayed text
 * ElevatedButton to show template table
 
 ## 26.10.2024
 
-* Fiddling with Table, putting aside
-* Switched to DataTable
-* Externalized player names 🔐
+* Fiddling with Tables and DataTable
 * For-in and C-like for loops
 * Basic exception handling
 * List of strings
@@ -27,3 +23,7 @@
 * Experimenting with file reading and parameterized constructors
 * Dumped data table to restart with text
 * Design decision: Minimum task fulfilment
+
+## 30.10.2024
+* Added markdown support to flatten table code structure
+* Closing button
