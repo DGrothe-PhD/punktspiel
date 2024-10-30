@@ -8,6 +8,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  //final TableExampleApp punkteTabelle = const TableExampleApp();
 
   // This widget is the root of your application.
   @override
@@ -34,7 +35,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Punktspiel'),
-
+      /*routes: {
+        "punktestand" : (context) => punkteTabelle
+      },*/
     );
   }
 }
@@ -59,16 +62,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Teilnehmer> gruppe = [];
-  // Having the group prepared here, the table is generated first, that is, empty.
-  // I dont quite understand it, it is against what I've remembered from c++ OOP.
-  //List names = ["Eins", "Zwei", "Drei", "Vier" ];
 
-  _MyHomePageState(){
-    /*
-    for(int i=0;i<3; i++){
-      gruppe.add(Teilnehmer(name: names[i]));
-    }*/
-  }
+  _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
   int _counter = 0;
 

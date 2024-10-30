@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 //import 'package:flutter/services.dart';
 
 // Idee: Umschreiben. Die Klasse soll keine Daten beinhalten, nur Text zerpflücken und 
@@ -55,4 +56,10 @@ class Teilnehmer{
   }
 
   int sumPoints() => punkte.sum;
+}
+
+extension IntListParsing on List<int>{
+  String enumerateString(){
+    return map((i) => i.toString()).join(", ");
+  }
 }
