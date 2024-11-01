@@ -18,43 +18,45 @@ class StyleDecorator {
 
 class TableExampleApp extends StatelessWidget {
   const TableExampleApp({super.key});
+  // how to update the table?
 
   @override
   Widget build(BuildContext context) {
     // reduce to the max. Returning MaterialApp shows black screen...
     return Scaffold(
-        appBar: AppBar(title: const Text('Table Sample')),
-        body: TableExample(),
+      resizeToAvoidBottomInset : true,
+      appBar: AppBar(title: const Text('SPIELSTAND')),
+      body: 
+      SingleChildScrollView(
+      //  size: 300,
+      //Expanded(
+        child: TableExample(),
+      )
     );
   }
 }
 
-/*
- TODO Make table work
- ! First add return-to-front-page button
- ? Background canvas?
- * Music playing
-*/
-
 class TableExample extends StatelessWidget {
-  final List<Teilnehmer> gruppe = [];
-  final List names = ["Eins", "Zwei", "Drei", "Vier" ];
+  //final List<Teilnehmer> gruppe = [];
+  final List names = Spieler.names;
+  //["Eins", "Zwei", "Drei", "Vier" ];
   final now = DateTime.now();
   TableExample({super.key});
 
   @override
   Widget build(BuildContext context) {
     try {
-      for(int i=0;i<3; i++){
-        gruppe.add(Teilnehmer(name: names[i]));
-      }
+      /*for(int i=0;i<3; i++){
+        Spieler.gruppe.add(Teilnehmer(name: names[i]));
+      }*/
+      Spieler.settings();
       String placeholder = "# Punktestand vom ${DateFormat('dd.MM.yyyy').format(now)}\n";
-      for(var player in gruppe){
+      for(var player in Spieler.gruppe){
         placeholder += "## ${player.name}:\n - ${player.punkte.enumerateString()}\n";
         placeholder += " - Punkte insgesamt: ${player.sumPoints()}\n\n";
       }
-      return Scaffold(
-        body: Center(
+
+      return Center(
           child: Column(
             children: <Widget>[
             StyleDecorator.viewMd(placeholder),
@@ -62,12 +64,12 @@ class TableExample extends StatelessWidget {
               width: 120,
               height: 50,
               child: ElevatedButton(
-              onPressed: () {Navigator.pop(context);},
-              child: const Text("Schließen"),
-            ),),
+                onPressed: () {Navigator.pop(context);},
+                child: const Text("Schließen"),
+              ),
+            ),
           ]
           )
-        )
       );  
   }
     catch (exception){

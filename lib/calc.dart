@@ -1,13 +1,22 @@
 import 'package:collection/collection.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 //import 'package:flutter/services.dart';
 
 // Idee: Umschreiben. Die Klasse soll keine Daten beinhalten, nur Text zerpflücken und 
 // die Punkteberechnung ermöglichen.
 class Spieler{
-  List<Teilnehmer> spieler = [];
-  String daten = "";
+  static List names = ["Eins", "Zwei", "Drei", "Vier" ];
+  static List<Teilnehmer> gruppe = [];
+
+  static void settings(){
+    for(String n in names){
+        gruppe.add(Teilnehmer(name: n));
+    }
+  }
   
+  static void addPoints(String name, int punkte){
+    gruppe[gruppe.indexWhere((element) => element.name == name)].addPoints(punkte);
+  }
   /*Future init() async
   {
     try{
@@ -22,28 +31,28 @@ class Spieler{
     }
   }*/
 
-  void readData()
+  /*void readData()
   {
     try{
       List<String> zeilen = daten.split("\r\n");
       List<String> names = zeilen[0].split(" ");
 
       for(String n in names){
-        spieler.add(Teilnehmer(name : n));
+        gruppe.add(Teilnehmer(name : n));
       }
 
       // extract points like grandma
       for(int i=1;i<zeilen.length;i++){
         List<String> p = zeilen[i].split(" ");
         for(int j=0;j<p.length;j++){
-          spieler[j].addPoints(int.tryParse(p[i]) ?? 0);
+          gruppe[j].addPoints(int.tryParse(p[i]) ?? 0);
         }
       }
     }
     catch(exception){
       print(exception.toString());
     }
-  }
+  }*/
 }
 
 class Teilnehmer{

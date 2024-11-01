@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './table.dart';
 import './calc.dart';
 
@@ -16,21 +17,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Punktspiel',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
@@ -61,7 +47,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Teilnehmer> gruppe = [];
+  //final List<Teilnehmer> gruppe = [];
+  final myController = TextEditingController();
+  int myPoints = 0;
 
   _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
@@ -87,6 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // TODO give combobox for names
+  // TODO make names list editable by typing comma-sep. names in a field
+  // TODO update that combobox with the "new" names
+  // TODO add points of selected player to his/her list of results.
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -110,19 +103,6 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
@@ -132,6 +112,32 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            Container(
+              margin: const EdgeInsets.all(12),
+              //height: 100,
+              //width: 100,
+              child: TextField(
+                controller: myController,
+                //onChanged Ereignis updated automatisch den angezeigten Text
+                onChanged: (newText) {myPoints = int.tryParse(newText) ?? 0;},
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Punkte:',
+                  isDense: true,// Added this
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 100,
+              height: 50,
+              child: ElevatedButton(
+              onPressed: showPoints,
+              child: const Text("Eintragen"),
+            ),),
             SizedBox(
               width: 100,
               height: 50,
