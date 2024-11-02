@@ -4,6 +4,7 @@ import './table.dart';
 import './calc.dart';
 
 void main() {
+  Spieler.settings();
   runApp(const MyApp());
 }
 
@@ -50,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //final List<Teilnehmer> gruppe = [];
   final myController = TextEditingController();
   int myPoints = 0;
+  String myName = Spieler.names.first;
 
   _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
@@ -64,6 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  void submitPoints() {
+    Spieler.addPoints(myName, myPoints);
   }
 
   void showPoints() {
@@ -131,11 +137,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
+            DropdownMenu<String>(
+              initialSelection: Spieler.names.first,
+              onSelected: (String? value){
+                myName = value ?? "";
+                //setState(() {dropdownValue = value};);
+              },
+              dropdownMenuEntries: Spieler.names.map<DropdownMenuEntry<String>>(
+                (String value) {
+                    return DropdownMenuEntry<String>(value: value, label: value);
+                  }).toList(),
+              width: 100,
+              //height: 50,
+              ),
             SizedBox(
               width: 100,
               height: 50,
               child: ElevatedButton(
-              onPressed: showPoints,
+              onPressed: submitPoints,
               child: const Text("Eintragen"),
             ),),
             SizedBox(

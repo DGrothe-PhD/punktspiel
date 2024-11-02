@@ -46,10 +46,6 @@ class TableExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     try {
-      /*for(int i=0;i<3; i++){
-        Spieler.gruppe.add(Teilnehmer(name: names[i]));
-      }*/
-      Spieler.settings();
       String placeholder = "# Punktestand vom ${DateFormat('dd.MM.yyyy').format(now)}\n";
       for(var player in Spieler.gruppe){
         placeholder += "## ${player.name}:\n - ${player.punkte.enumerateString()}\n";

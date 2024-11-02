@@ -5,7 +5,7 @@ import 'package:collection/collection.dart';
 // Idee: Umschreiben. Die Klasse soll keine Daten beinhalten, nur Text zerpflücken und 
 // die Punkteberechnung ermöglichen.
 class Spieler{
-  static List names = ["Eins", "Zwei", "Drei", "Vier" ];
+  static List<String> names = ["Eins", "Zwei", "Drei", "Vier" ];
   static List<Teilnehmer> gruppe = [];
 
   static void settings(){
@@ -57,7 +57,7 @@ class Spieler{
 
 class Teilnehmer{
   String name = "";
-  List<int> punkte = [2,3,4] ;
+  List<int> punkte = [] ;
   Teilnehmer({required this.name});
 
   void addPoints(int value){
