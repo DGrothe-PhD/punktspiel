@@ -4,6 +4,11 @@ A local app to add points when playing cards in a group.
 
 Designed for the fun of it and for learning!
 
+## Features
+Entry field for player names, submit points, show results.
+
+<img src="./doc/ExampleSubmitForm.png" alt="Submit Form" style="width:25%; height:auto;">&nbsp;&nbsp;<img src="./doc/ExampleResults.png" alt="Example Results" style="width:28%; height:auto;">
+
 ## References
 
 ### Files
