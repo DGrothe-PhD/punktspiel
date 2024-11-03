@@ -2,20 +2,28 @@ import 'package:collection/collection.dart';
 //import 'package:intl/intl.dart';
 //import 'package:flutter/services.dart';
 
-// Idee: Umschreiben. Die Klasse soll keine Daten beinhalten, nur Text zerpflücken und 
-// die Punkteberechnung ermöglichen.
 class Spieler{
-  static List<String> names = ["Eins", "Zwei", "Drei", "Vier" ];
+  static List<String> _names = ["Eins", "Zwei", "Drei", "Vier" ];
   static List<Teilnehmer> gruppe = [];
 
+  static set names(List<String> values){
+    // By making _names private, the new names call settings to update groups.
+    _names = values;
+    settings();
+  }
+  static List<String> get names => _names;
+
   static void settings(){
-    for(String n in names){
+    gruppe = [];
+    for(String n in _names){
         gruppe.add(Teilnehmer(name: n));
     }
   }
   
   static void addPoints(String name, int punkte){
-    gruppe[gruppe.indexWhere((element) => element.name == name)].addPoints(punkte);
+    gruppe[
+      gruppe.indexWhere((element) => element.name == name)
+    ].addPoints(punkte);
   }
   /*Future init() async
   {

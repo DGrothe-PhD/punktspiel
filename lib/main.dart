@@ -49,9 +49,29 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   //final List<Teilnehmer> gruppe = [];
-  final myController = TextEditingController();
+  final numberFieldController = TextEditingController();
+  final namesFieldController = TextEditingController();
+  final selectableNamesMenuController = TextEditingController();
   int myPoints = 0;
   String myName = Spieler.names.first;
+
+Widget buildselectableNamesMenu(){
+  return DropdownMenu<String>(
+    key: ValueKey(Object.hashAll(Spieler.names)),
+    requestFocusOnTap: true,
+    enableSearch: true,
+    controller: selectableNamesMenuController,
+    initialSelection: Spieler.names.first,
+    onSelected: (String? value){
+      myName = value ?? "";
+    },
+    dropdownMenuEntries: Spieler.names.map<DropdownMenuEntry<String>>(
+      (String value) {
+        return DropdownMenuEntry<String>(value: value, label: value);
+      }).toList(),
+    width: 250,
+    //height: 50,
+  );}
 
   _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
@@ -80,11 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     );
   }
-
-  // TODO give combobox for names
-  // TODO make names list editable by typing comma-sep. names in a field
-  // TODO update that combobox with the "new" names
-  // TODO add points of selected player to his/her list of results.
 
   @override
   Widget build(BuildContext context) {
@@ -118,18 +133,42 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            Container(
+            Container( 
               margin: const EdgeInsets.all(12),
               //height: 100,
               //width: 100,
               child: TextField(
-                controller: myController,
+                controller: namesFieldController,
+                //onChanged Ereignis updated automatisch den angezeigten Text
+                onChanged: (newText) {
+                  List<String> names = newText.split(",")
+                    .where((x) => x != "").toList();
+                  if(names.length > 1) {
+                    Spieler.names = names;
+                    // Rebuild widget! Show the names, hopefully!
+                    setState(() => {});
+                  }
+                },
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Teilnehmer:',
+                  isDense: true,
+                ),
+                //keyboardType: TextInputType.text,
+              ),
+            ),
+            Container( 
+              margin: const EdgeInsets.all(12),
+              //height: 100,
+              //width: 100,
+              child: TextField(
+                controller: numberFieldController,
                 //onChanged Ereignis updated automatisch den angezeigten Text
                 onChanged: (newText) {myPoints = int.tryParse(newText) ?? 0;},
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Punkte:',
-                  isDense: true,// Added this
+                  isDense: true,
                 ),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
@@ -137,19 +176,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            DropdownMenu<String>(
-              initialSelection: Spieler.names.first,
-              onSelected: (String? value){
-                myName = value ?? "";
-                //setState(() {dropdownValue = value};);
-              },
-              dropdownMenuEntries: Spieler.names.map<DropdownMenuEntry<String>>(
-                (String value) {
-                    return DropdownMenuEntry<String>(value: value, label: value);
-                  }).toList(),
-              width: 100,
-              //height: 50,
-              ),
+            buildselectableNamesMenu(),
+            // TODO colors, 
             SizedBox(
               width: 100,
               height: 50,
