@@ -145,6 +145,7 @@ Widget buildselectableNamesMenu(){
                     .where((x) => x != "").toList();
                   if(names.length > 1) {
                     Spieler.names = names;
+                    myName = Spieler.names.first;
                     // Rebuild widget! Show the names, hopefully!
                     setState(() => {});
                   }
@@ -177,19 +178,32 @@ Widget buildselectableNamesMenu(){
               ),
             ),
             buildselectableNamesMenu(),
-            // TODO colors, 
             SizedBox(
-              width: 100,
+              width: 150,
               height: 50,
               child: ElevatedButton(
               onPressed: submitPoints,
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(
+                  const Color.fromARGB(255, 204, 166, 61)
+                ),
+              ),
               child: const Text("Eintragen"),
             ),),
+            const SizedBox(height:20),
             SizedBox(
-              width: 100,
+              width: 150,
               height: 50,
               child: ElevatedButton(
               onPressed: showPoints,
+              style: ButtonStyle(
+                padding: WidgetStateProperty.resolveWith<EdgeInsetsGeometry>((Set<WidgetState> states) {
+                return const EdgeInsets.all(7);
+              },),
+                backgroundColor: WidgetStateProperty.all<Color>(
+                  const Color.fromARGB(255, 87, 228, 141)
+                ),
+              ),
               child: const Text("Tabelle"),
             ),),
           ],
