@@ -45,7 +45,7 @@ class TableExample extends StatelessWidget {
       String placeholder = "# ${Locales.results[l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
       for(var player in Spieler.gruppe){
         placeholder += "## ${player.name}:\n - ${player.punkte.enumerateString()}\n";
-        placeholder += " - Punkte insgesamt: ${player.sumPoints()}\n\n";
+        placeholder += " - ${Locales.pointsTotal[l]} ${player.sumPoints()}\n\n";
       }
 
       return Center(

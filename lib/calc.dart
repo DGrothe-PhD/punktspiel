@@ -42,6 +42,14 @@ class Spieler{
     ].punkte.length;
     return minCounts < nameCounts;
   }
+
+  static List<String> whoIsEmpty(){
+    var crunchedData = gruppe.map((x) => x.punkte.length);
+    int minCounts = crunchedData.min;
+    return gruppe
+      .where((x)=> x.punkte.length == minCounts)
+      .map((x)=>x.name).toList();
+  }
   /*Future init() async
   {
     try{

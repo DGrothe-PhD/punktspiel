@@ -97,7 +97,10 @@ Widget buildselectableNamesMenu(){
       Spieler.addPoints(myName, myPoints);
     }
     else{
-      _showAlertDialog(Locales.noSecondEntry[l].format([myName]));
+      var empty = Spieler.whoIsEmpty();
+      _showAlertDialog(
+        "${Locales.noSecondEntry[l].format([myName])}\n${Locales.hint[l]} ${empty.join(', ')}"
+      );
     }
   }
 

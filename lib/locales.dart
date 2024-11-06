@@ -2,7 +2,7 @@
 
 // I know that officially this is done differently, however, this is a MVP.
 // Just to let English-speaking people use and understand my little app as well.
-const int l = 0;
+const int l = 1;
 
 class Locales {
   //static int i = 0;
@@ -10,6 +10,7 @@ class Locales {
     "Punkte für %s sind schon eingetragen.",
     "Points for %s already submitted for this round."
   ];
+  static const List<String> hint = ["Hinweis: Punkte fehlen für ", "Hint: Missing results for "];
   static const List<String> gotIt = ["Verstanden!", "Got it!"];
   static const List<String> playedRounds = ["Gespielte Runden:", "Played rounds:"];
   static const List<String> players = ["Teilnehmer:", "Players:"];
