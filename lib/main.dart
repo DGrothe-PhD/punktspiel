@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './table.dart';
 import './calc.dart';
+import './locales.dart';
+
+//const int l = 0;
 
 void main() {
   Spieler.settings();
@@ -89,7 +93,31 @@ Widget buildselectableNamesMenu(){
   }
 
   void submitPoints() {
-    Spieler.addPoints(myName, myPoints);
+    if (!Spieler.fillingTwice(myName)) {
+      Spieler.addPoints(myName, myPoints);
+    }
+    else{
+      _showAlertDialog(Locales.noSecondEntry[l].format([myName]));
+    }
+  }
+
+  void _showAlertDialog(String message) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(message),
+          actions: <Widget>[
+            CupertinoButton(
+              child: Text(Locales.gotIt[l]),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void showPoints() {
@@ -126,9 +154,7 @@ Widget buildselectableNamesMenu(){
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Gespielte Runden:',
-            ),
+            Text(Locales.playedRounds[l]),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
@@ -150,9 +176,9 @@ Widget buildselectableNamesMenu(){
                     setState(() => {});
                   }
                 },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Teilnehmer:',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: Locales.players[l],
                   isDense: true,
                 ),
                 //keyboardType: TextInputType.text,
@@ -166,9 +192,9 @@ Widget buildselectableNamesMenu(){
                 controller: numberFieldController,
                 //onChanged Ereignis updated automatisch den angezeigten Text
                 onChanged: (newText) {myPoints = int.tryParse(newText) ?? 0;},
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Punkte:',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: Locales.points[l],
                   isDense: true,
                 ),
                 keyboardType: TextInputType.number,
@@ -188,7 +214,7 @@ Widget buildselectableNamesMenu(){
                   const Color.fromARGB(255, 204, 166, 61)
                 ),
               ),
-              child: const Text("Eintragen"),
+              child: Text(Locales.submit[l]),
             ),),
             const SizedBox(height:20),
             SizedBox(
@@ -204,14 +230,14 @@ Widget buildselectableNamesMenu(){
                   const Color.fromARGB(255, 87, 228, 141)
                 ),
               ),
-              child: const Text("Tabelle"),
+              child: Text(Locales.results[l]),
             ),),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
-        tooltip: 'Neue Runde',
+        tooltip: Locales.nextRound[l],
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

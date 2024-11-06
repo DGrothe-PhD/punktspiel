@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:sprintf/sprintf.dart';
 //import 'package:intl/intl.dart';
 //import 'package:flutter/services.dart';
 
@@ -24,6 +25,22 @@ class Spieler{
     gruppe[
       gruppe.indexWhere((element) => element.name == name)
     ].addPoints(punkte);
+  }
+
+  static bool filledFullRound(){
+    var crunchedData = gruppe.map((x) => x.punkte.length);
+    int minCounts = crunchedData.min;
+    int maxCounts = crunchedData.max;
+    return minCounts == maxCounts;
+  }
+
+  static bool fillingTwice(String name){
+    var crunchedData = gruppe.map((x) => x.punkte.length);
+    int minCounts = crunchedData.min;
+    int nameCounts = gruppe[
+      gruppe.indexWhere((element) => element.name == name)
+    ].punkte.length;
+    return minCounts < nameCounts;
   }
   /*Future init() async
   {
@@ -79,4 +96,8 @@ extension IntListParsing on List<int>{
   String enumerateString(){
     return map((i) => i.toString()).join(", ");
   }
+}
+
+extension StringFormatExtension on String {
+  String format(var arguments) => sprintf(this, arguments);
 }

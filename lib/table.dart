@@ -3,10 +3,10 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import './calc.dart';
+import './locales.dart';
 
 class StyleDecorator {
   static const textstil = TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold);
-  //const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold);
   static String write(String inputText){
     return md.markdownToHtml(inputText);
   }
@@ -25,11 +25,9 @@ class TableExampleApp extends StatelessWidget {
     // reduce to the max. Returning MaterialApp shows black screen...
     return Scaffold(
       resizeToAvoidBottomInset : true,
-      appBar: AppBar(title: const Text('SPIELSTAND')),
+      appBar: AppBar(title: Text(Locales.resultsTitle[l])),
       body: 
       SingleChildScrollView(
-      //  size: 300,
-      //Expanded(
         child: TableExample(),
       )
     );
@@ -37,16 +35,14 @@ class TableExampleApp extends StatelessWidget {
 }
 
 class TableExample extends StatelessWidget {
-  //final List<Teilnehmer> gruppe = [];
   final List names = Spieler.names;
-  //["Eins", "Zwei", "Drei", "Vier" ];
   final now = DateTime.now();
   TableExample({super.key});
 
   @override
   Widget build(BuildContext context) {
     try {
-      String placeholder = "# Punktestand vom ${DateFormat('dd.MM.yyyy').format(now)}\n";
+      String placeholder = "# ${Locales.results[l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
       for(var player in Spieler.gruppe){
         placeholder += "## ${player.name}:\n - ${player.punkte.enumerateString()}\n";
         placeholder += " - Punkte insgesamt: ${player.sumPoints()}\n\n";
@@ -61,7 +57,7 @@ class TableExample extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {Navigator.pop(context);},
-                child: const Text("Schließen"),
+                child: Text(Locales.close[l]),
               ),
             ),
           ]
