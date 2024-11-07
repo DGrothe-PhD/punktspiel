@@ -1,5 +1,7 @@
 # punktspiel
 
+[![Build apk](https://github.com/DGrothe-PhD/punktspiel/actions/workflows/ci.yml/badge.svg)](https://github.com/DGrothe-PhD/punktspiel/actions/workflows/ci.yml)
+
 A local app to add points when playing cards in a group.
 
 Designed for the fun of it and for learning!
