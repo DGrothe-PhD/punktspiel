@@ -52,12 +52,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //final List<Teilnehmer> gruppe = [];
+  //Each editable field needs their controller.
+  //Otherwise, stuff happens, such as that a name appears in a number field.
   final numberFieldController = TextEditingController();
   final namesFieldController = TextEditingController();
   final selectableNamesMenuController = TextEditingController();
+  final EdgeInsets edgeInsets = const EdgeInsets.all(12);
+
   int myPoints = 0;
   String myName = Spieler.names.first;
+  bool dontEditNames = false;
 
 Widget buildselectableNamesMenu(){
   return DropdownMenu<String>(
@@ -66,6 +70,7 @@ Widget buildselectableNamesMenu(){
     enableSearch: true,
     controller: selectableNamesMenuController,
     initialSelection: Spieler.names.first,
+    expandedInsets: edgeInsets,
     onSelected: (String? value){
       myName = value ?? "";
     },
@@ -93,6 +98,10 @@ Widget buildselectableNamesMenu(){
   }
 
   void submitPoints() {
+    if(!dontEditNames){
+      dontEditNames = true;
+      setState(() => {});
+    }
     if (!Spieler.fillingTwice(myName)) {
       Spieler.addPoints(myName, myPoints);
     }
@@ -132,6 +141,10 @@ Widget buildselectableNamesMenu(){
     );
   }
 
+  void deleteLastEntry() {
+    Spieler.deleteLastEntry(myName);
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -163,19 +176,19 @@ Widget buildselectableNamesMenu(){
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             Container( 
-              margin: const EdgeInsets.all(12),
+              margin: edgeInsets,
               //height: 100,
               //width: 100,
               child: TextField(
                 controller: namesFieldController,
+                readOnly: dontEditNames,
                 //onChanged Ereignis updated automatisch den angezeigten Text
                 onChanged: (newText) {
                   List<String> names = newText.split(",")
                     .where((x) => x != "").toList();
                   if(names.length > 1) {
-                    Spieler.names = names;
+                    Spieler.names = names.map((x)=> x.trim()).toList();
                     myName = Spieler.names.first;
-                    // Rebuild widget! Show the names, hopefully!
                     setState(() => {});
                   }
                 },
@@ -187,10 +200,12 @@ Widget buildselectableNamesMenu(){
                 //keyboardType: TextInputType.text,
               ),
             ),
-            Container( 
-              margin: const EdgeInsets.all(12),
+            Row(
+              children: <Widget>[
+              Container( 
+              margin: edgeInsets,
               //height: 100,
-              //width: 100,
+              width: 150,
               child: TextField(
                 controller: numberFieldController,
                 //onChanged Ereignis updated automatisch den angezeigten Text
@@ -205,6 +220,25 @@ Widget buildselectableNamesMenu(){
                   FilteringTextInputFormatter.digitsOnly
                 ],
               ),
+              ),
+              SizedBox(
+                width: 80,
+                height: 50,
+                child: ElevatedButton(
+                onPressed: deleteLastEntry,
+                style: ButtonStyle(
+                  padding: WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
+                    (Set<WidgetState> states) {
+                  return const EdgeInsets.all(7);
+                  },),
+                  backgroundColor: WidgetStateProperty.all<Color>(
+                  const Color.fromARGB(255, 87, 228, 141)
+                  ),
+                ),
+                child: const Icon(Icons.delete),
+              //Text(Locales.deleteLastEntry[l]),
+              ),),
+            ],
             ),
             buildselectableNamesMenu(),
             SizedBox(
@@ -217,7 +251,9 @@ Widget buildselectableNamesMenu(){
                   const Color.fromARGB(255, 204, 166, 61)
                 ),
               ),
-              child: Text(Locales.submit[l]),
+              child: 
+              //const Icon(Icons.check_box),
+              Text(Locales.submit[l]),
             ),),
             const SizedBox(height:20),
             SizedBox(
@@ -226,7 +262,9 @@ Widget buildselectableNamesMenu(){
               child: ElevatedButton(
               onPressed: showPoints,
               style: ButtonStyle(
-                padding: WidgetStateProperty.resolveWith<EdgeInsetsGeometry>((Set<WidgetState> states) {
+                padding: 
+                WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
+                  (Set<WidgetState> states) {
                 return const EdgeInsets.all(7);
               },),
                 backgroundColor: WidgetStateProperty.all<Color>(

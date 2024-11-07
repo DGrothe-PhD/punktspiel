@@ -27,6 +27,11 @@ class Spieler{
     ].addPoints(punkte);
   }
 
+  static void deleteLastEntry(String name){
+    gruppe[
+      gruppe.indexWhere((element) => element.name == name)
+    ].popPointsEntry();
+  }
   static bool filledFullRound(){
     var crunchedData = gruppe.map((x) => x.punkte.length);
     int minCounts = crunchedData.min;
@@ -95,6 +100,12 @@ class Teilnehmer{
 
   void addPoints(int value){
     punkte.add(value);
+  }
+
+  void popPointsEntry(){
+    if (punkte.isNotEmpty){
+      punkte.removeLast();
+    }
   }
 
   int sumPoints() => punkte.sum;

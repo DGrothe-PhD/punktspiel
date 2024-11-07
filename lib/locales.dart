@@ -16,6 +16,7 @@ class Locales {
   static const List<String> players = ["Teilnehmer:", "Players:"];
   static const List<String> points = ["Punkte:", "Points:"];
   static const List<String> submit = ["Eintragen", "Submit"];
+  static const List<String> deleteLastEntry = ["Letzten löschen", "Delete last"];
   static const List<String> close = ["Schließen", "Close view"];
   static const List<String> results = ["Ergebnisse", "Results"];
   static const List<String> nextRound = ["Neue Runde", "Next Round"];
