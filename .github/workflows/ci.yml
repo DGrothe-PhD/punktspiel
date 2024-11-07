@@ -2,12 +2,12 @@ name: Build apk
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '*.dart'
-  pull_request:
-    paths:
-      - '*.dart'
+  #push:
+  #  paths:
+  #    - '*.dart'
+  #pull_request:
+  #  paths:
+  #    - '*.dart'
 
 jobs:
   build:
