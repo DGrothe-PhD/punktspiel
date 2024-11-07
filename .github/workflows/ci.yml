@@ -29,4 +29,4 @@ jobs:
         with:
           artifacts: "build/app/outputs/apk/debug/*.apk"
           tag: v0.0.${{ github.run_number}}
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
