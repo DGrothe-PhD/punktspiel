@@ -145,6 +145,14 @@ Widget buildselectableNamesMenu(){
     Spieler.deleteLastEntry(myName);
   }
 
+  void deleteEverything() {
+    for(Teilnehmer t in Spieler.gruppe){
+      t.punkte.clear();
+    }
+    dontEditNames = false;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -272,6 +280,24 @@ Widget buildselectableNamesMenu(){
                 ),
               ),
               child: Text(Locales.results[l]),
+            ),),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 150,
+              height: 50,
+              child: ElevatedButton(
+              onPressed: deleteEverything,
+              style: ButtonStyle(
+                padding: 
+                WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
+                  (Set<WidgetState> states) {
+                return const EdgeInsets.all(7);
+              },),
+                backgroundColor: WidgetStateProperty.all<Color>(
+                  const Color.fromARGB(255, 204, 75, 11)
+                ),
+              ),
+              child: Text(Locales.deleteAllResults[l]),
             ),),
           ],
         ),

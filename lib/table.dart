@@ -47,7 +47,6 @@ class TableExample extends StatelessWidget {
         placeholder += "## ${player.name}:\n - ${player.punkte.enumerateString()}\n";
         placeholder += " - ${Locales.pointsTotal[l]} ${player.sumPoints()}\n\n";
       }
-
       return Center(
           child: Column(
             children: <Widget>[
@@ -57,6 +56,15 @@ class TableExample extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {Navigator.pop(context);},
+                style: ButtonStyle(
+                  padding: WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
+                    (Set<WidgetState> states) {
+                  return const EdgeInsets.all(7);
+                  },),
+                  backgroundColor: WidgetStateProperty.all<Color>(
+                  const Color.fromARGB(255, 63, 186, 110)
+                  ),
+                ),
                 child: Text(Locales.close[l]),
               ),
             ),
