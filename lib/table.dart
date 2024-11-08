@@ -24,7 +24,7 @@ class TableExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // reduce to the max. Returning MaterialApp shows black screen...
     return Scaffold(
-      resizeToAvoidBottomInset : true,
+      resizeToAvoidBottomInset : true,//maybe false if keyboard
       appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
       body: 
       SingleChildScrollView(

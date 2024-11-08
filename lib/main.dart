@@ -128,6 +128,7 @@ Widget buildselectableNamesMenu(){
     }
     if (!Spieler.fillingTwice(myName)) {
       Spieler.addPoints(myName, myPoints);
+      //SystemChannels.textInput.invokeMethod('TextInput.hide');
     }
     else{
       var empty = Spieler.whoIsEmpty();
@@ -185,6 +186,7 @@ Widget buildselectableNamesMenu(){
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
