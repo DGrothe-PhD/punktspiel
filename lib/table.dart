@@ -25,7 +25,7 @@ class TableExampleApp extends StatelessWidget {
     // reduce to the max. Returning MaterialApp shows black screen...
     return Scaffold(
       resizeToAvoidBottomInset : true,
-      appBar: AppBar(title: Text(Locales.resultsTitle[l])),
+      appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
       body: 
       SingleChildScrollView(
         child: TableExample(),
@@ -42,10 +42,10 @@ class TableExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     try {
-      String placeholder = "# ${Locales.results[l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
+      String placeholder = "# ${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
       for(var player in Spieler.gruppe){
         placeholder += "## ${player.name}:\n - ${player.punkte.enumerateString()}\n";
-        placeholder += " - ${Locales.pointsTotal[l]} ${player.sumPoints()}\n\n";
+        placeholder += " - ${Locales.pointsTotal[Lang.l]} ${player.sumPoints()}\n\n";
       }
       return Center(
           child: Column(
@@ -65,7 +65,7 @@ class TableExample extends StatelessWidget {
                   const Color.fromARGB(255, 63, 186, 110)
                   ),
                 ),
-                child: Text(Locales.close[l]),
+                child: Text(Locales.close[Lang.l]),
               ),
             ),
           ]

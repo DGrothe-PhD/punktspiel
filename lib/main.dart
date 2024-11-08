@@ -57,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final numberFieldController = TextEditingController();
   final namesFieldController = TextEditingController();
   final selectableNamesMenuController = TextEditingController();
+  final selectLanguageController = TextEditingController();
   final EdgeInsets edgeInsets = const EdgeInsets.all(12);
 
   int myPoints = 0;
@@ -82,6 +83,30 @@ Widget buildselectableNamesMenu(){
     //height: 50,
   );}
 
+  Widget buildselectLanguagesMenu({bool wellBehaving = true}){
+    if(wellBehaving){
+      return DropdownMenu<String>(
+      key: ValueKey(Object.hashAll(Lang.availableLanguages)),
+      requestFocusOnTap: true,
+      enableSearch: true,
+      controller: selectLanguageController,
+      initialSelection: Lang.availableLanguages.first,
+      expandedInsets: edgeInsets,
+      onSelected: (String? value){
+        setState(() => Lang.setLanguage(value ?? "EN"));
+      },
+      dropdownMenuEntries: Lang.availableLanguages.map<DropdownMenuEntry<String>>(
+        (String value) {
+          return DropdownMenuEntry<String>(value: value, label: value);
+      }).toList(),
+      width: 100,
+      );
+    }
+    else{
+      return const SizedBox(width: 50, child: Text(" [tbd]"));
+    }
+  }
+
   _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
   int _counter = 0;
@@ -99,8 +124,7 @@ Widget buildselectableNamesMenu(){
 
   void submitPoints() {
     if(!dontEditNames){
-      dontEditNames = true;
-      setState(() => {});
+      setState(() => dontEditNames = true);
     }
     if (!Spieler.fillingTwice(myName)) {
       Spieler.addPoints(myName, myPoints);
@@ -108,7 +132,7 @@ Widget buildselectableNamesMenu(){
     else{
       var empty = Spieler.whoIsEmpty();
       _showAlertDialog(
-        "${Locales.noSecondEntry[l].format([myName])}\n${Locales.hint[l]} ${empty.join(', ')}"
+        "${Locales.noSecondEntry[Lang.l].format([myName])}\n${Locales.hint[Lang.l]} ${empty.join(', ')}"
       );
     }
   }
@@ -121,7 +145,7 @@ Widget buildselectableNamesMenu(){
           title: Text(message),
           actions: <Widget>[
             CupertinoButton(
-              child: Text(Locales.gotIt[l]),
+              child: Text(Locales.gotIt[Lang.l]),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -149,8 +173,7 @@ Widget buildselectableNamesMenu(){
     for(Teilnehmer t in Spieler.gruppe){
       t.punkte.clear();
     }
-    dontEditNames = false;
-    setState(() {});
+    setState(() { dontEditNames = false;});
   }
 
   @override
@@ -178,11 +201,34 @@ Widget buildselectableNamesMenu(){
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(Locales.playedRounds[l]),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            //buildselectLanguagesMenu(),
+            Row(
+              children: [
+                Container(
+                  margin: edgeInsets,
+                  width: 100,
+                  child: Text(Locales.playedRounds[Lang.l]),
+                ),
+                Container(
+                  alignment: Alignment.bottomRight,
+                  width: 20,
+                  child: Text(
+                  '$_counter',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.bottomRight,
+                  width: 42,
+                  child: const Icon(Icons.language),
+                ),
+                SizedBox(
+                  width: 111,
+                  child: buildselectLanguagesMenu(),
+                ),
+              ],
             ),
+            //
             Container( 
               margin: edgeInsets,
               //height: 100,
@@ -202,7 +248,7 @@ Widget buildselectableNamesMenu(){
                 },
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: Locales.players[l],
+                  labelText: Locales.players[Lang.l],
                   isDense: true,
                 ),
                 //keyboardType: TextInputType.text,
@@ -220,7 +266,7 @@ Widget buildselectableNamesMenu(){
                 onChanged: (newText) {myPoints = int.tryParse(newText) ?? 0;},
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: Locales.points[l],
+                  labelText: Locales.points[Lang.l],
                   isDense: true,
                 ),
                 keyboardType: TextInputType.number,
@@ -261,7 +307,7 @@ Widget buildselectableNamesMenu(){
               ),
               child: 
               //const Icon(Icons.check_box),
-              Text(Locales.submit[l]),
+              Text(Locales.submit[Lang.l]),
             ),),
             const SizedBox(height:20),
             SizedBox(
@@ -279,7 +325,7 @@ Widget buildselectableNamesMenu(){
                   const Color.fromARGB(255, 87, 228, 141)
                 ),
               ),
-              child: Text(Locales.results[l]),
+              child: Text(Locales.results[Lang.l]),
             ),),
             const SizedBox(height: 20),
             SizedBox(
@@ -297,14 +343,14 @@ Widget buildselectableNamesMenu(){
                   const Color.fromARGB(255, 204, 75, 11)
                 ),
               ),
-              child: Text(Locales.deleteAllResults[l]),
+              child: Text(Locales.deleteAllResults[Lang.l]),
             ),),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
-        tooltip: Locales.nextRound[l],
+        tooltip: Locales.nextRound[Lang.l],
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
