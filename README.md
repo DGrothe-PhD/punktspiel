@@ -11,6 +11,10 @@ Entry field for player names, submit points, show results.
 
 <img src="./doc/ExampleSubmitForm.png" alt="Submit Form" style="width:25%; height:auto;">&nbsp;&nbsp;<img src="./doc/ExampleResults.png" alt="Example Results" style="width:28%; height:auto;">
 
+## Installation
+* Android: Which APK to use, you find the CPU type of your phone for example [here](https://www.gsmarena.com/)
+* Example: Octa-core 1.6 GHz Cortex-A53 &rarr; ARM64-v8a.
+
 ## References
 
 ### Files
