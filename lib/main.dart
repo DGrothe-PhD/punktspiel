@@ -5,8 +5,6 @@ import './table.dart';
 import './calc.dart';
 import './locales.dart';
 
-//const int l = 0;
-
 void main() {
   Spieler.settings();
   runApp(const MyApp());
@@ -138,6 +136,10 @@ Widget buildselectableNamesMenu(){
     }
   }
 
+  void closeKbd(){
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
+
   void _showAlertDialog(String message) async {
     showDialog(
       context: context,
@@ -179,13 +181,11 @@ Widget buildselectableNamesMenu(){
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
+    return GestureDetector(
+      onTap: closeKbd,
+      //onDoubleTap: () => {},
+      //onLongPress: () => {},
+      child: Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -203,7 +203,6 @@ Widget buildselectableNamesMenu(){
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //buildselectLanguagesMenu(),
             Row(
               children: [
                 Container(
@@ -355,6 +354,7 @@ Widget buildselectableNamesMenu(){
         tooltip: Locales.nextRound[Lang.l],
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    ),
     );
   }
 }

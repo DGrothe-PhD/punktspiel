@@ -12,7 +12,9 @@ class StyleDecorator {
   }
 
   static Html viewMd(String inputText){
-    return Html(data: write(inputText));
+    return Html(
+      data: write(inputText)
+    );
   }
 }
 
@@ -22,15 +24,15 @@ class TableExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // reduce to the max. Returning MaterialApp shows black screen...
     return Scaffold(
-      resizeToAvoidBottomInset : true,//maybe false if keyboard
-      appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
-      body: 
-      SingleChildScrollView(
-        child: TableExample(),
-      )
+        resizeToAvoidBottomInset : true,//maybe false if keyboard
+        appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
+        body: 
+        SingleChildScrollView(
+          child: TableExample(),
+        )
     );
+    // reduce to the max. Returning MaterialApp shows black screen...
   }
 }
 
@@ -50,7 +52,9 @@ class TableExample extends StatelessWidget {
       return Center(
           child: Column(
             children: <Widget>[
-            StyleDecorator.viewMd(placeholder),
+              SelectionArea(
+                child: StyleDecorator.viewMd(placeholder),
+              ),
             SizedBox(
               width: 120,
               height: 50,
