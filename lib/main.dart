@@ -63,23 +63,39 @@ class _MyHomePageState extends State<MyHomePage> {
   bool dontEditNames = false;
 
 Widget buildselectableNamesMenu(){
-  return DropdownMenu<String>(
+  var dropdown = DropdownButton<String>(
     key: ValueKey(Object.hashAll(Spieler.names)),
-    requestFocusOnTap: true,
-    enableSearch: true,
-    controller: selectableNamesMenuController,
-    initialSelection: Spieler.names.first,
-    expandedInsets: edgeInsets,
-    onSelected: (String? value){
-      myName = value ?? "";
+    isExpanded: true,
+    value: myName,
+    onChanged: (String? value){
+      setState((){
+        myName = value ?? "";
+      });
+      
     },
-    dropdownMenuEntries: Spieler.names.map<DropdownMenuEntry<String>>(
+    items: Spieler.names.map<DropdownMenuItem<String>>(
       (String value) {
-        return DropdownMenuEntry<String>(value: value, label: value);
+        return DropdownMenuItem<String>(value: value, child: Text(value));
       }).toList(),
-    width: 250,
-    //height: 50,
-  );}
+  );
+  return Container(
+    margin: edgeInsets,
+    //padding: edgeInsets,
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(3)),
+    ),
+    width: double.infinity,
+    //child: dropdown,
+    child: Theme(
+      data: Theme.of(context).copyWith(
+        canvasColor: const Color.fromARGB(255, 249, 208, 83), // background color for the dropdown items
+        buttonTheme: ButtonTheme.of(context).copyWith(
+        alignedDropdown: true,  //If false (the default), then the dropdown's menu will be wider than its button.
+      )),
+      child: dropdown
+    )
+  );
+  }
 
   Widget buildselectLanguagesMenu({bool wellBehaving = true}){
     if(wellBehaving){
@@ -303,7 +319,7 @@ Widget buildselectableNamesMenu(){
               onPressed: submitPoints,
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 204, 166, 61)
+                  const Color.fromARGB(255, 243, 198, 76)
                 ),
               ),
               child: 
