@@ -13,7 +13,7 @@ Entry field for player names, submit points, show results.
 
 ## Installation
 * Android: Which APK to use, you find the CPU type of your phone for example [here](https://www.gsmarena.com/)
-* Example: Octa-core 1.6 GHz Cortex-A53 &rarr; ARM64-v8a.
+* Example: Octa-core 1.6 GHz Cortex-A53 &rarr; ARM64-v8a. Probably, with Android 7, you might need the apk such as app-armeabi-v7a-debug.apk.
 
 ## References
 
