@@ -35,6 +35,16 @@ migrate_working_dir/
 /build/7977*
 /build/.last_build_id
 /build/cache*
+/build/windows/x64/runner/Debug/
+/build/windows/x64/runner/CMake*
+/build/windows/x64/runner/punktspie*
+/build/windows/x64/runner/*.sln
+/build/windows/x64/x64/
+/build/windows/x64/flutter/
+/build/windows/x64/CMake*/
+/build/windows/x64/cmake*
+/build/windows/x64/*.vcxproj*
+/build/windows/x64/install_manifest.txt
 
 # Symbolication related
 app.*.symbols
