@@ -55,42 +55,15 @@ class Spieler{
       .where((x)=> x.punkte.length == minCounts)
       .map((x)=>x.name).toList();
   }
-  /*Future init() async
-  {
-    try{
-      daten = await rootBundle.loadString('assets/data/players.txt');
-      //.then((value) => {daten});
-      //final input = File('assets/data/players.txt').openRead();
-      //String daten = input.toString();
-      readData();
+  
+  static List<Teilnehmer> whoIsWinning(){
+    if (filledFullRound() && gruppe[0].punkte.length >= gruppe.length){
+      var sumOfPoints = gruppe.map((x) => x.sumPoints());
+      var best = sumOfPoints.min;
+      return gruppe.where((x)=> x.sumPoints() == best).toList();
     }
-    catch(exception){
-      print(exception.toString());
-    }
-  }*/
-
-  /*void readData()
-  {
-    try{
-      List<String> zeilen = daten.split("\r\n");
-      List<String> names = zeilen[0].split(" ");
-
-      for(String n in names){
-        gruppe.add(Teilnehmer(name : n));
-      }
-
-      // extract points like grandma
-      for(int i=1;i<zeilen.length;i++){
-        List<String> p = zeilen[i].split(" ");
-        for(int j=0;j<p.length;j++){
-          gruppe[j].addPoints(int.tryParse(p[i]) ?? 0);
-        }
-      }
-    }
-    catch(exception){
-      print(exception.toString());
-    }
-  }*/
+    return <Teilnehmer>[];
+  }
 }
 
 class Teilnehmer{

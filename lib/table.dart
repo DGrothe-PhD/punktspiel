@@ -38,6 +38,7 @@ class TableExampleApp extends StatelessWidget {
 
 class TableExample extends StatelessWidget {
   final List names = Spieler.names;
+  static const String winningDecoration = "🎉";
   final now = DateTime.now();
   TableExample({super.key});
 
@@ -46,7 +47,8 @@ class TableExample extends StatelessWidget {
     try {
       String placeholder = "# ${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
       for(var player in Spieler.gruppe){
-        placeholder += "## ${player.name}:\n - ${player.punkte.enumerateString()}\n";
+        String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "";
+        placeholder += "## ${player.name}:$decoration\n - ${player.punkte.enumerateString()}\n";
         placeholder += " - ${Locales.pointsTotal[Lang.l]} ${player.sumPoints()}\n\n";
       }
       return Center(
