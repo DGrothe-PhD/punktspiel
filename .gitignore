@@ -45,6 +45,7 @@ migrate_working_dir/
 /build/windows/x64/cmake*
 /build/windows/x64/*.vcxproj*
 /build/windows/x64/install_manifest.txt
+build/windows/x64/install_manifest.txt
 
 # Symbolication related
 app.*.symbols
