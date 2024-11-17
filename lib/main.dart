@@ -62,39 +62,39 @@ class _MyHomePageState extends State<MyHomePage> {
   String myName = Spieler.names.first;
   bool dontEditNames = false;
 
-Widget buildselectableNamesMenu(){
-  var dropdown = DropdownButton<String>(
-    key: ValueKey(Object.hashAll(Spieler.names)),
-    isExpanded: true,
-    value: myName,
-    onChanged: (String? value){
-      setState((){
-        myName = value ?? "";
-      });
-      
-    },
-    items: Spieler.names.map<DropdownMenuItem<String>>(
-      (String value) {
-        return DropdownMenuItem<String>(value: value, child: Text(value));
-      }).toList(),
-  );
-  return Container(
-    margin: edgeInsets,
-    //padding: edgeInsets,
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(3)),
-    ),
-    width: double.infinity,
-    //child: dropdown,
-    child: Theme(
-      data: Theme.of(context).copyWith(
-        canvasColor: const Color.fromARGB(255, 249, 208, 83), // background color for the dropdown items
-        buttonTheme: ButtonTheme.of(context).copyWith(
-        alignedDropdown: true,  //If false (the default), then the dropdown's menu will be wider than its button.
-      )),
-      child: dropdown
-    )
-  );
+  Widget buildselectableNamesMenu(){
+    var dropdown = DropdownButton<String>(
+      key: ValueKey(Object.hashAll(Spieler.names)),
+      isExpanded: true,
+      value: myName,
+      onChanged: (String? value){
+        setState((){
+          myName = value ?? "";
+        });
+        
+      },
+      items: Spieler.names.map<DropdownMenuItem<String>>(
+        (String value) {
+          return DropdownMenuItem<String>(value: value, child: Text(value));
+        }).toList(),
+    );
+    return Container(
+      margin: edgeInsets,
+      //padding: edgeInsets,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(3)),
+      ),
+      width: double.infinity,
+      //child: dropdown,
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: const Color.fromARGB(255, 249, 208, 83), // background color for the dropdown items
+          buttonTheme: ButtonTheme.of(context).copyWith(
+          alignedDropdown: true,  //If false (the default), then the dropdown's menu will be wider than its button.
+        )),
+        child: dropdown
+      )
+    );
   }
 
   Widget buildselectLanguagesMenu({bool wellBehaving = true}){
@@ -136,13 +136,21 @@ Widget buildselectableNamesMenu(){
     });
   }
 
+  void _decrementCounter() {
+    if(_counter>0) {
+      setState(() { _counter--;});
+    }
+  }
+
   void submitPoints() {
     if(!dontEditNames){
       setState(() => dontEditNames = true);
     }
     if (!Spieler.fillingTwice(myName)) {
       Spieler.addPoints(myName, myPoints);
-      //SystemChannels.textInput.invokeMethod('TextInput.hide');
+      if(Spieler.filledFullRound()){
+        _incrementCounter();
+      }
     }
     else{
       var empty = Spieler.whoIsEmpty();
@@ -185,7 +193,11 @@ Widget buildselectableNamesMenu(){
   }
 
   void deleteLastEntry() {
+    bool rowWasJustFilled = Spieler.filledFullRound();
     Spieler.deleteLastEntry(myName);
+    if(rowWasJustFilled){
+      _decrementCounter();
+    }
   }
 
   void deleteEverything() {
