@@ -33,6 +33,7 @@ class Locales {
   static const List<String> gotIt = ["Verstanden!", "Got it!", "Compris !"];
   static const List<String> playedRounds = ["Gespielt:", "Played:", "Joué :"];
   static const List<String> players = ["Teilnehmer:", "Players:", "Joueurs :"];
+  static const List<String> opener = ["%s fängt an", "%s starts", "%s commence"];
   static const List<String> points = ["Punkte:", "Points:", "Points :"];
   //
   static const List<String> submit = ["Eintragen", "Submit", "Inscrire"];
