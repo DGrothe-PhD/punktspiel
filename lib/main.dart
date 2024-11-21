@@ -59,17 +59,21 @@ class _MyHomePageState extends State<MyHomePage> {
   final EdgeInsets edgeInsets = const EdgeInsets.all(12);
 
   int myPoints = 0;
-  String myName = Spieler.names.first;
+  int whoseTurnIndex = 0;
+  int whoseFirstTurnIndex = 0;
+  double? buttonHeight = 30;
+  String selectedPlayerName = Spieler.names.first;
+
   bool dontEditNames = false;
 
   Widget buildselectableNamesMenu(){
     var dropdown = DropdownButton<String>(
       key: ValueKey(Object.hashAll(Spieler.names)),
       isExpanded: true,
-      value: myName,
+      value: selectedPlayerName,
       onChanged: (String? value){
         setState((){
-          myName = value ?? "";
+          selectedPlayerName = value ?? "";
         });
         
       },
@@ -133,12 +137,16 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+      whoseTurnIndex = (whoseFirstTurnIndex + _counter) % Spieler.names.length;
     });
   }
 
   void _decrementCounter() {
     if(_counter>0) {
-      setState(() { _counter--;});
+      setState(() {
+        _counter--;
+        whoseTurnIndex = (whoseFirstTurnIndex + _counter) % Spieler.names.length;
+      });
     }
   }
 
@@ -146,8 +154,8 @@ class _MyHomePageState extends State<MyHomePage> {
     if(!dontEditNames){
       setState(() => dontEditNames = true);
     }
-    if (!Spieler.fillingTwice(myName)) {
-      Spieler.addPoints(myName, myPoints);
+    if (!Spieler.fillingTwice(selectedPlayerName)) {
+      Spieler.addPoints(selectedPlayerName, myPoints);
       if(Spieler.filledFullRound()){
         _incrementCounter();
       }
@@ -155,11 +163,19 @@ class _MyHomePageState extends State<MyHomePage> {
     else{
       var empty = Spieler.whoIsEmpty();
       _showAlertDialog(
-        "${Locales.noSecondEntry[Lang.l].format([myName])}\n${Locales.hint[Lang.l]} ${empty.join(', ')}"
+        "${Locales.noSecondEntry[Lang.l].format([selectedPlayerName])}\n${Locales.hint[Lang.l]} ${empty.join(', ')}"
       );
     }
   }
 
+  void setOpener(){
+    if(!dontEditNames){
+      setState(() {
+        whoseFirstTurnIndex = Spieler.names.indexOf(selectedPlayerName);
+        whoseTurnIndex = whoseFirstTurnIndex;
+      });
+    }
+  }
   void closeKbd(){
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
@@ -194,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void deleteLastEntry() {
     bool rowWasJustFilled = Spieler.filledFullRound();
-    Spieler.deleteLastEntry(myName);
+    Spieler.deleteLastEntry(selectedPlayerName);
     if(rowWasJustFilled){
       _decrementCounter();
     }
@@ -232,7 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Container(
                   margin: edgeInsets,
-                  width: 100,
+                  width: 60,
                   child: Text(Locales.playedRounds[Lang.l]),
                 ),
                 Container(
@@ -244,8 +260,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Container(
+                  margin: edgeInsets,
+                  width: 80,
+                  child: Text(Locales.opener[Lang.l]
+                    .format([Spieler.names[whoseTurnIndex].truncate(10)]
+                    )),
+                ),
+                Container(
                   alignment: Alignment.bottomRight,
-                  width: 42,
+                  width: 30,
                   child: const Icon(Icons.language),
                 ),
                 SizedBox(
@@ -268,7 +291,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     .where((x) => x != "").toList();
                   if(names.length > 1) {
                     Spieler.names = names.map((x)=> x.trim()).toList();
-                    myName = Spieler.names.first;
+                    selectedPlayerName = Spieler.names.first;
                     setState(() => {});
                   }
                 },
@@ -302,8 +325,27 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               ),
               SizedBox(
+              // Whose turn
+              width: 80,
+              height: buttonHeight,
+              child: ElevatedButton(
+              onPressed: setOpener,
+              style: ButtonStyle(
+                padding: 
+                WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
+                  (Set<WidgetState> states) {
+                return const EdgeInsets.all(7);
+              },),
+                backgroundColor: WidgetStateProperty.all<Color>(
+                  const Color.fromARGB(255, 87, 228, 141)
+                ),
+              ),
+              child: const Icon(Icons.chair),
+            ),),
+            const SizedBox(width:10),
+            SizedBox(
                 width: 80,
-                height: 50,
+                height: buttonHeight,
                 child: ElevatedButton(
                 onPressed: deleteLastEntry,
                 style: ButtonStyle(
@@ -312,7 +354,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return const EdgeInsets.all(7);
                   },),
                   backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 87, 228, 141)
+                  const Color.fromARGB(255, 230, 124, 75)
                   ),
                 ),
                 child: const Icon(Icons.delete),
@@ -323,7 +365,7 @@ class _MyHomePageState extends State<MyHomePage> {
             buildselectableNamesMenu(),
             SizedBox(
               width: 150,
-              height: 50,
+              height: buttonHeight,
               child: ElevatedButton(
               onPressed: submitPoints,
               style: ButtonStyle(
@@ -338,7 +380,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height:20),
             SizedBox(
               width: 150,
-              height: 50,
+              height: buttonHeight,
               child: ElevatedButton(
               onPressed: showPoints,
               style: ButtonStyle(
@@ -356,7 +398,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 20),
             SizedBox(
               width: 150,
-              height: 50,
+              height: buttonHeight,
               child: ElevatedButton(
               onPressed: deleteEverything,
               style: ButtonStyle(
@@ -366,7 +408,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 return const EdgeInsets.all(7);
               },),
                 backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 204, 75, 11)
+                  const Color.fromARGB(255, 230, 124, 75)
                 ),
               ),
               child: Text(Locales.deleteAllResults[Lang.l]),
@@ -374,11 +416,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      //floatingActionButton: FloatingActionButton(
-      //  onPressed: _incrementCounter,
-      //  tooltip: Locales.nextRound[Lang.l],
-      //  child: const Icon(Icons.add),
-      //), // This trailing comma makes auto-formatting nicer for build methods.
     ),
     );
   }

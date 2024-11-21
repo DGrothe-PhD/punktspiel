@@ -26,6 +26,7 @@ class Locales {
     "Points for %s already submitted for this round.",
     "Les points pour %s sont déjà inscrits."
   ];
+  
   static const List<String> hint = [
     "Hinweis: Punkte fehlen für ", "Hint: Missing results for ",
     "Remarque : il manque des points pour"

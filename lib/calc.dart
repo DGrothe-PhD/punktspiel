@@ -92,4 +92,10 @@ extension IntListParsing on List<int>{
 
 extension StringFormatExtension on String {
   String format(var arguments) => sprintf(this, arguments);
+  String truncate(int maxLength) {
+    if(length > maxLength){
+      return "${substring(0, maxLength)}.";
+    }
+    return this;
+  }
 }
