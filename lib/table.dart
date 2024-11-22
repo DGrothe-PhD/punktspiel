@@ -45,17 +45,26 @@ class TableExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     try {
+      var buffer = StringBuffer();
+      buffer.write("# ${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n");
+      //
+      for(var player in Spieler.gruppe){
+        String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "";
+        buffer.write("## ${player.name}:$decoration\n - ${player.punkte.enumerateString()}\n");
+        buffer.write(" - ${Locales.pointsTotal[Lang.l]} ${player.sumPoints()}\n\n");
+      }
+      /*
       String placeholder = "# ${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
       for(var player in Spieler.gruppe){
         String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "";
         placeholder += "## ${player.name}:$decoration\n - ${player.punkte.enumerateString()}\n";
         placeholder += " - ${Locales.pointsTotal[Lang.l]} ${player.sumPoints()}\n\n";
-      }
+      }*/
       return Center(
           child: Column(
             children: <Widget>[
               SelectionArea(
-                child: StyleDecorator.viewMd(placeholder),
+                child: StyleDecorator.viewMd(buffer.toString()),
               ),
             SizedBox(
               width: 120,
