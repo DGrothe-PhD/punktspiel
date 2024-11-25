@@ -31,3 +31,6 @@ Designed for the fun of it and for learning!
 
 ### Input fields
 * Numbers: [Digits Only](https://stackoverflow.com/questions/49577781/how-to-create-number-input-field-in-flutter#49578197)
+
+### Miscellaneous Dart tips
+* Nested loops: [OuterLoop Label](https://stackoverflow.com/questions/70300104/how-to-break-out-of-nested-loops-in-dart)
