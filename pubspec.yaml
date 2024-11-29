@@ -65,6 +65,14 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/players.txt
+  fonts:
+    - family: B612 Mono
+      fonts:
+        - asset: assets/fonts/SpaceMono/SpaceMono-Regular.ttf
+        - asset: assets/fonts/SpaceMono/SpaceMono-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/SpaceMono/SpaceMono-Italic.ttf
+          style: italic
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
