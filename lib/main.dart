@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final selectLanguageController = TextEditingController();
   final EdgeInsets edgeInsets = const EdgeInsets.all(12);
 
-  int myPoints = 0;
+  int selectedPlayerPoints = 0;
   int whoseTurnIndex = 0;
   int whoseFirstTurnIndex = 0;
   double? buttonHeight = 30;
@@ -150,7 +150,11 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() => dontEditNames = true);
     }
     if (!Spieler.fillingTwice(selectedPlayerName)) {
-      Spieler.addPoints(selectedPlayerName, myPoints);
+      Spieler.addPoints(selectedPlayerName, selectedPlayerPoints);
+      setState(() {
+        numberFieldController.clear();
+        selectedPlayerPoints = 0;
+      });
       if(Spieler.filledFullRound()){
         _incrementCounter();
       }
@@ -248,10 +252,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Container(
                   alignment: Alignment.bottomRight,
-                  width: 20,
+                  width: 42,
                   child: Text(
                   '$_counter',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
                 Container(
@@ -307,7 +311,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: TextField(
                 controller: numberFieldController,
                 //onChanged Ereignis updated automatisch den angezeigten Text
-                onChanged: (newText) {myPoints = int.tryParse(newText) ?? 0;},
+                onChanged: (newText) {selectedPlayerPoints = int.tryParse(newText) ?? 0;},
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: Locales.points[Lang.l],
