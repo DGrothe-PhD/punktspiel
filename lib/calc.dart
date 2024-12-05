@@ -29,6 +29,10 @@ class Spieler{
     ].addPoints(punkte);
   }
 
+  static int getSumOfPoints(String name) {
+    return gruppe.firstWhere((element) => element.name == name).sumPoints();
+  }
+
   static void deleteLastEntry(String name){
     gruppe[
       gruppe.indexWhere((element) => element.name == name)
@@ -76,6 +80,8 @@ class Teilnehmer{
   void addPoints(int value){
     punkte.add(value);
   }
+
+  String playerName() => name;
 
   void popPointsEntry(){
     if (punkte.isNotEmpty){
