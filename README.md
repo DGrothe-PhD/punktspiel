@@ -2,13 +2,21 @@
 
 [![Build apk](https://github.com/DGrothe-PhD/punktspiel/actions/workflows/ci.yml/badge.svg)](https://github.com/DGrothe-PhD/punktspiel/actions/workflows/ci.yml)
 
-A local app to add points when playing cards in a group.
+A local app to add points when playing cards or similar games in a group.
 
 Designed for the fun of it and for learning!
+
+##  Games
+### Winning with fewer points
+* Rummy
+
+### Winning with more points (to be done)
+* Scrabble (crossword game): get points for words
 
 ## Features
 * Languages: DE, EN, FR
 * Entry field for player names, submit points, show results.
+* Denote who is starting a round, such as taking the first card.
 
 <img src="./doc/ExampleSubmitForm.png" alt="Submit Form" style="width:25%; height:auto;">&nbsp;&nbsp;<img src="./doc/ExampleResults.png" alt="Example Results" style="width:28%; height:auto;">
 
