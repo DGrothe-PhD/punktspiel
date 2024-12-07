@@ -26,12 +26,19 @@ class Locales {
     "Points for %s already submitted for this round.",
     "Les points pour %s sont déjà inscrits."
   ];
+  static const List<String> noColon = [
+    "Ohne Komma wird „%s“ als ein Name gelesen, korrekt?",
+    "Without at least one colon, ‘%s’ is read as one name. Proceed anyway?",
+    "Sans virgule(s), « %s » est lu comme un seul nom, correct ?"
+  ];
   
   static const List<String> hint = [
     "Hinweis: Punkte fehlen für ", "Hint: Missing results for ",
     "Remarque : il manque des points pour"
     ];
   static const List<String> gotIt = ["Verstanden!", "Got it!", "Compris !"];
+  static const List<String> answerYes = ["Ja", "Yes", "Oui"];
+  static const List<String> answerNo = ["Nein", "No", "Non"];
   static const List<String> playedRounds = ["Gespielt:", "Played:", "Joué :"];
   static const List<String> players = ["Teilnehmer:", "Players:", "Joueurs :"];
   static const List<String> opener = ["%s fängt an", "%s starts", "%s commence"];

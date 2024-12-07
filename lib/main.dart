@@ -146,10 +146,23 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void submitPoints() {
+  Future<void> submitPoints() async {
+    // Validating names list
     if(!dontEditNames){
+      if(namesFieldController.text.split(",").length < 2){
+        bool onlyOnePlayer = await _showYesNoDialog(Locales.noColon[Lang.l].format([namesFieldController.text]));
+        if(!onlyOnePlayer){
+          setState(() {
+            numberFieldController.clear();
+            selectedPlayerPoints = 0;
+          });
+          return;
+        }
+      }
       setState(() => dontEditNames = true);
     }
+
+    // Validating and submitting points
     if (!Spieler.fillingTwice(selectedPlayerName)) {
       Spieler.addPoints(selectedPlayerName, selectedPlayerPoints);
       setState(() {
@@ -165,6 +178,17 @@ class _MyHomePageState extends State<MyHomePage> {
       _showAlertDialog(
         "${Locales.noSecondEntry[Lang.l].format([selectedPlayerName])}\n${Locales.hint[Lang.l]} ${empty.join(', ')}"
       );
+    }
+  }
+
+  void _finishEditingNames(String newText){
+    List<String> names = newText.split(",")
+      .map((x)=> x.trim()).toList()
+      .where((x) => x != "").toList();
+    if(names.isNotEmpty) {
+      Spieler.names = names;
+      selectedPlayerName = Spieler.names.first;
+      setState(() => {});
     }
   }
 
@@ -197,6 +221,32 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  Future<bool> _showYesNoDialog(String message) async {
+    final answer = await showDialog<bool?>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(message),
+          actions: <Widget>[
+            CupertinoButton(
+              child: Text(Locales.answerYes[Lang.l]),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            CupertinoButton(
+              child: Text(Locales.answerNo[Lang.l]),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ), 
+          ],
+        );
+      },
+    );
+    return answer ?? false;
   }
 
   void showPoints() {
@@ -286,15 +336,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 controller: namesFieldController,
                 readOnly: dontEditNames,
                 //onChanged Ereignis updated automatisch den angezeigten Text
-                onChanged: (newText) {
-                  List<String> names = newText.split(",")
-                    .where((x) => x != "").toList();
-                  if(names.length > 1) {
-                    Spieler.names = names.map((x)=> x.trim()).toList();
-                    selectedPlayerName = Spieler.names.first;
-                    setState(() => {});
-                  }
-                },
+                onChanged: (newText) => _finishEditingNames(newText),
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: Locales.players[Lang.l],

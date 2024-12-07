@@ -63,7 +63,7 @@ class Spieler{
   }
   
   static List<Teilnehmer> whoIsWinning(){
-    if (filledFullRound() && gruppe[0].punkte.length >= gruppe.length){
+    if(gruppe.length > 1 && filledFullRound() && gruppe[0].punkte.length >= gruppe.length){
       var sumOfPoints = gruppe.map((x) => x.sumPoints());
       var best = sumOfPoints.min;
       return gruppe.where((x)=> x.sumPoints() == best).toList();
