@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_adjacent_string_concatenation
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -150,7 +152,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // Validating names list
     if(!dontEditNames){
       if(namesFieldController.text.split(",").length < 2){
-        bool onlyOnePlayer = await _showYesNoDialog(Locales.noColon[Lang.l].format([namesFieldController.text]));
+        bool onlyOnePlayer = await _showYesNoDialog(
+          Locales.noColon[Lang.l].format([namesFieldController.text])
+        );
         if(!onlyOnePlayer){
           setState(() {
             numberFieldController.clear();
@@ -176,7 +180,8 @@ class _MyHomePageState extends State<MyHomePage> {
     else{
       var empty = Spieler.whoIsEmpty();
       _showAlertDialog(
-        "${Locales.noSecondEntry[Lang.l].format([selectedPlayerName])}\n${Locales.hint[Lang.l]} ${empty.join(', ')}"
+        "${Locales.noSecondEntry[Lang.l].format([selectedPlayerName])}\n"
+          + "${Locales.hint[Lang.l]} ${empty.join(', ')}"
       );
     }
   }
@@ -294,6 +299,19 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Row(children: [
+              Container(
+                margin: const EdgeInsets.all(7),
+                alignment: Alignment.bottomRight,
+                width: 30,
+                child: const Icon(Icons.language),
+              ),
+              SizedBox(
+                width: 111,
+                child: buildselectLanguagesMenu(),
+              ),
+            ],
+            ),
             Row(
               children: [
                 Container(
@@ -311,19 +329,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Container(
                   margin: edgeInsets,
-                  width: 80,
+                  //width: 120,
                   child: Text(Locales.opener[Lang.l]
                     .format([Spieler.names[whoseTurnIndex].truncate(10)]
                   )),
-                ),
-                Container(
-                  alignment: Alignment.bottomRight,
-                  width: 30,
-                  child: const Icon(Icons.language),
-                ),
-                SizedBox(
-                  width: 111,
-                  child: buildselectLanguagesMenu(),
                 ),
               ],
             ),
@@ -368,7 +377,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
               // Whose turn
-              width: 80,
+              width: 70,
               height: buttonHeight,
               child: ElevatedButton(
               onPressed: setOpener,
@@ -386,7 +395,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),),
             const SizedBox(width:10),
             SizedBox(
-                width: 80,
+                width: 70,
                 height: buttonHeight,
                 child: ElevatedButton(
                 onPressed: deleteLastEntry,
