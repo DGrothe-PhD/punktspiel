@@ -274,6 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void deleteEverything() {
     for(Teilnehmer t in Spieler.gruppe){
       t.punkte.clear();
+      _counter = 0;
     }
     setState(() { dontEditNames = false;});
   }
