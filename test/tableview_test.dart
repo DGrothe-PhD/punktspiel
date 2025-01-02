@@ -2,57 +2,170 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:punktspiel/main.dart';
+import 'package:punktspiel/calc.dart';
 import 'package:punktspiel/locales.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  PointsSubmittingTest testSuite = PointsSubmittingTest();
+  //testSuite.testIfEverythingFineAndCounterIncrements();
+  testSuite.testWhoIsWinning();
+}
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-    expect(find.text('Eins'), findsAtLeast(1));
-    //expect(find.text('Vier').hitTestable(), findsAtLeast(1));
+class PointsSubmittingTest{
+  Finder? firstPlayer, numPointsField, submittingPointsButton, secondPlayer;
+  Finder? tapAnchor;
+
+  Future givePoints({required WidgetTester tester, required int points}) 
+    async {
+      await tester.enterText(numPointsField!, "$points");
+      await tester.tap(tapAnchor!);
+      await tester.pumpAndSettle();
+      await tester.tap(submittingPointsButton!);
+      await tester.pumpAndSettle();
+  }
+
+  void testIfEverythingFineAndCounterIncrements(){
+    testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(const MyApp());
+
+      // Verify that our counter starts at 0.
+      expect(find.text('0'), findsOneWidget);
+      expect(find.text('1'), findsNothing);
+      expect(find.text('Eins'), findsAtLeast(1));
+      //expect(find.text('Vier').hitTestable(), findsAtLeast(1));
 
 
-    // Let's type some names and check if that's effective.
-    await tester.enterText(
-      find.bySemanticsLabel(Locales.players[Lang.l]),
-      "Anna 🍂,Dagmar 🦆",
-    );
-    await tester.tap(find.text('0'));
-    // Won't let me tap on AppBar or Scaffold by type.
+      // Let's type some names and check if that's effective.
+      await tester.enterText(
+        find.bySemanticsLabel(Locales.players[Lang.l]),
+        "Anna 🍂,Dagmar 🦆",
+      );
+      // Just tap somewhere I can code for. 
+      // First try was AppBar or Scaffold by type. Guess that's due to some hierarchical confusion.
+      await tester.tap(find.text('0'));
+      await tester.pumpAndSettle();
 
-    await tester.pumpAndSettle();
-    expect(find.text('Eins'), findsNothing);
+      // Assert that there's just Anna on top, nothing else.
+      expect(find.text('Eins'), findsNothing);
+      expect(find.text('Dagmar 🦆'), findsNothing);
 
-    expect(find.text('Dagmar 🦆'), findsNothing);
-    // Set a name for the names dropdownMenu
+      // Define some variables for the DropdownButton and point submitting
+      firstPlayer = find.text("Anna 🍂");
+      expect(firstPlayer, findsOneWidget);// ☺
+      numPointsField = find.bySemanticsLabel(Locales.points[Lang.l]);
+      expect(numPointsField, findsOneWidget);
+      submittingPointsButton = find.bySemanticsLabel(Locales.submit[Lang.l]);
+      expect(submittingPointsButton, findsOneWidget);
 
-    // TRYING
-    final nameSelector = find.text("Anna 🍂");
-    expect(nameSelector, findsOneWidget);// ☺
+      // Enter points for first player
+      await givePoints(tester: tester, points: 42);
 
-    // Enter points
-    await tester.enterText(find.bySemanticsLabel(Locales.points[Lang.l]), '42');
-    await tester.tap(find.bySemanticsLabel(Locales.submit[Lang.l]));
+      // Select other player through opening the firstPlayer dropdownMenu
+      await tester.tap(firstPlayer!);
+      await tester.pumpAndSettle();
+      secondPlayer = find.text("Dagmar 🦆").hitTestable();
+      expect(secondPlayer, findsOneWidget);
 
-    // Enter some further points through opening the nameSelector dropdownMenu
-    await tester.tap(nameSelector);
-    await tester.pumpAndSettle();
-    final secondPlayerThere = find.text("Dagmar 🦆").hitTestable();
-    expect(secondPlayerThere, findsOneWidget);
+      // Now that second player exists, select that one and give that `guy` 21 points.
+      await tester.tap(secondPlayer!);
+      await tester.pumpAndSettle();
+      await givePoints(tester: tester, points: 21);
 
-    // Now that second player exists, select that one and give that `guy` 21 points.
-    await tester.tap(secondPlayerThere);
-    await tester.pumpAndSettle();
-    await tester.enterText(find.bySemanticsLabel(Locales.points[Lang.l]), '21');
-    await tester.tap(find.bySemanticsLabel(Locales.submit[Lang.l]));
-    await tester.pump();
+      // Verify that our counter is incremented.
+      expect(find.text('0'), findsNothing);
+      expect(find.text('1'), findsOneWidget);
+    });
+  }
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+  void testWhoIsWinning(){
+    testWidgets('Check point sum, Who is winning', (WidgetTester tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(const MyApp());
+
+      tapAnchor = find.text(Locales.playedRounds[Lang.l]);
+
+      // Let's type some names and check if that's effective.
+      await tester.enterText(
+        find.bySemanticsLabel(Locales.players[Lang.l]),
+        "Anna 🍂,Dagmar 🦆",
+      );
+      // Just tap somewhere I can code for. 
+      // First try was AppBar or Scaffold by type. Guess that's due to some hierarchical confusion.
+      await tester.tap(find.text(Locales.playedRounds[Lang.l]));
+      await tester.pumpAndSettle();
+
+      // Assert that there's just Anna on top, nothing else.
+      expect(find.text('Eins'), findsNothing);
+      expect(find.text('Dagmar 🦆'), findsNothing);
+
+      // Define some variables for the DropdownButton and point submitting
+      firstPlayer = find.text("Anna 🍂");
+      expect(firstPlayer, findsOneWidget);// ☺
+      numPointsField = find.bySemanticsLabel(Locales.points[Lang.l]);
+      expect(numPointsField, findsOneWidget);
+      submittingPointsButton = find.bySemanticsLabel(Locales.submit[Lang.l]);
+      expect(submittingPointsButton, findsOneWidget);
+
+      // ! Enter points for first player
+      expect(Spieler.getSumOfPoints("Anna 🍂"), equals(0));
+      await givePoints(tester: tester, points: 42);
+
+      expect(Spieler.getSumOfPoints("Anna 🍂"), equals(42));
+
+      // Select other player through opening the firstPlayer dropdownMenu
+      await tester.tap(firstPlayer!);
+      await tester.pumpAndSettle();
+      secondPlayer = find.text("Dagmar 🦆").hitTestable();
+      expect(secondPlayer, findsOneWidget);
+
+      // 2nd player gets points.
+      await tester.tap(secondPlayer!);
+      await tester.pumpAndSettle();
+      await givePoints(tester: tester, points: 0);
+      expect(Spieler.getSumOfPoints("Dagmar 🦆"), equals(0));
+
+      // ! Second round
+      await switchToPlayerNumber(tester: tester, i: 1);
+      await givePoints(tester: tester, points: 21);
+      expect(Spieler.getSumOfPoints("Dagmar 🦆"), equals(0));
+      expect(Spieler.getSumOfPoints("Anna 🍂"), equals(63));
+
+      // 2nd player gets points.
+      await switchToPlayerNumber(tester: tester, i: 2);
+      await givePoints(tester: tester, points: 0);
+      expect(Spieler.getSumOfPoints("Dagmar 🦆"), equals(0));
+
+      // ! Third round
+      await switchToPlayerNumber(tester: tester, i: 1);
+      await givePoints(tester: tester, points: 17);
+      expect(Spieler.getSumOfPoints("Anna 🍂"), equals(80));
+
+      await switchToPlayerNumber(tester: tester, i: 2);
+      await givePoints(tester: tester, points: 11);
+      expect(Spieler.getSumOfPoints("Dagmar 🦆"), equals(11));
+
+      // Verify that our counter is incremented.
+      expect(find.text('1'), findsNothing);
+      expect(find.text('3'), findsOneWidget);
+
+      expect(Spieler.whoIsWinning().first.playerName(), equals("Dagmar 🦆"));
+    });
+  }
+
+  Future switchToPlayerNumber({required WidgetTester tester, required int i}) async {
+    switch(i){
+      case 1:
+        await tester.tap(secondPlayer!);
+        await tester.pumpAndSettle();
+        await tester.tap(firstPlayer!);
+        break;
+      case 2:
+        await tester.tap(firstPlayer!);
+        await tester.pumpAndSettle();
+        await tester.tap(secondPlayer!);
+      default:
+        break;
+    }
+  }
 }
