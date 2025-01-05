@@ -59,12 +59,13 @@ class _MyHomePageState extends State<MyHomePage> {
   final namesFieldController = TextEditingController();
   final selectableNamesMenuController = TextEditingController();
   final selectLanguageController = TextEditingController();
+  final selectPointsRuleController = TextEditingController();
   final EdgeInsets edgeInsets = const EdgeInsets.all(12);
+  final double? buttonHeight = 30;
 
   int selectedPlayerPoints = 0;
   int whoseTurnIndex = 0;
   int whoseFirstTurnIndex = 0;
-  double? buttonHeight = 30;
   String selectedPlayerName = Spieler.names.first;
 
   bool dontEditNames = false;
@@ -104,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+//TODO make readonly by using dropdownButton!
   Widget buildselectLanguagesMenu({bool wellBehaving = true}){
     if(wellBehaving){
       return DropdownMenu<String>(
@@ -127,6 +129,28 @@ class _MyHomePageState extends State<MyHomePage> {
       return const SizedBox(width: 50, child: Text(" [tbd]"));
     }
   }
+
+//TODO make readonly, or replace with a switch.
+  late Widget pointsWinningSwitch = DropdownMenu<String>(
+      key: ValueKey(Object.hashAll(Locales.pointsRule[Lang.l])),
+      requestFocusOnTap: true,
+      enableSearch: true,
+      controller: selectPointsRuleController,
+      initialSelection: Locales.pointsRule[Lang.l].first,
+      //expandedInsets: edgeInsets,
+      expandedInsets: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
+      textStyle: const TextStyle(fontSize: 14),
+      onSelected: (String? value){
+        setState(
+          () => Spieler.leastPointsWinning = (value == Locales.pointsRule[Lang.l].first)
+        );
+      },
+      dropdownMenuEntries: Locales.pointsRule[Lang.l].map<DropdownMenuEntry<String>>(
+        (String value) {
+          return DropdownMenuEntry<String>(value: value, label: value);
+      }).toList(),
+      width: 100,
+  );
 
   _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
@@ -310,6 +334,11 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 width: 111,
                 child: buildselectLanguagesMenu(),
+              ),
+              const Text("Gewinn: "),
+              SizedBox(
+                width: 111,
+                child: pointsWinningSwitch,
               ),
             ],
             ),

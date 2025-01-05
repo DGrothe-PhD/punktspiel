@@ -9,6 +9,9 @@ class Spieler{
   static List<String> _names = ["Eins", "Zwei", "Drei", "Vier" ];
   static List<Teilnehmer> gruppe = [];
 
+  // default: rummy, lowest number of points is winning, as opposed to scrabble.
+  static bool leastPointsWinning = true;
+
   static set names(List<String> values){
     // By making _names private, the new names call settings to update groups.
     _names = values;
@@ -65,7 +68,7 @@ class Spieler{
   static List<Teilnehmer> whoIsWinning(){
     if(gruppe.length > 1 && filledFullRound() && gruppe[0].punkte.length >= gruppe.length){
       var sumOfPoints = gruppe.map((x) => x.sumPoints());
-      var best = sumOfPoints.min;
+      var best = leastPointsWinning? sumOfPoints.min : sumOfPoints.max;
       return gruppe.where((x)=> x.sumPoints() == best).toList();
     }
     return <Teilnehmer>[];
