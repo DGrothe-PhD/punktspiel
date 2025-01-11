@@ -16,6 +16,8 @@ class Lang{
         l = 1;
     }
   }
+
+  static String currentLanguageCode() => availableLanguages[l];
 }
 
 

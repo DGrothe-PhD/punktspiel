@@ -55,11 +55,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   //Each editable field needs their controller.
   //Otherwise, stuff happens, such as that a name appears in a number field.
-  final numberFieldController = TextEditingController();
-  final namesFieldController = TextEditingController();
-  final selectableNamesMenuController = TextEditingController();
-  final selectLanguageController = TextEditingController();
-  final selectPointsRuleController = TextEditingController();
+  final TextEditingController numberFieldController = TextEditingController();
+  final TextEditingController namesFieldController = TextEditingController();
+  final TextEditingController selectableNamesMenuController = TextEditingController();
+  final TextEditingController selectPointsRuleController = TextEditingController();
   final EdgeInsets edgeInsets = const EdgeInsets.all(12);
   final double? buttonHeight = 30;
 
@@ -105,24 +104,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-//TODO make readonly by using dropdownButton!
   Widget buildselectLanguagesMenu({bool wellBehaving = true}){
     if(wellBehaving){
-      return DropdownMenu<String>(
+      return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Lang.availableLanguages)),
-      requestFocusOnTap: true,
-      enableSearch: true,
-      controller: selectLanguageController,
-      initialSelection: Lang.availableLanguages.first,
-      expandedInsets: edgeInsets,
-      onSelected: (String? value){
+      isExpanded: true,
+      value: Lang.currentLanguageCode(),
+      padding: edgeInsets,
+      onChanged: (String? value){
         setState(() => Lang.setLanguage(value ?? "EN"));
       },
-      dropdownMenuEntries: Lang.availableLanguages.map<DropdownMenuEntry<String>>(
+      items: Lang.availableLanguages.map<DropdownMenuItem<String>>(
         (String value) {
-          return DropdownMenuEntry<String>(value: value, label: value);
+          return DropdownMenuItem<String>(value: value, child: Text(value));
       }).toList(),
-      width: 100,
+      menuWidth: 100,
       );
     }
     else{
@@ -499,4 +495,5 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
     );
   }
+
 }
