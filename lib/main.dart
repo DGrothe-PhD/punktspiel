@@ -58,7 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController numberFieldController = TextEditingController();
   final TextEditingController namesFieldController = TextEditingController();
   final TextEditingController selectableNamesMenuController = TextEditingController();
-  final TextEditingController selectPointsRuleController = TextEditingController();
   final EdgeInsets edgeInsets = const EdgeInsets.all(12);
   final double? buttonHeight = 30;
 
@@ -126,27 +125,25 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-//TODO make readonly, or replace with a switch.
-  late Widget pointsWinningSwitch = DropdownMenu<String>(
+  Widget buildpointsWinningSwitch() {
+   return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Locales.pointsRule[Lang.l])),
-      requestFocusOnTap: true,
-      enableSearch: true,
-      controller: selectPointsRuleController,
-      initialSelection: Locales.pointsRule[Lang.l].first,
+      // ! should not be changed after first points submitted just like with the names.
+      value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
       //expandedInsets: edgeInsets,
-      expandedInsets: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
-      textStyle: const TextStyle(fontSize: 14),
-      onSelected: (String? value){
+      padding: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
+      onChanged: (String? value){
         setState(
           () => Spieler.leastPointsWinning = (value == Locales.pointsRule[Lang.l].first)
         );
       },
-      dropdownMenuEntries: Locales.pointsRule[Lang.l].map<DropdownMenuEntry<String>>(
+      items: Locales.pointsRule[Lang.l].map<DropdownMenuItem<String>>(
         (String value) {
-          return DropdownMenuEntry<String>(value: value, label: value);
+          return DropdownMenuItem<String>(value: value, child: Text(value));
       }).toList(),
-      width: 100,
-  );
+      menuWidth: 100,
+   );
+  }
 
   _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
@@ -334,7 +331,7 @@ class _MyHomePageState extends State<MyHomePage> {
               const Text("Gewinn: "),
               SizedBox(
                 width: 111,
-                child: pointsWinningSwitch,
+                child: buildpointsWinningSwitch(),
               ),
             ],
             ),
