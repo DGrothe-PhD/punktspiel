@@ -69,37 +69,19 @@ class _MyHomePageState extends State<MyHomePage> {
   bool dontEditNames = false;
 
   Widget buildselectableNamesMenu(){
-    var dropdown = DropdownButton<String>(
+    //var dropdown = 
+    return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Spieler.names)),
       isExpanded: true,
+      padding: edgeInsets,
       value: selectedPlayerName,
       onChanged: (String? value){
-        setState((){
-          selectedPlayerName = value ?? "";
-        });
-        
+        setState((){ selectedPlayerName = value ?? ""; });
       },
       items: Spieler.names.map<DropdownMenuItem<String>>(
         (String value) {
           return DropdownMenuItem<String>(value: value, child: Text(value));
         }).toList(),
-    );
-    return Container(
-      margin: edgeInsets,
-      //padding: edgeInsets,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(3)),
-      ),
-      width: double.infinity,
-      //child: dropdown,
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          canvasColor: const Color.fromARGB(255, 249, 208, 83), // background color for the dropdown items
-          buttonTheme: ButtonTheme.of(context).copyWith(
-          alignedDropdown: true,  //If false (the default), then the dropdown's menu will be wider than its button.
-        )),
-        child: dropdown
-      )
     );
   }
 
@@ -128,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildpointsWinningSwitch() {
    return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Locales.pointsRule[Lang.l])),
+      isExpanded: true,
       // ! should not be changed after first points submitted just like with the names.
       value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
       //expandedInsets: edgeInsets,
@@ -353,9 +336,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   margin: edgeInsets,
                   //width: 120,
-                  child: Text(Locales.opener[Lang.l]
-                    .format([Spieler.names[whoseTurnIndex].truncate(10)]
-                  )),
+                  child: Text(
+                    (whoseTurnIndex < Spieler.names.length)?
+                    Locales.opener[Lang.l]
+                    .format([
+                      Spieler.names[whoseTurnIndex].truncate(10)
+                    ]) : "< empty >"
+                  ),
                 ),
               ],
             ),
@@ -435,6 +422,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),),
             ],
             ),
+            // TODO maybe SizedBox here.
             buildselectableNamesMenu(),
             SizedBox(
               width: 150,
