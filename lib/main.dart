@@ -111,11 +111,10 @@ class _MyHomePageState extends State<MyHomePage> {
    return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Locales.pointsRule[Lang.l])),
       isExpanded: true,
-      // ! should not be changed after first points submitted just like with the names.
       value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
-      //expandedInsets: edgeInsets,
       padding: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
       onChanged: (String? value){
+        dontEditNames ? null :
         setState(
           () => Spieler.leastPointsWinning = (value == Locales.pointsRule[Lang.l].first)
         );
@@ -167,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // Validating and submitting points
+    // TODO refactor if else
     if (!Spieler.fillingTwice(selectedPlayerName)) {
       Spieler.addPoints(selectedPlayerName, selectedPlayerPoints);
       setState(() {
