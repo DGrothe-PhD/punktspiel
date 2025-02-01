@@ -68,8 +68,8 @@ class TableExample extends StatelessWidget {
 
       StringBuffer playerNames = StringBuffer();
       for(var player in Spieler.gruppe){
-        String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "";
-        playerNames.write(" ${player.name.truncate(10)}$decoration |".padLeft(14, " "));
+        String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "  ";
+        playerNames.write("${player.name.truncate(10)}$decoration|".padLeft(14, " "));
       }
       playerNames.write("\n");
 
@@ -80,8 +80,6 @@ class TableExample extends StatelessWidget {
             continue;
           }
           buffer.write(" ${player.punkte[j]} |".padLeft(14, " "));
-        //buffer.write("## ${player.name}:$decoration\n - ${player.punkte.enumerateString()}\n");
-        //buffer.write(" - ${Locales.pointsTotal[Lang.l]} ${player.sumPoints()}\n\n");
         }
         buffer.write("\n");
       }
@@ -105,7 +103,6 @@ class TableExample extends StatelessWidget {
               SelectionArea(
                 child: 
                 RichText(
-                  //TODO test IRL aka Android Phone
                   selectionRegistrar: SelectionContainer.maybeOf(context),
                   textAlign: TextAlign.right,
                   text: TextSpan(
@@ -118,13 +115,10 @@ class TableExample extends StatelessWidget {
                       ),
                       TextSpan(
                         text: buffer.toString(),
-                        style: StyleDecorator.monoStil,
                       ),
                     ],
                   ),
                 ),
-                //child: StyleDecorator.typewriter(buffer.toString()),
-                //child: StyleDecorator.viewMd(buffer.toString(), isMD: true),
               ),
               const SizedBox(height:20),
             SizedBox(
