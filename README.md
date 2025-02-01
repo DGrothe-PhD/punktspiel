@@ -26,7 +26,7 @@ You'll find
 * Entry field for player names, submit points, show results.
 * Denote who is starting a round, such as taking the first card.
 
-<img src="./doc/ExampleSubmitForm.png" alt="Submit Form" style="width:25%; height:auto;">&nbsp;&nbsp;<img src="./doc/ExampleResults.png" alt="Example Results" style="width:28%; height:auto;">
+<img src="./doc/ExampleSubmitForm.png?" alt="Submit Form" style="width:25%; height:auto;">&nbsp;&nbsp;<img src="./doc/ExampleResults.png?" alt="Example Results" style="width:28%; height:auto;">
 
 ## Installation
 * Android: Which APK to use, you find the CPU type of your phone for example [here](https://www.gsmarena.com/)
