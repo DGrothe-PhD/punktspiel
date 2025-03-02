@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
+import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:intl/intl.dart';
 import './calc.dart';
 import './locales.dart';
@@ -100,25 +101,31 @@ class TableExample extends StatelessWidget {
           child: Column(
             //crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              SelectionArea(
-                child: 
-                RichText(
-                  selectionRegistrar: SelectionContainer.maybeOf(context),
-                  textAlign: TextAlign.right,
-                  text: TextSpan(
-                    text: headline,
-                    style: StyleDecorator.monoStil,
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: playerNames.toString(),
-                        style: StyleDecorator.textstil,
-                      ),
-                      TextSpan(
-                        text: buffer.toString(),
-                      ),
-                    ],
-                  ),
+              WidgetAnimator(
+                incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
+                  duration: const Duration(milliseconds: 2000),
                 ),
+                child:
+                  SelectionArea(
+                    child: 
+                    RichText(
+                      selectionRegistrar: SelectionContainer.maybeOf(context),
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                        text: headline,
+                        style: StyleDecorator.monoStil,
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: playerNames.toString(),
+                            style: StyleDecorator.textstil,
+                          ),
+                          TextSpan(
+                            text: buffer.toString(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
               ),
               const SizedBox(height:20),
             SizedBox(
