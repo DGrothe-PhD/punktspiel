@@ -3,6 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 import './table.dart';
 import './calc.dart';
 import './locales.dart';
@@ -474,6 +476,21 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: Text(Locales.deleteAllResults[Lang.l]),
             ),),
+            const SizedBox(height: 20),
+            // Test Website Access
+            ElevatedButton.icon(
+              onPressed: _launchURL,
+              icon: const Icon(Icons.favorite),
+              label: const Text(
+                'Support me on Ko-fi',
+                style: TextStyle(fontSize: 12.0),
+              ),
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(
+                  const Color.fromARGB(255, 165, 206, 185)
+                ),
+              )
+      ),
           ],
         ),
       ),
@@ -481,4 +498,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  _launchURL() async {
+   final Uri url = Uri.parse('https://ko-fi.com/danielagrothe');
+   if (!await launchUrl(
+    url, webOnlyWindowName: "Web Title"
+    )) {
+        throw Exception('Could not launch $url');
+    }
+  }
 }
