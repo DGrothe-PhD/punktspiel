@@ -15,3 +15,6 @@
 
 ### Miscellaneous Dart tips
 * Nested loops: [OuterLoop Label](https://stackoverflow.com/questions/70300104/how-to-break-out-of-nested-loops-in-dart)
+
+### Web view
+* [In-app web view](https://inappwebview.dev/docs/intro/)
