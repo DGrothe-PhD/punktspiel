@@ -43,6 +43,8 @@ dependencies:
   sprintf: ^7.0.0
   widget_and_text_animator: ^1.1.5
   url_launcher: ^6.3.1
+  swipe_to: ^1.0.6
+  share_plus: ^10.1.4
 
 dev_dependencies:
   flutter_test:

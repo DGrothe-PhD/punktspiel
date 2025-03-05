@@ -1,9 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
+import 'package:swipe_to/swipe_to.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:intl/intl.dart';
+import 'dart:io' show Platform;
 import './calc.dart';
 import './locales.dart';
 
@@ -59,15 +63,18 @@ class TableExample extends StatelessWidget {
   static const String winningDecoration = "🎉";
   final now = DateTime.now();
   TableExample({super.key});
+  static String headline = "";
+  static StringBuffer playerNames = StringBuffer();
+  static StringBuffer gameResultText = StringBuffer();
 
   @override
   Widget build(BuildContext context) {
     try {
-      StringBuffer buffer = StringBuffer();
-      String headline = "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
+      gameResultText = StringBuffer();
+      headline = "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
       int maxCounts = Spieler.gruppe.map((x) => x.punkte.length).max;
 
-      StringBuffer playerNames = StringBuffer();
+      playerNames = StringBuffer();
       for(var player in Spieler.gruppe){
         String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "  ";
         playerNames.write("${player.name.truncate(10)}$decoration|".padLeft(14, " "));
@@ -77,19 +84,19 @@ class TableExample extends StatelessWidget {
       for(int j=0;j<maxCounts;j++){
         for(var player in Spieler.gruppe){
           if(j >= player.punkte.length){
-            buffer.write(" |".padLeft(14, " "));
+            gameResultText.write(" |".padLeft(14, " "));
             continue;
           }
-          buffer.write(" ${player.punkte[j]} |".padLeft(14, " "));
+          gameResultText.write(" ${player.punkte[j]} |".padLeft(14, " "));
         }
-        buffer.write("\n");
+        gameResultText.write("\n");
       }
       // do a `===============`
-      buffer.write("${"=" * 14 * Spieler.gruppe.length}\n");
+      gameResultText.write("${"=" * 14 * Spieler.gruppe.length}\n");
 
       // Sum of points
       for(var player in Spieler.gruppe){
-        buffer.write(" ${player.sumPoints()} |".padLeft(14, " "));
+        gameResultText.write(" ${player.sumPoints()} |".padLeft(14, " "));
       }
       // try SelectableText.rich, onTap
       // as here https://stackoverflow.com/q/60395983/17677104
@@ -98,6 +105,9 @@ class TableExample extends StatelessWidget {
       // https://stackoverflow.com/questions/49617934/how-to-make-text-or-richtext-scrollable-in-flutter
       
       return Center(
+        child: SwipeTo(
+          onRightSwipe: (details) => {Navigator.pop(context)},
+          onLeftSwipe: (details) => {_onShare(context)},
           child: Column(
             //crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -119,15 +129,26 @@ class TableExample extends StatelessWidget {
                             text: playerNames.toString(),
                             style: StyleDecorator.textstil,
                           ),
-                          TextSpan(
-                            text: buffer.toString(),
-                          ),
+                          TextSpan(text: gameResultText.toString(),),
                         ],
                       ),
                     ),
                   ),
               ),
               const SizedBox(height:20),
+            ElevatedButton(
+              onPressed: () => {_onShare(context)},
+              style: ButtonStyle(
+                  padding: WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
+                    (Set<WidgetState> states) {
+                  return const EdgeInsets.all(7);
+                  },),
+                  backgroundColor: WidgetStateProperty.all<Color>(
+                  const Color.fromARGB(255, 221, 215, 157)
+                  ),
+              ),
+              child: Text(Locales.share[Lang.l]),
+            ),
             SizedBox(
               width: 120,
               height: 50,
@@ -147,10 +168,35 @@ class TableExample extends StatelessWidget {
             ),
           ]
           )
+        ),
       );  
   }
     catch (exception){
       //Make exception readable.
       return Text(exception.toString());
   }
-}}
+}
+
+  void _onShare(BuildContext context) async {
+    final box = context.findRenderObject() as RenderBox?;
+    if(Platform.isWindows){
+      Clipboard.setData(ClipboardData(
+        text: gameResultText.isEmpty? "Nichts/None/Rien" 
+        : "$headline\n$playerNames$gameResultText"
+      ));
+      showDialog(
+        context: context,
+        builder:(context) => const AlertDialog(
+          title: Text("Copied"),
+          content: Text("Game results copied to clipboard."),
+      ));
+      return;
+    }
+    await Share.share(
+      gameResultText.isEmpty? "Nichts/None/Rien" 
+      : "$headline\n$playerNames$gameResultText",
+      subject: Locales.emailSubject[Lang.l],
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+    );
+  }
+}

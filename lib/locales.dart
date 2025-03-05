@@ -60,4 +60,14 @@ class Locales {
     ["-- the least", "++ the most"],
     ["-- les moins", "++ les plus"]
   ];
+
+  static const List<String> isOffline = [
+    "Diese Seite kann nicht angezeigt werden.",
+    "Sorry, the website cannot be displayed",
+    "Cette page ne peut pas être affichée."
+  ];
+  static const List<String> share = ["Teilen", "Share", "Partager"];
+  static const List<String> emailSubject = [
+    "Unsere Spielergebnisse", "Our game results", "Notres résultats de jeu"
+  ];
 }
