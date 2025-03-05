@@ -55,6 +55,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   //Each editable field needs their controller.
   //Otherwise, stuff happens, such as that a name appears in a number field.
   final TextEditingController numberFieldController = TextEditingController();
@@ -285,20 +286,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: closeKbd,
+      
       //onDoubleTap: () => {},
       //onLongPress: () => {},
       child: Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Colors.amber,
-        //Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+        key: _scaffoldKey,
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(backgroundColor: Colors.amber, title: Text(widget.title),),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -309,15 +304,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 30,
                 child: const Icon(Icons.language),
               ),
-              SizedBox(
-                width: 111,
-                child: buildselectLanguagesMenu(),
-              ),
+              SizedBox(width: 111, child: buildselectLanguagesMenu(),),
               const Text("Gewinn: "),
-              SizedBox(
-                width: 111,
-                child: buildpointsWinningSwitch(),
-              ),
+              SizedBox(width: 111, child: buildpointsWinningSwitch(),),
             ],
             ),
             Row(
@@ -500,10 +489,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _launchURL() async {
    final Uri url = Uri.parse('https://ko-fi.com/danielagrothe');
-   if (!await launchUrl(
-    url, webOnlyWindowName: "Web Title"
-    )) {
-        throw Exception('Could not launch $url');
-    }
+   if (!await launchUrl(url, webOnlyWindowName: "Web Title")) {
+      _showAlertDialog(Locales.isOffline[Lang.l]);
+   }
   }
 }
