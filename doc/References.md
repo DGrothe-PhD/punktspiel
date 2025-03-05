@@ -9,6 +9,7 @@
 <!--* Updatable tables (beta state?): [Dynamic table](https://pub.dev/packages/dynamic_table)-->
 * Navigating:
   - MaterialApp vs. Scaffold: [fixing black screen issue](https://stackoverflow.com/questions/53723294/flutter-navigator-popcontext-returning-a-black-screen)
+  - Swipe gestures https://pub.dev/packages/swipe_to
 
 ### Input fields
 * Numbers: [Digits Only](https://stackoverflow.com/questions/49577781/how-to-create-number-input-field-in-flutter#49578197)
