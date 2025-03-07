@@ -3,11 +3,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/flutter_html.dart';
+//import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './table.dart';
 import './calc.dart';
 import './locales.dart';
+import './styles.dart';
 
 void main() {
   Spieler.settings();
@@ -169,23 +170,21 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // Validating and submitting points
-    // TODO refactor if else
-    if (!Spieler.fillingTwice(selectedPlayerName)) {
-      Spieler.addPoints(selectedPlayerName, selectedPlayerPoints);
-      setState(() {
-        numberFieldController.clear();
-        selectedPlayerPoints = 0;
-      });
-      if(Spieler.filledFullRound()){
-        _incrementCounter();
-      }
-    }
-    else{
+    if (Spieler.fillingTwice(selectedPlayerName)){
       var empty = Spieler.whoIsEmpty();
       _showAlertDialog(
         "${Locales.noSecondEntry[Lang.l].format([selectedPlayerName])}\n"
           + "${Locales.hint[Lang.l]} ${empty.join(', ')}"
       );
+      return;
+    }
+    Spieler.addPoints(selectedPlayerName, selectedPlayerPoints);
+    setState(() {
+      numberFieldController.clear();
+      selectedPlayerPoints = 0;
+    });
+    if(Spieler.filledFullRound()){
+      _incrementCounter();
     }
   }
 
@@ -286,7 +285,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: closeKbd,
-      
       //onDoubleTap: () => {},
       //onLongPress: () => {},
       child: Scaffold(
@@ -382,16 +380,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: buttonHeight,
               child: ElevatedButton(
               onPressed: setOpener,
-              style: ButtonStyle(
-                padding: 
-                WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
-                  (Set<WidgetState> states) {
-                return const EdgeInsets.all(7);
-              },),
-                backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 87, 228, 141)
-                ),
-              ),
+              style: ButtonStyle(backgroundColor: Themes.green),
               child: const Icon(Icons.chair),
             ),),
             const SizedBox(width:10),
@@ -400,34 +389,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: buttonHeight,
                 child: ElevatedButton(
                 onPressed: deleteLastEntry,
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
-                    (Set<WidgetState> states) {
-                  return const EdgeInsets.all(7);
-                  },),
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 230, 124, 75)
-                  ),
-                ),
+                style: ButtonStyle(backgroundColor: Themes.pumpkin),
                 child: const Icon(Icons.delete),
               ),),
             ],
             ),
-            // TODO maybe SizedBox here.
             buildselectableNamesMenu(),
             SizedBox(
               width: 150,
               height: buttonHeight,
               child: ElevatedButton(
               onPressed: submitPoints,
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 243, 198, 76)
-                ),
-              ),
-              child: 
-              //const Icon(Icons.check_box),
-              Text(Locales.submit[Lang.l]),
+              style: ButtonStyle(backgroundColor: Themes.sunflower),
+              child: Text(Locales.submit[Lang.l]),
             ),),
             const SizedBox(height:20),
             SizedBox(
@@ -435,16 +409,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: buttonHeight,
               child: ElevatedButton(
               onPressed: showPoints,
-              style: ButtonStyle(
-                padding: 
-                WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
-                  (Set<WidgetState> states) {
-                return const EdgeInsets.all(7);
-              },),
-                backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 87, 228, 141)
-                ),
-              ),
+              style: ButtonStyle(backgroundColor: Themes.green),
               child: Text(Locales.results[Lang.l]),
             ),),
             const SizedBox(height: 20),
@@ -453,16 +418,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: buttonHeight,
               child: ElevatedButton(
               onPressed: deleteEverything,
-              style: ButtonStyle(
-                padding: 
-                WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
-                  (Set<WidgetState> states) {
-                return const EdgeInsets.all(7);
-              },),
-                backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 230, 124, 75)
-                ),
-              ),
+              style: ButtonStyle(backgroundColor: Themes.pumpkin),
               child: Text(Locales.deleteAllResults[Lang.l]),
             ),),
             const SizedBox(height: 20),
@@ -470,16 +426,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton.icon(
               onPressed: _launchURL,
               icon: const Icon(Icons.favorite),
-              label: const Text(
-                'Support me on Ko-fi',
-                style: TextStyle(fontSize: 12.0),
-              ),
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 165, 206, 185)
-                ),
-              )
-      ),
+              label: const Text('Support me on Ko-fi', style: TextStyle(fontSize: 12.0)              ),
+              style: ButtonStyle(backgroundColor: Themes.greenish),
+            )
           ],
         ),
       ),
