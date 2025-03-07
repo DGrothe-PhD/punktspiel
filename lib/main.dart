@@ -3,9 +3,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './table.dart';
+import './settings.dart';
 import './calc.dart';
 import './locales.dart';
 import './styles.dart';
@@ -15,7 +15,9 @@ void main() {
   runApp(const MyApp());
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
+  //SettingsAppWidget settingsPage = const SettingsAppWidget();
   const MyApp({super.key});
   //final TableExampleApp punkteTabelle = const TableExampleApp();
 
@@ -30,9 +32,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Punktspiel'),
-      /*routes: {
-        "punktestand" : (context) => punkteTabelle
-      },*/
+      //routes: {
+      //  "settings" : (context) => settingsPage
+      //},
     );
   }
 }
@@ -133,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
+  SettingsAppWidget settingsPage = const SettingsAppWidget();
   int _counter = 0;
 
   void _incrementCounter() {
@@ -295,6 +298,21 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Row(children:[
+              SizedBox(
+              // Open settings
+              width: 70,
+              height: buttonHeight,
+              child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => settingsPage),
+                );
+              },
+              style: ButtonStyle(backgroundColor: Themes.sunflower),
+              child: const Icon(Icons.settings),
+            ),),
+            ]),
             Row(children: [
               Container(
                 margin: const EdgeInsets.all(7),
