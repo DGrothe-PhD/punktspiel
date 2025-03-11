@@ -18,4 +18,9 @@
 * Nested loops: [OuterLoop Label](https://stackoverflow.com/questions/70300104/how-to-break-out-of-nested-loops-in-dart)
 
 ### Web view
-* [In-app web view](https://inappwebview.dev/docs/intro/)
+* In-app web view: https://inappwebview.dev/docs/intro/ 
+* Call an open API and fetch data before building a widget: [Medium article](https://medium.com/@ssdharmawansa97/async-await-in-flutter-handling-asynchronous-code-like-a-pro-497da0fad8fe)
+
+### Building process
+* View an APK's manifest file: https://stackoverflow.com/a/4191807/17677104 and https://apktool.org/docs/install
+* Main Android manifest file is at android > app > src > main > AndroidManifest.xml. Ref.: https://stackoverflow.com/a/60095312/17677104
