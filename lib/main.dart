@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_adjacent_string_concatenation
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,9 +31,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Punktspiel'),
-      //routes: {
-      //  "settings" : (context) => settingsPage
-      //},
     );
   }
 }
@@ -86,7 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
       },
       items: Spieler.names.map<DropdownMenuItem<String>>(
         (String value) {
-          return DropdownMenuItem<String>(value: value, child: Text(value));
+          return DropdownMenuItem<String>(
+            value: value, child: Text(value));
         }).toList(),
     );
   }
@@ -157,7 +154,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> submitPoints() async {
     // Validating names list
     if(!dontEditNames){
-      if(namesFieldController.text.split(",").length < 2){
+      var namesList = namesFieldController.text.split(",");
+      if(namesList.length < 2){
         bool onlyOnePlayer = await _showYesNoDialog(
           Locales.noColon[Lang.l].format([namesFieldController.text])
         );
@@ -196,6 +194,10 @@ class _MyHomePageState extends State<MyHomePage> {
       .map((x)=> x.trim()).toList()
       .where((x) => x != "").toList();
     if(names.isNotEmpty) {
+      if(names.toSet().length < names.length){
+        _showAlertDialog(Locales.foundDuplicateName[Lang.l]);
+        return;
+      }
       Spieler.names = names;
       selectedPlayerName = Spieler.names.first;
       setState(() => {});
@@ -362,7 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 controller: namesFieldController,
                 readOnly: dontEditNames,
                 //onChanged Ereignis updated automatisch den angezeigten Text
-                onChanged: (newText) => _finishEditingNames(newText),
+                onSubmitted: (newText) => _finishEditingNames(newText),
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: Locales.players[Lang.l],

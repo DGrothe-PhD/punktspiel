@@ -6,6 +6,7 @@ import 'package:swipe_to/swipe_to.dart';
 import 'package:http/http.dart' as http;
 //import 'package:flutter_html/flutter_html.dart';
 import './locales.dart';
+import './styles.dart';
 
 class SettingsAppWidget extends StatelessWidget {
   const SettingsAppWidget({super.key});
@@ -14,8 +15,7 @@ class SettingsAppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset : true,//maybe false if keyboard
-        //appBar: AppBar(title: Text(Locales.settingsTitle[Lang.l])),
+        resizeToAvoidBottomInset : true,
         body: 
         SingleChildScrollView(
           child: MySettingsPage(title: Locales.settingsTitle[Lang.l]),
@@ -87,9 +87,7 @@ class MySettingsPageState extends State<MySettingsPage> {
               child: ElevatedButton(
                 onPressed: () {Navigator.pop(context);},
                 style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 63, 186, 110)
-                  ),
+                  backgroundColor: Themes.green,
                 ),
                 child: Text(Locales.close[Lang.l]),
               ),
@@ -103,7 +101,6 @@ class MySettingsPageState extends State<MySettingsPage> {
       return Text(e.toString());
     }
     catch (exception){
-      //Make exception readable.
       return Text(exception.toString());
   }
 }

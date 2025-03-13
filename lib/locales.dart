@@ -37,7 +37,12 @@ class Locales {
   static const List<String> hint = [
     "Hinweis: Punkte fehlen für ", "Hint: Missing results for ",
     "Remarque : il manque des points pour"
-    ];
+  ];
+  static const List<String> foundDuplicateName = [
+    "Doppelte(n) Namen gefunden", 
+    "Found duplicate name(s)", 
+    "Trouvé un/des double(s) nom(s)"
+  ];
   static const List<String> gotIt = ["Verstanden!", "Got it!", "Compris !"];
   static const List<String> answerYes = ["Ja", "Yes", "Oui"];
   static const List<String> answerNo = ["Nein", "No", "Non"];
@@ -55,7 +60,9 @@ class Locales {
   static const List<String> settingsTitle = ["Einstellungen", "Settings", "Configurer"];
   static const List<String> nextRound = ["Neue Runde", "Next Round", "Encore une fois"];
   static const List<String> resultsTitle = ["SPIELSTAND", "RESULTS", "RESULTATS"];
-  static const List<String> pointsTotal = ["Punkte insgesamt:", "Sum of points:", "Somme de points :"];
+  static const List<String> pointsTotal = [
+    "Punkte insgesamt:", "Sum of points:", "Somme de points :"
+  ];
   static const List<List<String>> pointsRule = [
     ["-- weniger", "++ mehr"],
     ["-- the least", "++ the most"],
