@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info_plus/package_info_plus.dart';
 //import 'package:flutter_html/flutter_html.dart';
 import './locales.dart';
 import './styles.dart';
@@ -44,17 +45,36 @@ class MySettingsPageState extends State<MySettingsPage> {
 
   //Network Request to get latest release version of this app.
   Future<String> fetchLatestAppVersionDetails() async {
-    final response = await http.get(
+    String currentVersionInfo = "";
+    try{
+      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String appName = packageInfo.appName;
+      String releaseTag = "build v0.0.16beta";//packageInfo.packageName;
+      String version = "";// packageInfo.version;
+      String buildNumber = "";//packageInfo.buildNumber;
+      currentVersionInfo = "$appName $releaseTag\n$version $buildNumber";
+    }
+    catch(exception){
+      currentVersionInfo += "Version info could not be found.";
+    }
+    try{
+      final response = await http.get(
       Uri.parse('https://api.github.com/repos/DGrothe-PhD/punktspiel/releases/latest')
-    );
+      );
+    
     if(response.statusCode == 200){
       Map<String, dynamic> json = jsonDecode(response.body);
       String tagName = json['tag_name'];
       String publishedAt = json['published_at'];
-      return "Latest version: $tagName\nPublished at: $publishedAt\n";
+      return "Installed:\n$currentVersionInfo\n\n" 
+      "Latest version: $tagName\nPublished at: $publishedAt\n";
     }
     else{
       throw HttpException(Locales.isOffline[Lang.l]);
+    }
+    }
+    catch(exception){
+      return Locales.isOffline[Lang.l];
     }
   }
 

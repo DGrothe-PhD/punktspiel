@@ -45,6 +45,11 @@ migrate_working_dir/
 /build/windows/x64/cmake*
 /build/windows/x64/*.vcxproj*
 /build/windows/x64/install_manifest.txt
+/build/*/intermediates/
+/build/*/kotlin/
+/build/windows/x64/plugins/
+/build/path_provider_android/
+/build/*_android/
 
 # Symbolication related
 app.*.symbols
