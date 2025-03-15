@@ -29,7 +29,6 @@ You'll find
 <img src="./doc/ExampleSubmitForm.png?" alt="Submit Form" style="width:25%; height:auto;">&nbsp;&nbsp;<img src="./doc/ExampleResults.png?" alt="Example Results" style="width:28%; height:auto;">
 
 ## Installation
-* Android: Which APK to use, you find the CPU type of your phone for example [here](https://www.gsmarena.com/)
-* Example: Octa-core 1.6 GHz Cortex-A53 &rarr; ARM64-v8a. Probably, with Android 7, you might need the apk such as app-armeabi-v7a-debug.apk.
+* Android: You'll find a recent APK file at Releases.
 * No phone for testing? No worries. On Windows, just open [this folder](build/windows/x64/runner/Release), there is a *.exe file for you.
 
