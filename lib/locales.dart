@@ -63,11 +63,13 @@ class Locales {
   static const List<String> pointsTotal = [
     "Punkte insgesamt:", "Sum of points:", "Somme de points :"
   ];
+  static const List<String> winFor = ["Gewinn", "Winning", "Gagner"];
   static const List<List<String>> pointsRule = [
     ["-- weniger", "++ mehr"],
     ["-- the least", "++ the most"],
     ["-- les moins", "++ les plus"]
   ];
+
 
   static const List<String> isOffline = [
     "Diese Seite kann nicht angezeigt werden.",

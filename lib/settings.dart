@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -39,8 +40,12 @@ class MySettingsPageState extends State<MySettingsPage> {
   //late String latestAppVersion;
 
   @override
-  initState(){
+  void initState(){
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
   }
 
   //Network Request to get latest release version of this app.

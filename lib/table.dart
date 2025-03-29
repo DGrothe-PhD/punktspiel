@@ -46,6 +46,11 @@ class TableExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO test without portrait preference first. Otherwise fix portrait by uncommenting this.
+    //SystemChrome.setPreferredOrientations([
+    //  DeviceOrientation.portraitUp,
+    //  DeviceOrientation.portraitDown,
+    //]);
     return Scaffold(
         resizeToAvoidBottomInset : true,//maybe false if keyboard
         appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),

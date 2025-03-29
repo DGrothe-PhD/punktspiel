@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController namesFieldController = TextEditingController();
   final TextEditingController selectableNamesMenuController = TextEditingController();
   final EdgeInsets edgeInsets = const EdgeInsets.all(12);
-  final double? buttonHeight = 30;
+  final double buttonHeight = 30;
 
   int selectedPlayerPoints = 0;
   int whoseTurnIndex = 0;
@@ -69,6 +69,15 @@ class _MyHomePageState extends State<MyHomePage> {
   String selectedPlayerName = Spieler.names.first;
 
   bool dontEditNames = false;
+
+  @override
+  void initState(){
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
 
   Widget buildselectableNamesMenu(){
     //var dropdown = 
@@ -323,10 +332,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Icon(Icons.language),
               ),
               SizedBox(width: 111, child: buildselectLanguagesMenu(),),
-              const Text("Gewinn: "),
+              Text(Locales.winFor[Lang.l]),
               SizedBox(width: 111, child: buildpointsWinningSwitch(),),
             ],
-            ),
+            ),// Row for played rounds and whose turn it is
             Row(
               children: [
                 Container(
@@ -355,7 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-            //
+            // Field for names
             Container( 
               margin: edgeInsets,
               //height: 100,
@@ -373,12 +382,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 //keyboardType: TextInputType.text,
               ),
             ),
+            // Number field row
             Row(
               children: <Widget>[
               Container( 
               margin: edgeInsets,
               //height: 100,
               width: 150,
+              // Number field to enter points
               child: TextField(
                 controller: numberFieldController,
                 //onChanged Ereignis updated automatisch den angezeigten Text
@@ -394,49 +405,36 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               ),
-              SizedBox(
-              // Whose turn
-              width: 70,
-              height: buttonHeight,
-              child: ElevatedButton(
+              ElevatedButton(
               onPressed: setOpener,
               style: ButtonStyle(backgroundColor: Themes.green),
               child: const Icon(Icons.chair),
-            ),),
-            const SizedBox(width:10),
-            SizedBox(
-                width: 70,
-                height: buttonHeight,
-                child: ElevatedButton(
+              ),
+              const SizedBox(width:10),
+              ElevatedButton(
                 onPressed: deleteLastEntry,
                 style: ButtonStyle(backgroundColor: Themes.pumpkin),
                 child: const Icon(Icons.delete),
-              ),),
+              ),
             ],
             ),
             buildselectableNamesMenu(),
-            SizedBox(
-              width: 150,
-              height: buttonHeight,
-              child: ElevatedButton(
+            mySizedBox(
+              ElevatedButton(
               onPressed: submitPoints,
               style: ButtonStyle(backgroundColor: Themes.sunflower),
               child: Text(Locales.submit[Lang.l]),
             ),),
             const SizedBox(height:20),
-            SizedBox(
-              width: 150,
-              height: buttonHeight,
-              child: ElevatedButton(
+            mySizedBox(
+              ElevatedButton(
               onPressed: showPoints,
               style: ButtonStyle(backgroundColor: Themes.green),
               child: Text(Locales.results[Lang.l]),
             ),),
             const SizedBox(height: 20),
-            SizedBox(
-              width: 150,
-              height: buttonHeight,
-              child: ElevatedButton(
+            mySizedBox(
+              ElevatedButton(
               onPressed: deleteEverything,
               style: ButtonStyle(backgroundColor: Themes.pumpkin),
               child: Text(Locales.deleteAllResults[Lang.l]),
@@ -453,6 +451,14 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     ),
+    );
+  }
+
+  SizedBox mySizedBox(Widget childwidget){
+    return SizedBox(
+      width: 150,
+      height: buttonHeight,
+      child: childwidget
     );
   }
 
