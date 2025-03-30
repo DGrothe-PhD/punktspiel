@@ -42,7 +42,6 @@ class StyleDecorator {
 
 class TableExampleApp extends StatelessWidget {
   const TableExampleApp({super.key});
-  // how to update the table?
 
   @override
   Widget build(BuildContext context) {

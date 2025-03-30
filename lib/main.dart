@@ -97,28 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget buildselectLanguagesMenu({bool wellBehaving = true}){
-    if(wellBehaving){
-      return DropdownButton<String>(
-      key: ValueKey(Object.hashAll(Lang.availableLanguages)),
-      isExpanded: true,
-      value: Lang.currentLanguageCode(),
-      padding: edgeInsets,
-      onChanged: (String? value){
-        setState(() => Lang.setLanguage(value ?? "EN"));
-      },
-      items: Lang.availableLanguages.map<DropdownMenuItem<String>>(
-        (String value) {
-          return DropdownMenuItem<String>(value: value, child: Text(value));
-      }).toList(),
-      menuWidth: 100,
-      );
-    }
-    else{
-      return const SizedBox(width: 50, child: Text(" [tbd]"));
-    }
-  }
-
   Widget buildpointsWinningSwitch() {
    return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Locales.pointsRule[Lang.l])),
@@ -295,6 +273,15 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() { dontEditNames = false;});
   }
 
+  void _navigateAndRefresh() async{
+    final result = await Navigator.push(
+      context, MaterialPageRoute(builder: (context) => settingsPage),
+    );
+    if(result != null){
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -315,11 +302,12 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 70,
               height: buttonHeight,
               child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => settingsPage),
-                );
-              },
+              onPressed: _navigateAndRefresh,
+              //() {
+              //  Navigator.of(context).push(
+              //  MaterialPageRoute(builder: (context) => settingsPage),
+              //  );
+              //},
               style: ButtonStyle(backgroundColor: Themes.sunflower),
               child: const Icon(Icons.settings),
             ),),
@@ -331,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 30,
                 child: const Icon(Icons.language),
               ),
-              SizedBox(width: 111, child: buildselectLanguagesMenu(),),
+              //SizedBox(width: 111, child: buildselectLanguagesMenu(),),
               Text(Locales.winFor[Lang.l]),
               SizedBox(width: 111, child: buildpointsWinningSwitch(),),
             ],

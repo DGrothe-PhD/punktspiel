@@ -12,15 +12,17 @@ import './styles.dart';
 
 class SettingsAppWidget extends StatelessWidget {
   const SettingsAppWidget({super.key});
-  // how to update the table?
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset : true,
+        appBar: AppBar(backgroundColor: Colors.amber,
+         title: Text(Locales.settingsTitle[Lang.l]),
+        ),
         body: 
-        SingleChildScrollView(
-          child: MySettingsPage(title: Locales.settingsTitle[Lang.l]),
+        const SingleChildScrollView(
+          child: MySettingsPage(),
         )
     );
     // reduce to the max. Returning MaterialApp shows black screen...
@@ -28,14 +30,14 @@ class SettingsAppWidget extends StatelessWidget {
 }
 
 class MySettingsPage extends StatefulWidget{
-  const MySettingsPage({super.key, required this.title});
-  final String title;
+  const MySettingsPage({super.key});
   @override
   MySettingsPageState createState() => MySettingsPageState();
 }
 
 class MySettingsPageState extends State<MySettingsPage> {
   final now = DateTime.now();
+
   //SettingsPage({super.key});
   //late String latestAppVersion;
 
@@ -48,6 +50,22 @@ class MySettingsPageState extends State<MySettingsPage> {
     ]);
   }
 
+  Widget buildselectLanguagesMenu({bool wellBehaving = true}){
+    return DropdownButton<String>(
+    key: ValueKey(Object.hashAll(Lang.availableLanguages)),
+    isExpanded: true,
+    value: Lang.currentLanguageCode(),
+    onChanged: (String? value){
+      setState(() => Lang.setLanguage(value ?? "EN"));
+    },
+    items: Lang.availableLanguages.map<DropdownMenuItem<String>>(
+      (String value) {
+        return DropdownMenuItem<String>(value: value, child: Text(value));
+      }).toList(),
+    menuWidth: 100,
+    );
+  }
+  
   //Network Request to get latest release version of this app.
   Future<String> fetchLatestAppVersionDetails() async {
     String currentVersionInfo = "";
@@ -86,12 +104,25 @@ class MySettingsPageState extends State<MySettingsPage> {
   @override
   Widget build(BuildContext context) {
     try {
-      return Center(
+      return PopScope(
+        onPopInvokedWithResult: (bool didPop, Object? result) {
+          if(didPop){
+            return;
+          }
+          Navigator.pop(context, true);
+          //return false;
+        },
+        child: 
+        Center(
         child: SwipeTo(
-          onRightSwipe: (details) => {Navigator.pop(context)},
+          onRightSwipe: (details) => {Navigator.pop(context, true)},
           child: Column(
             children: <Widget>[
-            const Text("… coming soon …"),
+              Row(
+                children:<Widget>[
+                  const Icon(Icons.language),
+                  SizedBox(width: 111, child: buildselectLanguagesMenu(),),
+              ],),
             const SizedBox(height:177),
             FutureBuilder<String>(
               future: fetchLatestAppVersionDetails(),
@@ -110,7 +141,7 @@ class MySettingsPageState extends State<MySettingsPage> {
               width: 120,
               //height: 50,
               child: ElevatedButton(
-                onPressed: () {Navigator.pop(context);},
+                onPressed: () {setState(() => Navigator.pop(context, true));},
                 style: ButtonStyle(
                   backgroundColor: Themes.green,
                 ),
@@ -120,6 +151,7 @@ class MySettingsPageState extends State<MySettingsPage> {
           ]
           )
         ),
+        )
       );  
   }
     on HttpException catch(e){
