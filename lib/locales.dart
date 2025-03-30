@@ -53,7 +53,7 @@ class Locales {
   //
   static const List<String> submit = ["Eintragen", "Submit", "Inscrire"];
   static const List<String> deleteLastEntry = ["Letzten löschen", "Delete last", "Effacer le dernier"];
-  static const List<String> deleteAllResults = ["Alles löschen", "Delete everything", "Tout effacer"];
+  static const List<String> deleteAllResults = ["Alles löschen", "Delete it all", "Tout effacer"];
   //
   static const List<String> close = ["Schließen", "Close view", "Fermer"];
   static const List<String> results = ["Ergebnisse", "Results", "Les résultats"];
