@@ -73,6 +73,7 @@ class Spieler{
     }
     return <Teilnehmer>[];
   }
+
 }
 
 class Teilnehmer{

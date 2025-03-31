@@ -25,7 +25,6 @@ class SettingsAppWidget extends StatelessWidget {
           child: MySettingsPage(),
         )
     );
-    // reduce to the max. Returning MaterialApp shows black screen...
   }
 }
 
