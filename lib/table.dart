@@ -10,19 +10,25 @@ import 'package:intl/intl.dart';
 import 'dart:io' show Platform;
 import './calc.dart';
 import './locales.dart';
+import './styles.dart';
 
 class StyleDecorator {
-  static const textstil = TextStyle(
-    fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold
+  static const double spacing = -0.4;
+  static final textstil = TextStyle(
+    fontSize: 12.0, color: const Color.fromARGB(255, 27, 26, 26),// fontWeight: FontWeight.bold,
+    backgroundColor: Themes.greenishColor,
+    letterSpacing: -1.1,
   );
   static const monoStil = TextStyle(
     fontSize: 12.0, color: Colors.black, fontFamily: "B612 Mono",
-    fontFamilyFallback: <String>["Courier"]
+    fontFamilyFallback: <String>["Courier"],
+    letterSpacing: spacing,
   );
   static const boldStil = TextStyle(
     fontSize: 12.0,  fontFamily: 'B612 Mono',
     color: Colors.black,
     fontWeight: FontWeight.bold, // Setzt die fetten Buchstaben
+    letterSpacing: spacing,
   );
 
   static Text typewriter(String input){
@@ -73,40 +79,55 @@ class TableExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int columnWidth = 11;
     try {
       gameResultText = StringBuffer();
       headline = "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
       int maxCounts = Spieler.gruppe.map((x) => x.punkte.length).max;
-
       playerNames = StringBuffer();
+      //playerNames = StringBuffer("\xA0");
+
       for(var player in Spieler.gruppe){
-        String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "  ";
-        playerNames.write("${player.name.truncate(10)}$decoration|".padLeft(14, " "));
+        // truncation is 10 ATM, for two lines of names think of that.
+        String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "\xA0\xA0";
+        if(player == Spieler.gruppe.last){
+          playerNames.write("${player.name.truncate(8)}$decoration\xA0".padLeft(columnWidth, "\xA0"));
+          break;
+        }
+        playerNames.write("${player.name.truncate(8)}$decoration|".padLeft(columnWidth, "\xA0"));
       }
       playerNames.write("\n");
 
       for(int j=0;j<maxCounts;j++){
         for(var player in Spieler.gruppe){
-          if(j >= player.punkte.length){
-            gameResultText.write(" |".padLeft(14, " "));
-            continue;
+          if(player == Spieler.gruppe.last){
+            if(j >= player.punkte.length){
+              gameResultText.write(" \xA0".padLeft(columnWidth, " "));
+              continue;
+            }
+            gameResultText.write(" ${player.punkte[j]} \xA0".padLeft(columnWidth, " "));
           }
-          gameResultText.write(" ${player.punkte[j]} |".padLeft(14, " "));
+          else{
+            if(j >= player.punkte.length){
+              gameResultText.write(" |".padLeft(columnWidth, " "));
+              continue;
+            }
+            gameResultText.write(" ${player.punkte[j]} |".padLeft(columnWidth, " "));
+          }
         }
         gameResultText.write("\n");
       }
       // do a `===============`
-      gameResultText.write("${"=" * 14 * Spieler.gruppe.length}\n");
+      gameResultText.write("${"=" * columnWidth * Spieler.gruppe.length}\n");
 
       // Sum of points
       for(var player in Spieler.gruppe){
-        gameResultText.write(" ${player.sumPoints()} |".padLeft(14, " "));
+        if(player == Spieler.gruppe.last){
+          gameResultText.write(" ${player.sumPoints()} \xA0".padLeft(columnWidth, " "));
+          break;
+        }
+        gameResultText.write(" ${player.sumPoints()} |".padLeft(columnWidth, " "));
       }
-      // try SelectableText.rich, onTap
-      // as here https://stackoverflow.com/q/60395983/17677104
-      // or some https://api.flutter.dev/flutter/widgets/RichText-class.html
-      // Scrollable (Windows testable I guess)
-      // https://stackoverflow.com/questions/49617934/how-to-make-text-or-richtext-scrollable-in-flutter
       
       return Center(
         child: SwipeTo(
@@ -124,7 +145,7 @@ class TableExample extends StatelessWidget {
                     child: 
                     RichText(
                       selectionRegistrar: SelectionContainer.maybeOf(context),
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.center,//right
                       text: TextSpan(
                         text: headline,
                         style: StyleDecorator.monoStil,
