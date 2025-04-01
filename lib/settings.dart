@@ -120,6 +120,7 @@ class MySettingsPageState extends State<MySettingsPage> {
               Row(
                 children:<Widget>[
                   const Icon(Icons.language),
+                  const Text("\xA0"),
                   SizedBox(width: 111, child: buildselectLanguagesMenu(),),
               ],),
             const SizedBox(height:177),

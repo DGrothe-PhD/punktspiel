@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './table.dart';
 import './settings.dart';
@@ -113,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
         (String value) {
           return DropdownMenuItem<String>(value: value, child: Text(value));
       }).toList(),
-      menuWidth: 100,
+      //menuWidth: 200,
    );
   }
 
@@ -303,11 +304,6 @@ class _MyHomePageState extends State<MyHomePage> {
               height: buttonHeight,
               child: ElevatedButton(
               onPressed: _navigateAndRefresh,
-              //() {
-              //  Navigator.of(context).push(
-              //  MaterialPageRoute(builder: (context) => settingsPage),
-              //  );
-              //},
               style: ButtonStyle(backgroundColor: Themes.sunflower),
               child: const Icon(Icons.settings),
             ),),
@@ -317,11 +313,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 margin: const EdgeInsets.all(7),
                 alignment: Alignment.bottomRight,
                 width: 30,
-                child: const Icon(Icons.language),
+                //child: const Icon(Icons.gamepad),
+                child: SvgPicture.asset(
+                  'assets/images/dice.svg',
+                   width: 25.0, height: 25.0,
+                ),
               ),
-              //SizedBox(width: 111, child: buildselectLanguagesMenu(),),
               Text(Locales.winFor[Lang.l]),
-              SizedBox(width: 111, child: buildpointsWinningSwitch(),),
+              const SizedBox(width: 20),
+              SizedBox(width: 200, child: buildpointsWinningSwitch(),),
             ],
             ),// Row for played rounds and whose turn it is
             Row(
@@ -393,18 +393,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               ),
-              ElevatedButton(
+                ElevatedButton(
               onPressed: setOpener,
               style: ButtonStyle(backgroundColor: Themes.green),
               child: const Icon(Icons.chair),
               ),
-              const SizedBox(width:10),
-              ElevatedButton(
+                const SizedBox(width:10),
+                ElevatedButton(
                 onPressed: deleteLastEntry,
                 style: ButtonStyle(backgroundColor: Themes.pumpkin),
                 child: const Icon(Icons.delete),
               ),
-            ],
+              ],
             ),
             buildselectableNamesMenu(),
             mySizedBox(

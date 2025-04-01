@@ -164,33 +164,20 @@ class TableExample extends StatelessWidget {
             ElevatedButton(
               onPressed: () => {_onShare(context)},
               style: ButtonStyle(
-                  padding: WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
-                    (Set<WidgetState> states) {
-                  return const EdgeInsets.all(7);
-                  },),
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 221, 215, 157)
-                  ),
+                  backgroundColor: Themes.sunflower,
+                  minimumSize: WidgetStateProperty.all<Size>(const Size(120, 40)),
               ),
               child: Text(Locales.share[Lang.l]),
             ),
-            SizedBox(
-              width: 120,
-              height: 50,
-              child: ElevatedButton(
+            const SizedBox(height:20),
+              ElevatedButton(
                 onPressed: () {Navigator.pop(context);},
                 style: ButtonStyle(
-                  padding: WidgetStateProperty.resolveWith<EdgeInsetsGeometry>(
-                    (Set<WidgetState> states) {
-                  return const EdgeInsets.all(7);
-                  },),
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                  const Color.fromARGB(255, 63, 186, 110)
-                  ),
+                  backgroundColor: Themes.green,
+                  minimumSize: WidgetStateProperty.all<Size>(const Size(120, 40)),
                 ),
                 child: Text(Locales.close[Lang.l]),
               ),
-            ),
           ]
           )
         ),
