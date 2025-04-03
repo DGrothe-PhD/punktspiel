@@ -275,12 +275,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _navigateAndRefresh() async{
-    final result = await Navigator.push(
+    //C#-ish here, discarding a variable using a _. :D
+    final _ = await Navigator.push(
       context, MaterialPageRoute(builder: (context) => settingsPage),
     );
-    if(result != null){
-      setState(() {});
-    }
+    setState(() {});
   }
 
   @override

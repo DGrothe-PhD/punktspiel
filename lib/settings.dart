@@ -103,16 +103,7 @@ class MySettingsPageState extends State<MySettingsPage> {
   @override
   Widget build(BuildContext context) {
     try {
-      return PopScope(
-        onPopInvokedWithResult: (bool didPop, Object? result) {
-          if(didPop){
-            return;
-          }
-          Navigator.pop(context, true);
-          //return false;
-        },
-        child: 
-        Center(
+      return Center(
         child: SwipeTo(
           onRightSwipe: (details) => {Navigator.pop(context, true)},
           child: Column(
@@ -149,16 +140,15 @@ class MySettingsPageState extends State<MySettingsPage> {
               ),
             ),
           ]
-          )
-        ),
         )
-      );  
+      ),
+    );  
   }
-    on HttpException catch(e){
+  on HttpException catch(e){
       return Text(e.toString());
-    }
-    catch (exception){
-      return Text(exception.toString());
+  }
+  catch (exception){
+    return Text(exception.toString());
   }
 }
 
