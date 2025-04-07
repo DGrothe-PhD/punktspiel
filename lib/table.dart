@@ -17,7 +17,7 @@ class StyleDecorator {
   static final textstil = TextStyle(
     fontSize: 12.0, color: const Color.fromARGB(255, 27, 26, 26),// fontWeight: FontWeight.bold,
     backgroundColor: Themes.greenishColor,
-    letterSpacing: -1.1,
+    letterSpacing: spacing,//-1.1,
   );
   static const monoStil = TextStyle(
     fontSize: 12.0, color: Colors.black, fontFamily: "B612 Mono",
@@ -86,17 +86,29 @@ class TableExample extends StatelessWidget {
       int maxCounts = Spieler.gruppe.map((x) => x.punkte.length).max;
       playerNames = StringBuffer();
       //playerNames = StringBuffer("\xA0");
-
+      
       for(var player in Spieler.gruppe){
-        // truncation is 10 ATM, for two lines of names think of that.
         String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "\xA0\xA0";
-        if(player == Spieler.gruppe.last){
-          playerNames.write("${player.name.truncate(8)}$decoration\xA0".padLeft(columnWidth, "\xA0"));
-          break;
-        }
-        playerNames.write("${player.name.truncate(8)}$decoration|".padLeft(columnWidth, "\xA0"));
+        //String decoration = (Spieler.whoIsWinning().contains(player)) ? '' : "\xA0";
+          if(player == Spieler.gruppe.last){
+            playerNames.write("${player.firstName.truncate(8)}$decoration".padLeft(columnWidth, "\xA0"));
+            break;
+          }
+          playerNames.write("${player.firstName.truncate(8)}$decoration|".padLeft(columnWidth, "\xA0"));
       }
       playerNames.write("\n");
+      
+      // Second part of names in second line
+      if(Spieler.gruppe.any((person) => person.lastName.isNotEmpty)){
+        for(var player in Spieler.gruppe){
+          if(player == Spieler.gruppe.last){
+            playerNames.write(" ${player.lastName.truncate(8)}\xA0".padLeft(columnWidth, "\xA0"));
+            break;
+          }
+          playerNames.write(" ${player.lastName.truncate(8)}\xA0|".padLeft(columnWidth, "\xA0"));
+        }
+        playerNames.write("\n");
+      }
 
       for(int j=0;j<maxCounts;j++){
         for(var player in Spieler.gruppe){
@@ -105,7 +117,7 @@ class TableExample extends StatelessWidget {
               gameResultText.write(" \xA0".padLeft(columnWidth, " "));
               continue;
             }
-            gameResultText.write(" ${player.punkte[j]} \xA0".padLeft(columnWidth, " "));
+            gameResultText.write(" ${player.punkte[j]}\xA0".padLeft(columnWidth, " "));
           }
           else{
             if(j >= player.punkte.length){
@@ -134,33 +146,33 @@ class TableExample extends StatelessWidget {
           onRightSwipe: (details) => {Navigator.pop(context)},
           onLeftSwipe: (details) => {_onShare(context)},
           child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              WidgetAnimator(
-                incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
-                  duration: const Duration(milliseconds: 2000),
-                ),
-                child:
-                  SelectionArea(
-                    child: 
-                    RichText(
-                      selectionRegistrar: SelectionContainer.maybeOf(context),
-                      textAlign: TextAlign.center,//right
-                      text: TextSpan(
-                        text: headline,
-                        style: StyleDecorator.monoStil,
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: playerNames.toString(),
-                            style: StyleDecorator.textstil,
-                          ),
-                          TextSpan(text: gameResultText.toString(),),
-                        ],
-                      ),
-                    ),
-                  ),
+          children: <Widget>[
+            WidgetAnimator(
+              incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
+                duration: const Duration(milliseconds: 2000),
               ),
-              const SizedBox(height:20),
+              child:
+              SelectionArea(
+                child: 
+                RichText(
+                  selectionRegistrar: SelectionContainer.maybeOf(context),
+                  textAlign: TextAlign.center,
+                  //textAlign: TextAlign.right,
+                  text: TextSpan(
+                    text: headline,
+                    style: StyleDecorator.monoStil,
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: playerNames.toString(),
+                        style: StyleDecorator.textstil,
+                      ),
+                      TextSpan(text: gameResultText.toString(),),
+                  ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height:20),
             ElevatedButton(
               onPressed: () => {_onShare(context)},
               style: ButtonStyle(
@@ -170,14 +182,14 @@ class TableExample extends StatelessWidget {
               child: Text(Locales.share[Lang.l]),
             ),
             const SizedBox(height:20),
-              ElevatedButton(
-                onPressed: () {Navigator.pop(context);},
-                style: ButtonStyle(
-                  backgroundColor: Themes.green,
-                  minimumSize: WidgetStateProperty.all<Size>(const Size(120, 40)),
-                ),
-                child: Text(Locales.close[Lang.l]),
+            ElevatedButton(
+              onPressed: () {Navigator.pop(context);},
+              style: ButtonStyle(
+                backgroundColor: Themes.green,
+                minimumSize: WidgetStateProperty.all<Size>(const Size(120, 40)),
               ),
+              child: Text(Locales.close[Lang.l]),
+            ),
           ]
           )
         ),

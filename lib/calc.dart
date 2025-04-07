@@ -22,7 +22,7 @@ class Spieler{
   static void settings(){
     gruppe = [];
     for(String n in _names){
-        gruppe.add(Teilnehmer(name: n));
+      gruppe.add(Teilnehmer(name: n));
     }
   }
   
@@ -78,8 +78,18 @@ class Spieler{
 
 class Teilnehmer{
   String name = "";
+  String firstName = "";
+  String lastName = "";
   List<int> punkte = [] ;
-  Teilnehmer({required this.name});
+  Teilnehmer({required this.name}){
+    int index = name.indexOf(" ");
+    if(index == -1 || index == name.length - 1){
+      firstName = name;
+      return;
+    }
+    firstName = name.substring(0, index);
+    lastName = name.substring(index+1);
+  }
 
   void addPoints(int value){
     punkte.add(value);
