@@ -95,8 +95,6 @@ class Teilnehmer{
     punkte.add(value);
   }
 
-  String playerName() => name;
-
   void popPointsEntry(){
     if (punkte.isNotEmpty){
       punkte.removeLast();
