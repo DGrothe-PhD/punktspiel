@@ -70,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String selectedPlayerName = Spieler.names.first;
 
   bool dontEditNames = false;
+  bool _gamesStarted = false;
 
   @override
   void initState(){
@@ -188,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       Spieler.names = names;
       selectedPlayerName = Spieler.names.first;
-      setState(() => {});
+      setState(() => _gamesStarted = true);
     }
   }
 
@@ -359,7 +360,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: TextField(
                 controller: namesFieldController,
                 readOnly: dontEditNames,
-                //onChanged Ereignis updated automatisch den angezeigten Text
+                onChanged: (unread) {setState(() => _gamesStarted = false);},
                 onSubmitted: (newText) => _finishEditingNames(newText),
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
@@ -378,8 +379,8 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 150,
               // Number field to enter points
               child: TextField(
+                enabled: _gamesStarted,
                 controller: numberFieldController,
-                //onChanged Ereignis updated automatisch den angezeigten Text
                 onChanged: (newText) {selectedPlayerPoints = int.tryParse(newText) ?? 0;},
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),

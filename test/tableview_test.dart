@@ -148,7 +148,7 @@ class PointsSubmittingTest{
       expect(find.text('1'), findsNothing);
       expect(find.text('3'), findsOneWidget);
 
-      expect(Spieler.whoIsWinning().first.playerName(), equals("Dagmar 🦆"));
+      expect(Spieler.whoIsWinning().first.name, equals("Dagmar 🦆"));
     });
   }
 
