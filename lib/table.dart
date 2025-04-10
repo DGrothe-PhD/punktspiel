@@ -80,6 +80,8 @@ class TableExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int columnWidth = 11;
+    Size buttonSize = const Size(180, 40);
+
     try {
       gameResultText = StringBuffer();
       headline = "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
@@ -144,7 +146,7 @@ class TableExample extends StatelessWidget {
       return Center(
         child: SwipeTo(
           onRightSwipe: (details) => {Navigator.pop(context)},
-          onLeftSwipe: (details) => {_onShare(context)},
+          onLeftSwipe: (details) => {_onShareResults(context)},
           child: Column(
           children: <Widget>[
             WidgetAnimator(
@@ -174,19 +176,28 @@ class TableExample extends StatelessWidget {
             ),
             const SizedBox(height:20),
             ElevatedButton(
-              onPressed: () => {_onShare(context)},
+              onPressed: () => {_onShareTable(context)},
               style: ButtonStyle(
                   backgroundColor: Themes.sunflower,
-                  minimumSize: WidgetStateProperty.all<Size>(const Size(120, 40)),
+                  minimumSize: WidgetStateProperty.all<Size>(buttonSize),
               ),
               child: Text(Locales.share[Lang.l]),
+            ),
+            const SizedBox(height:20),
+            ElevatedButton(
+              onPressed: () => {_onShareResults(context)},
+              style: ButtonStyle(
+                  backgroundColor: Themes.greenish,
+                  minimumSize: WidgetStateProperty.all<Size>(buttonSize),
+              ),
+              child: Text(Locales.shareResults[Lang.l]),
             ),
             const SizedBox(height:20),
             ElevatedButton(
               onPressed: () {Navigator.pop(context);},
               style: ButtonStyle(
                 backgroundColor: Themes.green,
-                minimumSize: WidgetStateProperty.all<Size>(const Size(120, 40)),
+                minimumSize: WidgetStateProperty.all<Size>(buttonSize),
               ),
               child: Text(Locales.close[Lang.l]),
             ),
@@ -201,7 +212,7 @@ class TableExample extends StatelessWidget {
   }
 }
 
-  void _onShare(BuildContext context) async {
+  void _onShareTable(BuildContext context) async {
     final box = context.findRenderObject() as RenderBox?;
     if(Platform.isWindows){
       Clipboard.setData(ClipboardData(
@@ -219,6 +230,29 @@ class TableExample extends StatelessWidget {
     await Share.share(
       gameResultText.isEmpty? "Nichts/None/Rien" 
       : "$headline\n$playerNames$gameResultText",
+      subject: Locales.emailSubject[Lang.l],
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+    );
+  }
+
+  void _onShareResults(BuildContext context) async {
+    final box = context.findRenderObject() as RenderBox?;
+    if(Platform.isWindows){
+      Clipboard.setData(ClipboardData(
+        text: gameResultText.isEmpty? "Nichts/None/Rien" 
+        : Spieler.report()
+      ));
+      showDialog(
+        context: context,
+        builder:(context) => const AlertDialog(
+          title: Text("Copied"),
+          content: Text("Game results copied to clipboard."),
+      ));
+      return;
+    }
+    await Share.share(
+      gameResultText.isEmpty? "Nichts/None/Rien" 
+      : Spieler.report(),
       subject: Locales.emailSubject[Lang.l],
       sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
     );

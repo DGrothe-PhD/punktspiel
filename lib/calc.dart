@@ -1,7 +1,9 @@
 //import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
+import './locales.dart';
 //import 'package:intl/intl.dart';
 //import 'package:flutter/services.dart';
 
@@ -74,6 +76,16 @@ class Spieler{
     return <Teilnehmer>[];
   }
 
+  static String report(){
+    final now = DateTime.now();
+    final String headline = "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n\n";
+    StringBuffer buffer = StringBuffer(headline);
+    
+    for(Teilnehmer player in gruppe){
+      buffer.write("${player.name}:\t${player.sumPoints()}\n");
+    }
+    return buffer.toString();
+  }
 }
 
 class Teilnehmer{

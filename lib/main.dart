@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int whoseFirstTurnIndex = 0;
   String selectedPlayerName = Spieler.names.first;
 
-  bool dontEditNames = false;
+  bool _dontEditNames = false;
   bool _gamesStarted = false;
 
   @override
@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
       value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
       padding: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
       onChanged: (String? value){
-        dontEditNames ? null :
+        _dontEditNames ? null :
         setState(
           () => Spieler.leastPointsWinning = (value == Locales.pointsRule[Lang.l].first)
         );
@@ -142,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> submitPoints() async {
     // Validating names list
-    if(!dontEditNames){
+    if(!_dontEditNames){
       var namesList = namesFieldController.text.split(",");
       if(namesList.length < 2){
         bool onlyOnePlayer = await _showYesNoDialog(
@@ -156,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return;
         }
       }
-      setState(() => dontEditNames = true);
+      setState(() => _dontEditNames = true);
     }
 
     // Validating and submitting points
@@ -194,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void setOpener(){
-    if(!dontEditNames){
+    if(!_dontEditNames){
       setState(() {
         whoseFirstTurnIndex = Spieler.names.indexOf(selectedPlayerName);
         whoseTurnIndex = whoseFirstTurnIndex;
@@ -272,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
       t.punkte.clear();
       _counter = 0;
     }
-    setState(() { dontEditNames = false;});
+    setState(() { _dontEditNames = false;});
   }
 
   void _navigateAndRefresh() async{
@@ -359,11 +359,16 @@ class _MyHomePageState extends State<MyHomePage> {
               //width: 100,
               child: TextField(
                 controller: namesFieldController,
-                readOnly: dontEditNames,
+                readOnly: _dontEditNames,
+                enabled: !_dontEditNames,
                 onChanged: (unread) {setState(() => _gamesStarted = false);},
                 onSubmitted: (newText) => _finishEditingNames(newText),
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Themes.greenishColor)),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Themes.active)),
                   labelText: Locales.players[Lang.l],
                   isDense: true,
                 ),
