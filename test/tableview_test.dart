@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:punktspiel/main.dart';
 import 'package:punktspiel/calc.dart';
 import 'package:punktspiel/locales.dart';
@@ -36,6 +36,7 @@ class PointsSubmittingTest{
 
 
       // Let's type some names and check if that's effective.
+      //TODO fix this test.
       await tester.enterText(
         find.bySemanticsLabel(Locales.players[Lang.l]),
         "Anna 🍂,Dagmar 🦆",
@@ -85,10 +86,17 @@ class PointsSubmittingTest{
       tapAnchor = find.text(Locales.playedRounds[Lang.l]);
 
       // Let's type some names and check if that's effective.
+      // TODO https://api.flutter.dev/flutter/flutter_test/TestTextInput/receiveAction.html
+      var nameField = find.byType(TextField).first;
       await tester.enterText(
-        find.bySemanticsLabel(Locales.players[Lang.l]),
+        nameField,
+        //find.bySemanticsLabel(Locales.players[Lang.l]),
         "Anna 🍂,Dagmar 🦆",
       );
+      // * I was trying to do
+      //* await nameField.receiveAction(TextInputAction.done);
+      //* but it has to be:
+      await tester.testTextInput.receiveAction(TextInputAction.done);
       // Just tap somewhere I can code for. 
       // First try was AppBar or Scaffold by type. Guess that's due to some hierarchical confusion.
       await tester.tap(find.text(Locales.playedRounds[Lang.l]));
