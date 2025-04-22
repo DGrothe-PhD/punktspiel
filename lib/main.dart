@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController numberFieldController = TextEditingController();
   final TextEditingController namesFieldController = TextEditingController();
   final TextEditingController selectableNamesMenuController = TextEditingController();
-  final EdgeInsets edgeInsets = const EdgeInsets.all(12);
+  final EdgeInsets edgeInsets = const EdgeInsets.all(11);
   final double buttonHeight = 30;
 
   int selectedPlayerPoints = 0;
@@ -341,7 +341,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Container(
                   margin: edgeInsets,
-                  //width: 120,
                   child: Text(
                     (whoseTurnIndex < Spieler.names.length)?
                     Locales.opener[Lang.l]
@@ -418,21 +417,21 @@ class _MyHomePageState extends State<MyHomePage> {
               style: ButtonStyle(backgroundColor: Themes.sunflower),
               child: Text(Locales.submit[Lang.l]),
             ),),
-            const SizedBox(height:20),
+            const SizedBox(height:10),
             mySizedBox(
               ElevatedButton(
               onPressed: showPoints,
               style: ButtonStyle(backgroundColor: Themes.green),
               child: Text(Locales.results[Lang.l]),
             ),),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             mySizedBox(
               ElevatedButton(
               onPressed: deleteEverything,
               style: ButtonStyle(backgroundColor: Themes.pumpkin),
               child: Text(Locales.deleteAllResults[Lang.l]),
             ),),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             // Test Website Access
             ElevatedButton.icon(
               onPressed: _launchURL,

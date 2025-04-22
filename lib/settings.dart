@@ -127,7 +127,6 @@ class MySettingsPageState extends State<MySettingsPage> {
                 return Text("${snapshot.data}");
               },
             ),
-            //Text(latestAppVersion),
             SizedBox(
               width: 120,
               //height: 50,

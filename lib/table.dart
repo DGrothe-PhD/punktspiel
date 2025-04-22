@@ -51,11 +51,6 @@ class TableExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO test without portrait preference first. Otherwise fix portrait by uncommenting this.
-    //SystemChrome.setPreferredOrientations([
-    //  DeviceOrientation.portraitUp,
-    //  DeviceOrientation.portraitDown,
-    //]);
     return Scaffold(
         resizeToAvoidBottomInset : true,//maybe false if keyboard
         appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
@@ -137,7 +132,7 @@ class TableExample extends StatelessWidget {
       // Sum of points
       for(var player in Spieler.gruppe){
         if(player == Spieler.gruppe.last){
-          gameResultText.write(" ${player.sumPoints()} \xA0".padLeft(columnWidth, " "));
+          gameResultText.write(" ${player.sumPoints()}\xA0".padLeft(columnWidth, " "));
           break;
         }
         gameResultText.write(" ${player.sumPoints()} |".padLeft(columnWidth, " "));
@@ -183,7 +178,7 @@ class TableExample extends StatelessWidget {
               ),
               child: Text(Locales.share[Lang.l]),
             ),
-            const SizedBox(height:20),
+            const SizedBox(height:10),
             ElevatedButton(
               onPressed: () => {_onShareResults(context)},
               style: ButtonStyle(
@@ -192,7 +187,7 @@ class TableExample extends StatelessWidget {
               ),
               child: Text(Locales.shareResults[Lang.l]),
             ),
-            const SizedBox(height:20),
+            const SizedBox(height:10),
             ElevatedButton(
               onPressed: () {Navigator.pop(context);},
               style: ButtonStyle(
