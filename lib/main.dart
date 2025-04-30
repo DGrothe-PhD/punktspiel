@@ -293,21 +293,55 @@ class _MyHomePageState extends State<MyHomePage> {
         key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(backgroundColor: Colors.amber, title: Text(widget.title),),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(7),
+        height: 50.0,
+        color: Colors.grey[200],
+        child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () => {},
+          ),
+          const Text(
+            '© Your Company 2023',
+            style: TextStyle(fontSize: 14.0),
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: _navigateAndRefresh,
+          ),
+          IconButton(
+            icon: SvgPicture.asset(
+              'assets/images/kofi_symbol.svg',
+              width: 25.0, height: 25.0,
+            ),
+            onPressed: _launchKoFi,
+          ),
+          IconButton(
+            icon: SvgPicture.asset(
+              'assets/images/github-mark.svg',
+              width: 25.0, height: 25.0,
+            ),
+            onPressed: _launchGitHub,
+          ),
+        ],),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(children:[
-              SizedBox(
-              // Open settings
-              width: 70,
-              height: buttonHeight,
-              child: ElevatedButton(
-              onPressed: _navigateAndRefresh,
-              style: ButtonStyle(backgroundColor: Themes.sunflower),
-              child: const Icon(Icons.settings),
-            ),),
-            ]),
+            //Row(children:[
+            //   SizedBox(
+            //   // Open settings
+            //   width: 70,
+            //   height: buttonHeight,
+            //   child: ElevatedButton(
+            //   onPressed: _navigateAndRefresh,
+            //   style: ButtonStyle(backgroundColor: Themes.sunflower),
+            //   child: const Icon(Icons.settings),
+            // ),),
+            //]),
             Row(children: [
               Container(
                 margin: const EdgeInsets.all(7),
@@ -432,13 +466,12 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(Locales.deleteAllResults[Lang.l]),
             ),),
             const SizedBox(height: 10),
-            // Test Website Access
-            ElevatedButton.icon(
-              onPressed: _launchURL,
-              icon: const Icon(Icons.favorite),
-              label: const Text('Support me on Ko-fi', style: TextStyle(fontSize: 12.0)              ),
-              style: ButtonStyle(backgroundColor: Themes.greenish),
-            )
+            //ElevatedButton.icon(
+            //  onPressed: _launchKoFi,
+            //  icon: const Icon(Icons.favorite),
+            //  label: const Text('Support me on Ko-fi', style: TextStyle(fontSize: 12.0)              ),
+            //  style: ButtonStyle(backgroundColor: Themes.greenish),
+            //)
           ],
         ),
       ),
@@ -454,9 +487,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  _launchURL() async {
+  _launchKoFi() async {
    final Uri url = Uri.parse('https://ko-fi.com/danielagrothe');
    if (!await launchUrl(url, webOnlyWindowName: "Web Title")) {
+      _showAlertDialog(Locales.isOffline[Lang.l]);
+   }
+  }
+
+  _launchGitHub() async {
+   final Uri url = Uri.parse('https://github.com/DGrothe-PhD/punktspiel/');
+   if (!await launchUrl(url, webOnlyWindowName: "Project on GitHub")) {
       _showAlertDialog(Locales.isOffline[Lang.l]);
    }
   }

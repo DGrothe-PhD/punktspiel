@@ -164,7 +164,7 @@ class TableExample extends StatelessWidget {
                         style: StyleDecorator.textstil,
                       ),
                       TextSpan(text: gameResultText.toString(),),
-                  ],
+                    ],
                   ),
                 ),
               ),
