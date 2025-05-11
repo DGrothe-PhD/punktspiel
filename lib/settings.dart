@@ -151,3 +151,43 @@ class MySettingsPageState extends State<MySettingsPage> {
 }
 
 }
+
+class SettingsHelper{
+  Future<String> fetchLatestAppVersionDetails() async {
+    String currentVersionInfo = "";
+    String tagName = "";
+    String publishedAt = "";
+    dynamic response;
+
+    try{
+      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String appName = packageInfo.appName;
+      String releaseTag = "build v0.0.16beta";//packageInfo.packageName;
+      String version = "";// packageInfo.version;
+      String buildNumber = "";//packageInfo.buildNumber;
+      currentVersionInfo = "$appName $releaseTag\n$version $buildNumber";
+    }
+    catch(exception){
+      currentVersionInfo += "Version info could not be found.";
+    }
+    try{
+      response = await http.get(
+        Uri.parse('https://api.github.com/repos/DGrothe-PhD/punktspiel/releases/latest')
+      );
+  
+    if(response?.statusCode == 200){
+      Map<String, dynamic> json = jsonDecode(response.body);
+      tagName = json['tag_name'];
+      publishedAt = json['published_at'];
+      return "Installed:\n$currentVersionInfo\n\n" 
+      "Latest version: $tagName\nPublished at: $publishedAt\n";
+    }
+    else{
+      throw HttpException(Locales.isOffline[Lang.l]);
+    }
+  }
+    catch(exception){
+      return Locales.isOffline[Lang.l];
+    }
+  }
+}

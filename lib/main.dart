@@ -55,12 +55,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final now = DateTime.now();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   //Each editable field needs their controller.
   //Otherwise, stuff happens, such as that a name appears in a number field.
   final TextEditingController numberFieldController = TextEditingController();
   final TextEditingController namesFieldController = TextEditingController();
   final TextEditingController selectableNamesMenuController = TextEditingController();
+  int currentPageIndex = 0;
+
+  final SvgPicture kofiIcon = SvgPicture.asset(
+    'assets/images/kofi_symbol.svg',
+    width: 25.0, height: 25.0,
+  );
+  final SvgPicture githubIcon = SvgPicture.asset(
+    'assets/images/github-mark.svg',
+    width: 25.0, height: 25.0,
+  );
   final EdgeInsets edgeInsets = const EdgeInsets.all(11);
   final double buttonHeight = 30;
 
@@ -285,6 +296,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SettingsHelper settingsHelper = SettingsHelper();
     return GestureDetector(
       onTap: closeKbd,
       //onDoubleTap: () => {},
@@ -293,41 +305,47 @@ class _MyHomePageState extends State<MyHomePage> {
         key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(backgroundColor: Colors.amber, title: Text(widget.title),),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(7),
+      bottomNavigationBar: NavigationBar(
         height: 50.0,
-        color: Colors.grey[200],
-        child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.home),
-            onPressed: () => {},
+        backgroundColor: Themes.greenishColor,
+        //indicatorColor: Colors.grey[200],
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        indicatorColor: Themes.active,
+        selectedIndex: currentPageIndex,
+        destinations: <Widget>[
+          const NavigationDestination(
+            icon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home_outlined),
+            label: 'Home',
+            //onPressed: () => {},
           ),
-          const Text(
-            '© Your Company 2023',
-            style: TextStyle(fontSize: 14.0),
+          const NavigationDestination(
+            icon: Icon(Icons.settings),
+            selectedIcon: Icon(Icons.settings_outlined),
+            label: 'Settings',
+            //onPressed: _navigateAndRefresh,
           ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: _navigateAndRefresh,
+          NavigationDestination(
+            icon: kofiIcon,
+            selectedIcon: kofiIcon,
+            label: 'KoFi',
+            //onPressed: _launchKoFi,
           ),
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/images/kofi_symbol.svg',
-              width: 25.0, height: 25.0,
-            ),
-            onPressed: _launchKoFi,
+          NavigationDestination(
+            icon: githubIcon,
+            selectedIcon: githubIcon,
+            label: 'GitHub',
+            //onPressed: _launchGitHub,
           ),
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/images/github-mark.svg',
-              width: 25.0, height: 25.0,
-            ),
-            onPressed: _launchGitHub,
-          ),
-        ],),
+        ],
       ),
-      body: Center(
+      body: <Widget>[
+        /// Home page
+        Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -475,10 +493,62 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+        /// Settings Page
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(children: [
+            Row(
+              children:<Widget>[
+                const Icon(Icons.language),
+                const Text("\xA0"),
+              SizedBox(width: 111, child: buildselectLanguagesMenu(),),
+            ],),
+            const Row(children: [Text("stuff coming")]),
+            /*
+            FutureBuilder<String>(
+              future: settingsHelper.fetchLatestAppVersionDetails(),
+              builder: (context, snapshot) {
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return const CircularProgressIndicator();
+                }
+                if(snapshot.hasError){
+                  return Text("Error: ${snapshot.error}");
+                }
+                return Text("${snapshot.data}");
+              },
+            ),*/
+          ],)
+        ),
+        // ! Make things work, look https://api.flutter.dev/flutter/material/NavigationBar-class.html
+        /// KoFi
+        // TODO go on
+        const Text("Here, Ko-fi."),
+        /// GitHub
+        // TODO go on
+        const Text("GitHub."),
+      ][currentPageIndex],
     ),
     );
   }
 
+  /// Utilities for Settings page
+  Widget buildselectLanguagesMenu({bool wellBehaving = true}){
+    return DropdownButton<String>(
+    key: ValueKey(Object.hashAll(Lang.availableLanguages)),
+    isExpanded: true,
+    value: Lang.currentLanguageCode(),
+    onChanged: (String? value){
+      setState(() => Lang.setLanguage(value ?? "EN"));
+    },
+    items: Lang.availableLanguages.map<DropdownMenuItem<String>>(
+      (String value) {
+        return DropdownMenuItem<String>(value: value, child: Text(value));
+      }).toList(),
+    menuWidth: 100,
+    );
+  }
+
+  /// Other stuff
   SizedBox mySizedBox(Widget childwidget){
     return SizedBox(
       width: 150,

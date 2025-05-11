@@ -140,7 +140,13 @@ class TableExample extends StatelessWidget {
       
       return Center(
         child: SwipeTo(
-          onRightSwipe: (details) => {Navigator.pop(context)},
+          onRightSwipe: (details) {
+            //Navigator.pop(context);
+            //final delta = details.delta.dx;
+            //if(delta > 3){
+              Navigator.pop(context);
+           // }
+          },
           onLeftSwipe: (details) => {_onShareResults(context)},
           child: Column(
           children: <Widget>[
