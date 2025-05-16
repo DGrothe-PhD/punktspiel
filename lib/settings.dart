@@ -34,6 +34,8 @@ class MySettingsPage extends StatefulWidget{
 }
 
 class MySettingsPageState extends State<MySettingsPage> {
+  String currentVersionInfo = "";
+  String availableVersionInfo = "";
   final now = DateTime.now();
 
   //SettingsPage({super.key});
@@ -42,6 +44,7 @@ class MySettingsPageState extends State<MySettingsPage> {
   @override
   void initState(){
     super.initState();
+    //getLatestAppVersionDetails();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -64,9 +67,50 @@ class MySettingsPageState extends State<MySettingsPage> {
     );
   }
   
+    //Network Request to get latest release version of this app.
+  void getLatestAppVersionDetails() async {
+    currentVersionInfo = "";
+    availableVersionInfo = "";
+    try{
+      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String appName = packageInfo.appName;
+      String releaseTag = "build v0.0.16beta";//packageInfo.packageName;
+      String version = "";// packageInfo.version;
+      String buildNumber = "";//packageInfo.buildNumber;
+      currentVersionInfo = "$appName $releaseTag\n$version $buildNumber";
+    }
+    catch(exception){
+      currentVersionInfo += "Version info could not be found.";
+    }
+    try{
+      availableVersionInfo = Locales.isOffline[Lang.l];
+      //dynamic foo = Uri.parse('https://api.github.com/repos/DGrothe-PhD/punktspiel/releases/latest');
+      dynamic response = await http.get(
+      Uri.parse('https://api.github.com/repos/DGrothe-PhD/punktspiel/releases/latest')
+      );
+    
+    if(response.statusCode == 200){
+      Map<String, dynamic> json = jsonDecode(response.body);
+      String tagName = json['tag_name'];
+      String publishedAt = json['published_at'];
+      setState(() {
+        availableVersionInfo = "Installed:\n$currentVersionInfo\n\n" 
+        "Latest version: $tagName\nPublished at: $publishedAt\n";
+      });
+    }
+    else{
+      throw HttpException(Locales.isOffline[Lang.l]);
+    }
+    }
+    catch(exception){
+      availableVersionInfo = Locales.isOffline[Lang.l];
+    }
+  }
+
   //Network Request to get latest release version of this app.
   Future<String> fetchLatestAppVersionDetails() async {
-    String currentVersionInfo = "";
+    currentVersionInfo = "";
+    availableVersionInfo = "";
     try{
       final PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String appName = packageInfo.appName;
@@ -87,8 +131,9 @@ class MySettingsPageState extends State<MySettingsPage> {
       Map<String, dynamic> json = jsonDecode(response.body);
       String tagName = json['tag_name'];
       String publishedAt = json['published_at'];
-      return "Installed:\n$currentVersionInfo\n\n" 
+      availableVersionInfo = "Installed:\n$currentVersionInfo\n\n" 
       "Latest version: $tagName\nPublished at: $publishedAt\n";
+      return availableVersionInfo;
     }
     else{
       throw HttpException(Locales.isOffline[Lang.l]);
@@ -114,7 +159,9 @@ class MySettingsPageState extends State<MySettingsPage> {
                   SizedBox(width: 111, child: buildselectLanguagesMenu(),),
               ],),
             const SizedBox(height:177),
-            FutureBuilder<String>(
+            availableVersionInfo.isNotEmpty ? Text(availableVersionInfo) : const Text("…"),
+            //! trying without FB here
+            /*FutureBuilder<String>(
               future: fetchLatestAppVersionDetails(),
               builder: (context, snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting){
@@ -125,16 +172,17 @@ class MySettingsPageState extends State<MySettingsPage> {
                 }
                 return Text("${snapshot.data}");
               },
-            ),
+            ),*/
             SizedBox(
               width: 120,
               //height: 50,
               child: ElevatedButton(
-                onPressed: () {setState(() => Navigator.pop(context, true));},
+                onPressed: () {},
+                //getLatestAppVersionDetails,
                 style: ButtonStyle(
                   backgroundColor: Themes.green,
                 ),
-                child: Text(Locales.close[Lang.l]),
+                child: const Text("Version Info"),
               ),
             ),
           ]
@@ -150,44 +198,4 @@ class MySettingsPageState extends State<MySettingsPage> {
   }
 }
 
-}
-
-class SettingsHelper{
-  Future<String> fetchLatestAppVersionDetails() async {
-    String currentVersionInfo = "";
-    String tagName = "";
-    String publishedAt = "";
-    dynamic response;
-
-    try{
-      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      String appName = packageInfo.appName;
-      String releaseTag = "build v0.0.16beta";//packageInfo.packageName;
-      String version = "";// packageInfo.version;
-      String buildNumber = "";//packageInfo.buildNumber;
-      currentVersionInfo = "$appName $releaseTag\n$version $buildNumber";
-    }
-    catch(exception){
-      currentVersionInfo += "Version info could not be found.";
-    }
-    try{
-      response = await http.get(
-        Uri.parse('https://api.github.com/repos/DGrothe-PhD/punktspiel/releases/latest')
-      );
-  
-    if(response?.statusCode == 200){
-      Map<String, dynamic> json = jsonDecode(response.body);
-      tagName = json['tag_name'];
-      publishedAt = json['published_at'];
-      return "Installed:\n$currentVersionInfo\n\n" 
-      "Latest version: $tagName\nPublished at: $publishedAt\n";
-    }
-    else{
-      throw HttpException(Locales.isOffline[Lang.l]);
-    }
-  }
-    catch(exception){
-      return Locales.isOffline[Lang.l];
-    }
-  }
 }
