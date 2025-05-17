@@ -286,13 +286,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() { _dontEditNames = false;});
   }
 
-  void _navigateAndRefresh() async{
-    //C#-ish here, discarding a variable using a _. :D
-    final _ = await Navigator.push(
-      context, MaterialPageRoute(builder: (context) => settingsPage),
-    );
-    setState(() {});
-  }
 
   Widget myHomePage(){
     return Center(
@@ -442,8 +435,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentPage = myHomePage();
         break;
       case 1:
-      //! Setting page is monolith, failing for same old reason. Disassemble and narrow down
-        currentPage = const MySettingsPage();
+        currentPage = settingsPage;
         break;
       default:
         currentPage = myHomePage();
@@ -481,7 +473,6 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.settings),
             selectedIcon: Icon(Icons.settings_outlined),
             label: 'Settings',
-            //onPressed: _navigateAndRefresh,
           ),
           NavigationDestination(
             icon: kofiIcon,
@@ -498,206 +489,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: currentPage,
-      /*body: <Widget>[
-        /// Home page
-        Center(//!!!!
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(children: [
-              Container(
-                margin: const EdgeInsets.all(7),
-                alignment: Alignment.bottomRight,
-                width: 30,
-                //child: const Icon(Icons.gamepad),
-                child: SvgPicture.asset(
-                  'assets/images/dice.svg',
-                   width: 25.0, height: 25.0,
-                ),
-              ),
-              Text(Locales.winFor[Lang.l]),
-              const SizedBox(width: 20),
-              SizedBox(width: 200, child: buildpointsWinningSwitch(),),
-            ],
-            ),// Row for played rounds and whose turn it is
-            Row(
-              children: [
-                Container(
-                  margin: edgeInsets,
-                  width: 60,
-                  child: Text(Locales.playedRounds[Lang.l]),
-                ),
-                Container(
-                  alignment: Alignment.bottomRight,
-                  width: 42,
-                  child: Text(
-                  '$_counter',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ),
-                Container(
-                  margin: edgeInsets,
-                  child: Text(
-                    (whoseTurnIndex < Spieler.names.length)?
-                    Locales.opener[Lang.l]
-                    .format([
-                      Spieler.names[whoseTurnIndex].truncate(10)
-                    ]) : "< empty >"
-                  ),
-                ),
-              ],
-            ),
-            // Field for names
-            Container( 
-              margin: edgeInsets,
-              //height: 100,
-              //width: 100,
-              child: TextField(
-                controller: namesFieldController,
-                readOnly: _dontEditNames,
-                enabled: !_dontEditNames,
-                onChanged: (unread) {setState(() => _gamesStarted = false);},
-                onSubmitted: (newText) => _finishEditingNames(newText),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Themes.greenishColor)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Themes.active)),
-                  labelText: Locales.players[Lang.l],
-                  isDense: true,
-                ),
-                //keyboardType: TextInputType.text,
-              ),
-            ),
-            // Number field row
-            Row(
-              children: <Widget>[
-              Container( 
-              margin: edgeInsets,
-              //height: 100,
-              width: 150,
-              // Number field to enter points
-              child: TextField(
-                enabled: _gamesStarted,
-                controller: numberFieldController,
-                onChanged: (newText) {selectedPlayerPoints = int.tryParse(newText) ?? 0;},
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: Locales.points[Lang.l],
-                  isDense: true,
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-              ),
-              ),
-                ElevatedButton(
-              onPressed: setOpener,
-              style: ButtonStyle(backgroundColor: Themes.green),
-              child: const Icon(Icons.chair),
-              ),
-                const SizedBox(width:10),
-                ElevatedButton(
-                onPressed: deleteLastEntry,
-                style: ButtonStyle(backgroundColor: Themes.pumpkin),
-                child: const Icon(Icons.delete),
-              ),
-              ],
-            ),
-            buildselectableNamesMenu(),
-            mySizedBox(
-              ElevatedButton(
-              onPressed: submitPoints,
-              style: ButtonStyle(backgroundColor: Themes.sunflower),
-              child: Text(Locales.submit[Lang.l]),
-            ),),
-            const SizedBox(height:10),
-            mySizedBox(
-              ElevatedButton(
-              onPressed: showPoints,
-              style: ButtonStyle(backgroundColor: Themes.green),
-              child: Text(Locales.results[Lang.l]),
-            ),),
-            const SizedBox(height: 10),
-            mySizedBox(
-              ElevatedButton(
-              onPressed: deleteEverything,
-              style: ButtonStyle(backgroundColor: Themes.pumpkin),
-              child: Text(Locales.deleteAllResults[Lang.l]),
-            ),),
-            const SizedBox(height: 10),
-            //ElevatedButton.icon(
-            //  onPressed: _launchKoFi,
-            //  icon: const Icon(Icons.favorite),
-            //  label: const Text('Support me on Ko-fi', style: TextStyle(fontSize: 12.0)              ),
-            //  style: ButtonStyle(backgroundColor: Themes.greenish),
-            //)
-          ],
-        ),
-      ),
-        /// Settings Page
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(children: [
-            Row(
-              children:<Widget>[
-                const Icon(Icons.language),
-                const Text("\xA0"),
-              SizedBox(width: 111, child: buildselectLanguagesMenu(),),
-            ],),
-            const Row(children: [Text("stuff coming")]),
-            gitHubVersionInfo(),
-          ],)
-        ),
-        // ! Make things work, look https://api.flutter.dev/flutter/material/NavigationBar-class.html
-        /// KoFi
-        // TODO go on
-        const Text("Here, Ko-fi."),
-        /// GitHub
-        // TODO go on
-        const Text("GitHub."),
-      ][currentPageIndex],*/
     ),
     );
     return TheContent;
   }
 
-/*
-  Widget gitHubVersionInfo() {
-    return FutureBuilder<String>(
-      future: settingsHelper.fetchLatestAppVersionDetails(),
-      builder: (context, snapshot) {
-      if(snapshot.connectionState == ConnectionState.waiting){
-        return const CircularProgressIndicator();
-      }
-      if(snapshot.hasError){
-        return Text("Error: ${snapshot.error}");
-      }
-        return Text("${snapshot.data}");
-      },
-    );
-  }*/
-
-  /// Utilities for Settings page
-  Widget buildselectLanguagesMenu({bool wellBehaving = true}){
-    return DropdownButton<String>(
-    key: ValueKey(Object.hashAll(Lang.availableLanguages)),
-    isExpanded: true,
-    value: Lang.currentLanguageCode(),
-    onChanged: (String? value){
-      setState(() => Lang.setLanguage(value ?? "EN"));
-    },
-    items: Lang.availableLanguages.map<DropdownMenuItem<String>>(
-      (String value) {
-        return DropdownMenuItem<String>(value: value, child: Text(value));
-      }).toList(),
-    menuWidth: 100,
-    );
-  }
-
-  /// Other stuff
   SizedBox mySizedBox(Widget childwidget){
     return SizedBox(
       width: 150,
