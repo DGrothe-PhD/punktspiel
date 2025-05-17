@@ -10,6 +10,12 @@
 * Navigating:
   - MaterialApp vs. Scaffold: [fixing black screen issue](https://stackoverflow.com/questions/53723294/flutter-navigator-popcontext-returning-a-black-screen)
   - Swipe gestures https://pub.dev/packages/swipe_to
+    `//import 'package:swipe_to/swipe_to.dart';`
+    ```flutter
+    child: SwipeTo(
+      onRightSwipe: (details) => {Navigator.pop(context, true)},
+      child: Padding/Column(…))
+    ```
   - Set and lock screen rotation [for both Stateless and StatefulWidget](https://stackoverflow.com/a/50322184/17677104)
 
 ### Input fields
