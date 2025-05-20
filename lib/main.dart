@@ -427,6 +427,22 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget aboutMePage() => Column(
+    children: <Widget>[ 
+      const Padding(
+        padding: EdgeInsets.all(5),
+        child: Text("bla"),
+      ),
+      ElevatedButton(
+        onPressed: () {_launchKoFi();},
+        style: ButtonStyle(
+        backgroundColor: Themes.green,
+        ),
+        child: const Text("Support me on Ko-fi"),
+      ),
+    ]
+  );
+
   @override
   Widget build(BuildContext context) {
     Widget currentPage;// = myHomePage();
@@ -437,6 +453,8 @@ class _MyHomePageState extends State<MyHomePage> {
       case 1:
         currentPage = settingsPage;
         break;
+      case 2:
+        currentPage = aboutMePage();
       default:
         currentPage = myHomePage();
         break;
@@ -474,10 +492,10 @@ class _MyHomePageState extends State<MyHomePage> {
             selectedIcon: Icon(Icons.settings_outlined),
             label: 'Settings',
           ),
-          NavigationDestination(
-            icon: kofiIcon,
-            selectedIcon: kofiIcon,
-            label: 'KoFi',
+          const NavigationDestination(
+            icon: Icon(Icons.info_rounded),
+            selectedIcon: Icon(Icons.info_outline_rounded),
+            label: 'About Me',
             //onPressed: _launchKoFi,
           ),
           NavigationDestination(
