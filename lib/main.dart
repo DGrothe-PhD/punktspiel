@@ -431,17 +431,27 @@ class _MyHomePageState extends State<MyHomePage> {
     children: <Widget>[ 
       const Padding(
         padding: EdgeInsets.all(5),
-        child: Text("bla"),
+        child: Text("A local app to add points when playing cards or similar games in a group.\n"+
+          "Designed for the fun of it and for learning!"),
       ),
+      const SizedBox(height: 7),
       ElevatedButton(
         onPressed: () {_launchKoFi();},
-        style: ButtonStyle(
-        backgroundColor: Themes.green,
-        ),
+        style: ButtonStyle(backgroundColor: Themes.green,),
         child: const Text("Support me on Ko-fi"),
+      ),
+      const SizedBox(height: 7),
+      ElevatedButton(
+        onPressed: () {_launchGitHub();},
+        style: ButtonStyle(backgroundColor: Themes.pumpkin,),
+        child: const Text("Open GitHub"),
       ),
     ]
   );
+
+  Widget myHelpPage() {
+    return const Text("tbd");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -454,7 +464,11 @@ class _MyHomePageState extends State<MyHomePage> {
         currentPage = settingsPage;
         break;
       case 2:
+        currentPage = myHelpPage();
+        break;
+      case 3:
         currentPage = aboutMePage();
+        break;
       default:
         currentPage = myHomePage();
         break;
@@ -480,29 +494,26 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         indicatorColor: Themes.active,
         selectedIndex: currentPageIndex,
-        destinations: <Widget>[
-          const NavigationDestination(
+        destinations: const <Widget>[
+          NavigationDestination(
             icon: Icon(Icons.home),
             selectedIcon: Icon(Icons.home_outlined),
             label: 'Home',
-            //onPressed: () => {},
           ),
-          const NavigationDestination(
+          NavigationDestination(
             icon: Icon(Icons.settings),
             selectedIcon: Icon(Icons.settings_outlined),
             label: 'Settings',
           ),
-          const NavigationDestination(
+          NavigationDestination(
+            icon: Icon(Icons.help_rounded),
+            selectedIcon: Icon(Icons.help_outline_rounded),
+            label: 'Help',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.info_rounded),
             selectedIcon: Icon(Icons.info_outline_rounded),
             label: 'About Me',
-            //onPressed: _launchKoFi,
-          ),
-          NavigationDestination(
-            icon: githubIcon,
-            selectedIcon: githubIcon,
-            label: 'GitHub',
-            //onPressed: _launchGitHub,
           ),
         ],
       ),
@@ -533,4 +544,5 @@ class _MyHomePageState extends State<MyHomePage> {
       _showAlertDialog(Locales.isOffline[Lang.l]);
    }
   }
+
 }
