@@ -46,28 +46,32 @@ class StyleDecorator {
   }
 }
 
+BuildContext? tableContext;
+
 class TableExampleApp extends StatelessWidget {
   const TableExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    tableContext = context;
     return Scaffold(
-        resizeToAvoidBottomInset : true,//maybe false if keyboard
-        appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
-        body: 
-        SingleChildScrollView(
-          child: TableExample(),
-        )
+      resizeToAvoidBottomInset : true,//maybe false if keyboard
+      appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
+      body: 
+      SingleChildScrollView(
+        child: TablePage(),
+      )
     );
     // reduce to the max. Returning MaterialApp shows black screen...
   }
 }
 
-class TableExample extends StatelessWidget {
+class TablePage extends StatelessWidget{
   final List names = Spieler.names;
   static const String winningDecoration = "🎉";
   final now = DateTime.now();
-  TableExample({super.key});
+  TablePage({super.key});
+  
   static String headline = "";
   static StringBuffer playerNames = StringBuffer();
   static StringBuffer gameResultText = StringBuffer();
@@ -140,8 +144,11 @@ class TableExample extends StatelessWidget {
       
       return Center(
         child: SwipeTo(
-          onRightSwipe: (details) => {Navigator.pop(context)},
-          onLeftSwipe: (details) => {_onShareResults(context)},
+          /*onRightSwipe: (details) {
+              Lang.tableVisible = false;
+              //Navigator.pop(tableContext ?? context);
+          },*/
+          onLeftSwipe: (details) => {_onShareResults(tableContext ?? context)},
           child: Column(
           children: <Widget>[
             WidgetAnimator(
@@ -152,7 +159,7 @@ class TableExample extends StatelessWidget {
               SelectionArea(
                 child: 
                 RichText(
-                  selectionRegistrar: SelectionContainer.maybeOf(context),
+                  selectionRegistrar: SelectionContainer.maybeOf(tableContext ?? context),
                   textAlign: TextAlign.center,
                   //textAlign: TextAlign.right,
                   text: TextSpan(
@@ -171,7 +178,7 @@ class TableExample extends StatelessWidget {
             ),
             const SizedBox(height:20),
             ElevatedButton(
-              onPressed: () => {_onShareTable(context)},
+              onPressed: () => {_onShareTable(tableContext ?? context)},
               style: ButtonStyle(
                   backgroundColor: Themes.sunflower,
                   minimumSize: WidgetStateProperty.all<Size>(buttonSize),
@@ -180,7 +187,7 @@ class TableExample extends StatelessWidget {
             ),
             const SizedBox(height:10),
             ElevatedButton(
-              onPressed: () => {_onShareResults(context)},
+              onPressed: () => {_onShareResults(tableContext ?? context)},
               style: ButtonStyle(
                   backgroundColor: Themes.greenish,
                   minimumSize: WidgetStateProperty.all<Size>(buttonSize),
@@ -189,7 +196,9 @@ class TableExample extends StatelessWidget {
             ),
             const SizedBox(height:10),
             ElevatedButton(
-              onPressed: () {Navigator.pop(context);},
+              onPressed: () {
+                Lang.tableVisible = false;
+              },
               style: ButtonStyle(
                 backgroundColor: Themes.green,
                 minimumSize: WidgetStateProperty.all<Size>(buttonSize),

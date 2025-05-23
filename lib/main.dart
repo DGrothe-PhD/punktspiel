@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_adjacent_string_concatenation
+// ignore_for_file: prefer_adjacent_string_concatenation, non_constant_identifier_names
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +17,6 @@ void main() {
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-  //SettingsAppWidget settingsPage = const SettingsAppWidget();
   const MyApp({super.key});
   //final TableExampleApp punkteTabelle = const TableExampleApp();
 
@@ -55,12 +54,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final now = DateTime.now();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   //Each editable field needs their controller.
   //Otherwise, stuff happens, such as that a name appears in a number field.
   final TextEditingController numberFieldController = TextEditingController();
   final TextEditingController namesFieldController = TextEditingController();
   final TextEditingController selectableNamesMenuController = TextEditingController();
+  int currentPageIndex = 0;
+
+  //SettingsHelper settingsHelper = SettingsHelper();
+  final SvgPicture kofiIcon = SvgPicture.asset(
+    'assets/images/kofi_symbol.svg',
+    width: 25.0, height: 25.0,
+  );
+  final SvgPicture githubIcon = SvgPicture.asset(
+    'assets/images/github-mark.svg',
+    width: 25.0, height: 25.0,
+  );
   final EdgeInsets edgeInsets = const EdgeInsets.all(11);
   final double buttonHeight = 30;
 
@@ -250,13 +261,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return answer ?? false;
   }
 
-  void showPoints() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => punkteTabelle,
-      )
-    );
+  void togglePointsView() {
+    setState(() {
+      Lang.tableVisible = !Lang.tableVisible;
+      /*Navigator.push(context,
+        MaterialPageRoute(
+          builder: (context) => punkteTabelle,
+        )
+      );*/
+    });
   }
 
   void deleteLastEntry() {
@@ -275,73 +288,12 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() { _dontEditNames = false;});
   }
 
-  void _navigateAndRefresh() async{
-    //C#-ish here, discarding a variable using a _. :D
-    final _ = await Navigator.push(
-      context, MaterialPageRoute(builder: (context) => settingsPage),
-    );
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: closeKbd,
-      //onDoubleTap: () => {},
-      //onLongPress: () => {},
-      child: Scaffold(
-        key: _scaffoldKey,
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(backgroundColor: Colors.amber, title: Text(widget.title),),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(7),
-        height: 50.0,
-        color: Colors.grey[200],
-        child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.home),
-            onPressed: () => {},
-          ),
-          const Text(
-            '© Your Company 2023',
-            style: TextStyle(fontSize: 14.0),
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: _navigateAndRefresh,
-          ),
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/images/kofi_symbol.svg',
-              width: 25.0, height: 25.0,
-            ),
-            onPressed: _launchKoFi,
-          ),
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/images/github-mark.svg',
-              width: 25.0, height: 25.0,
-            ),
-            onPressed: _launchGitHub,
-          ),
-        ],),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+  Widget _HomeContent(){
+    return //Center(
+      //child: 
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //Row(children:[
-            //   SizedBox(
-            //   // Open settings
-            //   width: 70,
-            //   height: buttonHeight,
-            //   child: ElevatedButton(
-            //   onPressed: _navigateAndRefresh,
-            //   style: ButtonStyle(backgroundColor: Themes.sunflower),
-            //   child: const Icon(Icons.settings),
-            // ),),
-            //]),
             Row(children: [
               Container(
                 margin: const EdgeInsets.all(7),
@@ -442,41 +394,152 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: ButtonStyle(backgroundColor: Themes.pumpkin),
                 child: const Icon(Icons.delete),
               ),
-              ],
-            ),
-            buildselectableNamesMenu(),
-            mySizedBox(
-              ElevatedButton(
-              onPressed: submitPoints,
-              style: ButtonStyle(backgroundColor: Themes.sunflower),
-              child: Text(Locales.submit[Lang.l]),
-            ),),
-            const SizedBox(height:10),
-            mySizedBox(
-              ElevatedButton(
-              onPressed: showPoints,
-              style: ButtonStyle(backgroundColor: Themes.green),
-              child: Text(Locales.results[Lang.l]),
-            ),),
-            const SizedBox(height: 10),
-            mySizedBox(
-              ElevatedButton(
-              onPressed: deleteEverything,
-              style: ButtonStyle(backgroundColor: Themes.pumpkin),
-              child: Text(Locales.deleteAllResults[Lang.l]),
-            ),),
-            const SizedBox(height: 10),
-            //ElevatedButton.icon(
-            //  onPressed: _launchKoFi,
-            //  icon: const Icon(Icons.favorite),
-            //  label: const Text('Support me on Ko-fi', style: TextStyle(fontSize: 12.0)              ),
-            //  style: ButtonStyle(backgroundColor: Themes.greenish),
-            //)
-          ],
-        ),
+            ],
+          ),
+          buildselectableNamesMenu(),
+          mySizedBox(
+            ElevatedButton(
+            onPressed: submitPoints,
+            style: ButtonStyle(backgroundColor: Themes.sunflower),
+            child: Text(Locales.submit[Lang.l]),
+          ),),
+          const SizedBox(height:10),
+          mySizedBox(
+            ElevatedButton(
+            onPressed: togglePointsView,//! TODO ephemeral
+            style: ButtonStyle(backgroundColor: Themes.green),
+            child: Text(Locales.results[Lang.l]),
+          ),),
+          const SizedBox(height: 10),
+          mySizedBox(
+            ElevatedButton(
+            onPressed: deleteEverything,
+            style: ButtonStyle(backgroundColor: Themes.pumpkin),
+            child: Text(Locales.deleteAllResults[Lang.l]),
+          ),),
+          const SizedBox(height: 10),
+        ],
+  //    ),
+    );
+  }
+
+  Widget myHomePage(){
+    return Stack(
+      children: <Widget>[
+        Lang.tableVisible ? const Text("<3") : _HomeContent(),
+        Align(alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(7),
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.table_view),
+              onPressed: togglePointsView,
+              style: ButtonStyle(backgroundColor: Themes.pumpkin,),
+              label: Text("${Lang.tableVisible ? "Hide ": "Show "}Table"),
+          ),),
+        )
+      ]
+    );
+    /*return Center(
+      child: _HomeContent(),
+    );*/
+  }
+
+  Widget aboutMePage() => Column(
+    children: <Widget>[ 
+      const Padding(
+        padding: EdgeInsets.all(5),
+        child: Text("A local app to add points when playing cards or similar games in a group.\n"+
+          "Designed for the fun of it and for learning!"),
       ),
+      const SizedBox(height: 7),
+      ElevatedButton.icon(
+        icon: kofiIcon,
+        onPressed: () {_launchKoFi();},
+        style: ButtonStyle(backgroundColor: Themes.green,),
+        label: const Text("Support me on Ko-fi"),
+      ),
+      const SizedBox(height: 7),
+      ElevatedButton.icon(
+        icon: githubIcon,
+        onPressed: () {_launchGitHub();},
+        style: ButtonStyle(backgroundColor: Themes.pumpkin,),
+        label: const Text("Open GitHub"),
+      ),
+    ]
+  );
+
+  Widget myHelpPage() {
+    return const Text("tbd");
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    Widget currentPage;// = myHomePage();
+    switch(currentPageIndex){
+      case 0:
+        currentPage = myHomePage();
+        break;
+      case 1:
+        currentPage = settingsPage;
+        break;
+      case 2:
+        currentPage = myHelpPage();
+        break;
+      case 3:
+        currentPage = aboutMePage();
+        break;
+      default:
+        currentPage = myHomePage();
+        break;
+    }
+
+    Widget TheContent = 
+    GestureDetector(
+      onTap: closeKbd,
+      //onDoubleTap: () => {},
+      //onLongPress: () => {},
+      child: Scaffold(
+        key: _scaffoldKey,
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(backgroundColor: Colors.amber, title: Text(widget.title),),
+      bottomNavigationBar: NavigationBar(
+        height: 50.0,
+        backgroundColor: Themes.greenishColor,
+        //indicatorColor: Colors.grey[200],
+        onDestinationSelected: (int index) {
+          setState(() { 
+            currentPageIndex = index;
+          });
+        },
+        indicatorColor: Themes.active,
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings),
+            selectedIcon: Icon(Icons.settings_outlined),
+            label: 'Settings',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.help_rounded),
+            selectedIcon: Icon(Icons.help_outline_rounded),
+            label: 'Help',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.info_rounded),
+            selectedIcon: Icon(Icons.info_outline_rounded),
+            label: 'About Me',
+          ),
+        ],
+      ),
+      body: currentPage,
     ),
     );
+    return TheContent;
   }
 
   SizedBox mySizedBox(Widget childwidget){
@@ -500,4 +563,5 @@ class _MyHomePageState extends State<MyHomePage> {
       _showAlertDialog(Locales.isOffline[Lang.l]);
    }
   }
+
 }
