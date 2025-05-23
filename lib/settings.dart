@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:swipe_to/swipe_to.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 //import 'package:flutter_html/flutter_html.dart';
@@ -34,6 +33,8 @@ class MySettingsPage extends StatefulWidget{
 }
 
 class MySettingsPageState extends State<MySettingsPage> {
+  String currentVersionInfo = "";
+  String availableVersionInfo = "";
   final now = DateTime.now();
 
   //SettingsPage({super.key});
@@ -65,12 +66,13 @@ class MySettingsPageState extends State<MySettingsPage> {
   }
   
   //Network Request to get latest release version of this app.
-  Future<String> fetchLatestAppVersionDetails() async {
-    String currentVersionInfo = "";
+  void getLatestAppVersionDetails() async {
+    currentVersionInfo = "";
+    availableVersionInfo = "";
     try{
       final PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String appName = packageInfo.appName;
-      String releaseTag = "build v0.0.16beta";//packageInfo.packageName;
+      String releaseTag = "build v0.0.19beta";//packageInfo.packageName;
       String version = "";// packageInfo.version;
       String buildNumber = "";//packageInfo.buildNumber;
       currentVersionInfo = "$appName $releaseTag\n$version $buildNumber";
@@ -79,23 +81,29 @@ class MySettingsPageState extends State<MySettingsPage> {
       currentVersionInfo += "Version info could not be found.";
     }
     try{
-      final response = await http.get(
-      Uri.parse('https://api.github.com/repos/DGrothe-PhD/punktspiel/releases/latest')
+      availableVersionInfo = Locales.isOffline[Lang.l];
+      //dynamic foo = Uri.parse('https://api.github.com/repos/DGrothe-PhD/punktspiel/releases/latest');
+      dynamic response = await http.get(
+        Uri.parse('https://api.github.com/repos/DGrothe-PhD/punktspiel/releases/latest'), 
+        headers: {'User-Agent': 'MyFlutterAppdgphd',}
       );
-    
-    if(response.statusCode == 200){
-      Map<String, dynamic> json = jsonDecode(response.body);
-      String tagName = json['tag_name'];
-      String publishedAt = json['published_at'];
-      return "Installed:\n$currentVersionInfo\n\n" 
-      "Latest version: $tagName\nPublished at: $publishedAt\n";
-    }
-    else{
-      throw HttpException(Locales.isOffline[Lang.l]);
-    }
+    ///flutter run -d windows --verbose
+    ///
+      if(response.statusCode == 200){
+        Map<String, dynamic> json = jsonDecode(response.body);
+        String tagName = json['tag_name'];
+        String publishedAt = json['published_at'];
+        setState(() {
+          availableVersionInfo = "Installed:\n$currentVersionInfo\n\n" 
+          "Latest version: $tagName\nPublished at: $publishedAt\n";
+        });
+      }
+      else{
+        throw HttpException(Locales.isOffline[Lang.l]);
+      }
     }
     catch(exception){
-      return Locales.isOffline[Lang.l];
+      availableVersionInfo = Locales.isOffline[Lang.l];
     }
   }
 
@@ -103,43 +111,31 @@ class MySettingsPageState extends State<MySettingsPage> {
   Widget build(BuildContext context) {
     try {
       return Center(
-        child: SwipeTo(
-          onRightSwipe: (details) => {Navigator.pop(context, true)},
-          child: Column(
-            children: <Widget>[
-              Row(
-                children:<Widget>[
-                  const Icon(Icons.language),
-                  const Text("\xA0"),
-                  SizedBox(width: 111, child: buildselectLanguagesMenu(),),
-              ],),
-            const SizedBox(height:177),
-            FutureBuilder<String>(
-              future: fetchLatestAppVersionDetails(),
-              builder: (context, snapshot) {
-                if(snapshot.connectionState == ConnectionState.waiting){
-                  return const CircularProgressIndicator();
-                }
-                if(snapshot.hasError){
-                  return Text("Error: ${snapshot.error}");
-                }
-                return Text("${snapshot.data}");
-              },
-            ),
-            SizedBox(
-              width: 120,
-              //height: 50,
-              child: ElevatedButton(
-                onPressed: () {setState(() => Navigator.pop(context, true));},
-                style: ButtonStyle(
-                  backgroundColor: Themes.green,
-                ),
-                child: Text(Locales.close[Lang.l]),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children:<Widget>[
+                const Icon(Icons.language),
+                const Text("\xA0"),
+                SizedBox(width: 111, child: buildselectLanguagesMenu(),),
+            ],),
+          const SizedBox(height:177),
+          availableVersionInfo.isNotEmpty ? Text(availableVersionInfo) : const Text("…"),
+          // for FutureBuilder things look into GH history
+          SizedBox(
+            width: 120,
+            //height: 50,
+            child: ElevatedButton(
+              onPressed: //() {},
+              getLatestAppVersionDetails,
+              style: ButtonStyle(
+                backgroundColor: Themes.green,
               ),
+              child: const Text("Version Info"),
             ),
-          ]
-        )
-      ),
+          ),
+        ]
+      )
     );  
   }
   on HttpException catch(e){
