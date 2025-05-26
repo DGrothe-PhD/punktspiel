@@ -403,13 +403,6 @@ class _MyHomePageState extends State<MyHomePage> {
             style: ButtonStyle(backgroundColor: Themes.sunflower),
             child: Text(Locales.submit[Lang.l]),
           ),),
-          const SizedBox(height:10),
-          mySizedBox(
-            ElevatedButton(
-            onPressed: togglePointsView,//! TODO ephemeral
-            style: ButtonStyle(backgroundColor: Themes.green),
-            child: Text(Locales.results[Lang.l]),
-          ),),
           const SizedBox(height: 10),
           mySizedBox(
             ElevatedButton(
@@ -426,22 +419,19 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget myHomePage(){
     return Stack(
       children: <Widget>[
-        Lang.tableVisible ? const Text("<3") : _HomeContent(),
+        Lang.tableVisible ? punkteTabelle : _HomeContent(),
         Align(alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.all(7),
+            padding: const EdgeInsets.all(17),
             child: ElevatedButton.icon(
               icon: const Icon(Icons.table_view),
               onPressed: togglePointsView,
-              style: ButtonStyle(backgroundColor: Themes.pumpkin,),
+              style: ButtonStyle(backgroundColor: Themes.green,),
               label: Text("${Lang.tableVisible ? "Hide ": "Show "}Table"),
           ),),
         )
       ]
     );
-    /*return Center(
-      child: _HomeContent(),
-    );*/
   }
 
   Widget aboutMePage() => Column(

@@ -194,17 +194,6 @@ class TablePage extends StatelessWidget{
               ),
               child: Text(Locales.shareResults[Lang.l]),
             ),
-            const SizedBox(height:10),
-            ElevatedButton(
-              onPressed: () {
-                Lang.tableVisible = false;
-              },
-              style: ButtonStyle(
-                backgroundColor: Themes.green,
-                minimumSize: WidgetStateProperty.all<Size>(buttonSize),
-              ),
-              child: Text(Locales.close[Lang.l]),
-            ),
           ]
           )
         ),
