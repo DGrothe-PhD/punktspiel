@@ -14,14 +14,13 @@ class SettingsAppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset : true,
-        appBar: AppBar(backgroundColor: Colors.amber,
-         title: Text(Locales.settingsTitle[Lang.l]),
-        ),
-        body: 
-        const SingleChildScrollView(
-          child: MySettingsPage(),
-        )
+      resizeToAvoidBottomInset : true,
+      appBar: AppBar(backgroundColor: Colors.amber,
+        title: Text(Locales.settingsTitle[Lang.l]),
+      ),
+      body: const SingleChildScrollView(
+        child: MySettingsPage(),
+      )
     );
   }
 }
@@ -87,8 +86,6 @@ class MySettingsPageState extends State<MySettingsPage> {
         Uri.parse('https://api.github.com/repos/DGrothe-PhD/punktspiel/releases/latest'), 
         headers: {'User-Agent': 'MyFlutterAppdgphd',}
       );
-    ///flutter run -d windows --verbose
-    ///
       if(response.statusCode == 200){
         Map<String, dynamic> json = jsonDecode(response.body);
         String tagName = json['tag_name'];
@@ -112,32 +109,29 @@ class MySettingsPageState extends State<MySettingsPage> {
     try {
       return Center(
         child: Column(
-          children: <Widget>[
-            Row(
-              children:<Widget>[
-                const Icon(Icons.language),
-                const Text("\xA0"),
-                SizedBox(width: 111, child: buildselectLanguagesMenu(),),
-            ],),
+        children: <Widget>[
+          Row(
+        children:<Widget>[
+          const Icon(Icons.language),
+          const Text("\xA0"),
+          SizedBox(width: 111, child: buildselectLanguagesMenu(),),
+          ],),
           const SizedBox(height:177),
           availableVersionInfo.isNotEmpty ? Text(availableVersionInfo) : const Text("…"),
           // for FutureBuilder things look into GH history
-          SizedBox(
-            width: 120,
-            //height: 50,
-            child: ElevatedButton(
-              onPressed: //() {},
-              getLatestAppVersionDetails,
-              style: ButtonStyle(
-                backgroundColor: Themes.green,
-              ),
-              child: const Text("Version Info"),
+          ElevatedButton(
+            onPressed: //() {},
+            getLatestAppVersionDetails,
+            style: ButtonStyle(
+              fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(200.0)),
+              backgroundColor: Themes.green,
+              shape: WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
             ),
+            child: const Text("Version Info"),
           ),
         ]
-      )
-    );  
-  }
+      ));  
+    }
   on HttpException catch(e){
       return Text(e.toString());
   }

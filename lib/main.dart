@@ -289,130 +289,120 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _HomeContent(){
-    return //Center(
-      //child: 
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(children: [
-              Container(
-                margin: const EdgeInsets.all(7),
-                alignment: Alignment.bottomRight,
-                width: 30,
-                //child: const Icon(Icons.gamepad),
-                child: SvgPicture.asset(
-                  'assets/images/dice.svg',
-                   width: 25.0, height: 25.0,
-                ),
-              ),
-              Text(Locales.winFor[Lang.l]),
-              const SizedBox(width: 20),
-              SizedBox(width: 200, child: buildpointsWinningSwitch(),),
-            ],
-            ),// Row for played rounds and whose turn it is
-            Row(
-              children: [
-                Container(
-                  margin: edgeInsets,
-                  width: 60,
-                  child: Text(Locales.playedRounds[Lang.l]),
-                ),
-                Container(
-                  alignment: Alignment.bottomRight,
-                  width: 42,
-                  child: Text(
-                  '$_counter',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ),
-                Container(
-                  margin: edgeInsets,
-                  child: Text(
-                    (whoseTurnIndex < Spieler.names.length)?
-                    Locales.opener[Lang.l]
-                    .format([
-                      Spieler.names[whoseTurnIndex].truncate(10)
-                    ]) : "< empty >"
-                  ),
-                ),
-              ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Row(
+      children: [
+        Container(
+          margin: const EdgeInsets.all(7),
+          alignment: Alignment.bottomRight,
+          width: 30,
+          child: SvgPicture.asset('assets/images/dice.svg', width: 25.0, height: 25.0,),
+        ),
+        //TODO try padding here
+        Text(Locales.winFor[Lang.l]),
+        const SizedBox(width: 20),
+        SizedBox(width: 200, child: buildpointsWinningSwitch(),),
+        ],),// Row for played rounds and whose turn it is
+        Row(
+      children: [
+        Container(
+          margin: edgeInsets, width: 60,
+          child: Text(Locales.playedRounds[Lang.l]),
+        ),
+        Container(
+          alignment: Alignment.bottomRight, width: 42,
+          child: Text( '$_counter',
+            style: Theme.of(context).textTheme.headlineSmall,
+        ),),
+        Container(
+          margin: edgeInsets,
+          child: Text(
+            (whoseTurnIndex < Spieler.names.length)?
+            Locales.opener[Lang.l].format([
+            Spieler.names[whoseTurnIndex].truncate(10)]) : "< empty >"
+        ),),
+      ],),
+      // Field for names
+        Container( 
+          margin: edgeInsets,
+          //height: 100,
+          //width: 100,
+          child: TextField(
+            controller: namesFieldController,
+            readOnly: _dontEditNames,
+            enabled: !_dontEditNames,
+            onChanged: (unread) {setState(() => _gamesStarted = false);},
+            onSubmitted: (newText) => _finishEditingNames(newText),
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Themes.greenishColor)),
+              focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Themes.active)),
+              labelText: Locales.players[Lang.l],
+              isDense: true,
+        ),),),
+      // Number field row
+        Row(
+      children: <Widget>[
+        Container( margin: edgeInsets,
+          //height: 100,
+          width: 150,
+      // Number field to enter points
+          child: TextField(
+            enabled: _gamesStarted,
+            controller: numberFieldController,
+            onChanged: (newText) {selectedPlayerPoints = int.tryParse(newText) ?? 0;},
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: Locales.points[Lang.l],
+              isDense: true,
             ),
-            // Field for names
-            Container( 
-              margin: edgeInsets,
-              //height: 100,
-              //width: 100,
-              child: TextField(
-                controller: namesFieldController,
-                readOnly: _dontEditNames,
-                enabled: !_dontEditNames,
-                onChanged: (unread) {setState(() => _gamesStarted = false);},
-                onSubmitted: (newText) => _finishEditingNames(newText),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Themes.greenishColor)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Themes.active)),
-                  labelText: Locales.players[Lang.l],
-                  isDense: true,
-                ),
-                //keyboardType: TextInputType.text,
-              ),
-            ),
-            // Number field row
-            Row(
-              children: <Widget>[
-              Container( 
-              margin: edgeInsets,
-              //height: 100,
-              width: 150,
-              // Number field to enter points
-              child: TextField(
-                enabled: _gamesStarted,
-                controller: numberFieldController,
-                onChanged: (newText) {selectedPlayerPoints = int.tryParse(newText) ?? 0;},
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: Locales.points[Lang.l],
-                  isDense: true,
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-              ),
-              ),
-                ElevatedButton(
-              onPressed: setOpener,
-              style: ButtonStyle(backgroundColor: Themes.green),
-              child: const Icon(Icons.chair),
-              ),
-                const SizedBox(width:10),
-                ElevatedButton(
-                onPressed: deleteLastEntry,
-                style: ButtonStyle(backgroundColor: Themes.pumpkin),
-                child: const Icon(Icons.delete),
-              ),
-            ],
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+        ),),
+        ElevatedButton(
+          onPressed: setOpener,
+          style: ButtonStyle(
+            backgroundColor: Themes.green,
+            shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
           ),
-          buildselectableNamesMenu(),
-          mySizedBox(
-            ElevatedButton(
-            onPressed: submitPoints,
-            style: ButtonStyle(backgroundColor: Themes.sunflower),
-            child: Text(Locales.submit[Lang.l]),
-          ),),
-          const SizedBox(height: 10),
-          mySizedBox(
-            ElevatedButton(
-            onPressed: deleteEverything,
-            style: ButtonStyle(backgroundColor: Themes.pumpkin),
-            child: Text(Locales.deleteAllResults[Lang.l]),
-          ),),
-          const SizedBox(height: 10),
-        ],
-  //    ),
+          child: const Icon(Icons.chair),
+        ),
+        const SizedBox(width:10),
+        ElevatedButton(
+          onPressed: deleteLastEntry,
+          style: ButtonStyle(
+            backgroundColor: Themes.pumpkin,
+            shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
+          ),
+          child: const Icon(Icons.delete),
+        ),
+      ],),
+      buildselectableNamesMenu(),
+      ElevatedButton(
+        onPressed: submitPoints,
+        style: ButtonStyle(
+          fixedSize: Themes.mediumButtonWidth,
+          backgroundColor: Themes.sunflower,
+          shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
+        ),
+        child: Text(Locales.submit[Lang.l]),
+      ),
+      const SizedBox(height: 10),
+      ElevatedButton(
+        onPressed: deleteEverything,
+        style: ButtonStyle(
+          fixedSize: Themes.mediumButtonWidth,
+          backgroundColor: Themes.pumpkin,
+          shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
+        ),
+        child: Text(Locales.deleteAllResults[Lang.l]),
+      ),
+      const SizedBox(height: 10),
+      ],
     );
   }
 
@@ -421,15 +411,17 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         Lang.tableVisible ? punkteTabelle : _HomeContent(),
         Align(alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(17),
-            child: ElevatedButton.icon(
-              icon: const Icon(Icons.table_view),
-              onPressed: togglePointsView,
-              style: ButtonStyle(backgroundColor: Themes.green,),
-              label: Text("${Lang.tableVisible ? "Hide ": "Show "}Table"),
-          ),),
-        )
+      child: Padding(
+        padding: const EdgeInsets.all(17),
+      child: ElevatedButton.icon(
+        icon: const Icon(Icons.table_view),
+        onPressed: togglePointsView,
+        style: ButtonStyle(
+          fixedSize: Themes.mediumButtonWidth,
+          backgroundColor: Themes.green,
+          shape: WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),),
+        label: Text("${Lang.tableVisible ? "Hide ": "Show "}Table"),
+      ),),)
       ]
     );
   }
@@ -438,21 +430,27 @@ class _MyHomePageState extends State<MyHomePage> {
     children: <Widget>[ 
       const Padding(
         padding: EdgeInsets.all(5),
-        child: Text("A local app to add points when playing cards or similar games in a group.\n"+
-          "Designed for the fun of it and for learning!"),
+    child: Text( "A local app to add points when playing cards or similar games in a group.\n"+
+        "Designed for the fun of it and for learning!"),
       ),
       const SizedBox(height: 7),
       ElevatedButton.icon(
         icon: kofiIcon,
         onPressed: () {_launchKoFi();},
-        style: ButtonStyle(backgroundColor: Themes.green,),
+        style: ButtonStyle(
+          fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(200.0)),
+          backgroundColor: Themes.green,
+          shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),),
         label: const Text("Support me on Ko-fi"),
       ),
       const SizedBox(height: 7),
       ElevatedButton.icon(
         icon: githubIcon,
         onPressed: () {_launchGitHub();},
-        style: ButtonStyle(backgroundColor: Themes.pumpkin,),
+        style: ButtonStyle(
+          fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(200.0)),
+          backgroundColor: Themes.pumpkin,
+          shape: WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),),
         label: const Text("Open GitHub"),
       ),
     ]
@@ -501,12 +499,18 @@ class _MyHomePageState extends State<MyHomePage> {
             currentPageIndex = index;
           });
         },
+        //Style and coloring
         indicatorColor: Themes.active,
+        labelTextStyle: WidgetStateProperty.all<TextStyle>(TextStyle(color: Themes.darkgreen)),
+        labelPadding: const EdgeInsets.all(5),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        indicatorShape: Themes.cardShape,
+        //Functionality
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            icon: Icon(Icons.home),
-            selectedIcon: Icon(Icons.home_outlined),
+            icon: Icon(Icons.home, color: Color.fromARGB(255, 16, 44, 31),),
+            selectedIcon: Icon(Icons.home_outlined, color: Color.fromARGB(255, 80, 59, 57)),
             label: 'Home',
           ),
           NavigationDestination(
@@ -532,13 +536,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return TheContent;
   }
 
-  SizedBox mySizedBox(Widget childwidget){
-    return SizedBox(
-      width: 150,
-      height: buttonHeight,
-      child: childwidget
-    );
-  }
+  //Stylings
 
   _launchKoFi() async {
    final Uri url = Uri.parse('https://ko-fi.com/danielagrothe');
