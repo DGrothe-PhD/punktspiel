@@ -17,6 +17,7 @@
       child: Padding/Column(…))
     ```
   - Set and lock screen rotation [for both Stateless and StatefulWidget](https://stackoverflow.com/a/50322184/17677104)
+  - Grids and how to fill a list (iteration) https://docs.flutter.dev/cookbook/lists/grid-lists
 
 ### Input fields
 * Numbers: [Digits Only](https://stackoverflow.com/questions/49577781/how-to-create-number-input-field-in-flutter#49578197)
