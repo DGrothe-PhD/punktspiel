@@ -48,7 +48,7 @@ class MySettingsPageState extends State<MySettingsPage> {
     ]);
   }
 
-  Widget buildselectLanguagesMenu({bool wellBehaving = true}){
+  Widget buildSelectLanguagesMenu({bool wellBehaving = true}){
     return DropdownButton<String>(
     key: ValueKey(Object.hashAll(Lang.availableLanguages)),
     isExpanded: true,
@@ -114,7 +114,7 @@ class MySettingsPageState extends State<MySettingsPage> {
         children:<Widget>[
           const Icon(Icons.language),
           const Text("\xA0"),
-          SizedBox(width: 111, child: buildselectLanguagesMenu(),),
+          SizedBox(width: 111, child: buildSelectLanguagesMenu(),),
           ],),
           const SizedBox(height:177),
           availableVersionInfo.isNotEmpty ? Text(availableVersionInfo) : const Text("…"),
@@ -122,10 +122,9 @@ class MySettingsPageState extends State<MySettingsPage> {
           ElevatedButton(
             onPressed: //() {},
             getLatestAppVersionDetails,
-            style: ButtonStyle(
+            style: Themes.cardButtonStyle(
+              Themes.green,
               fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(200.0)),
-              backgroundColor: Themes.green,
-              shape: WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
             ),
             child: const Text("Version Info"),
           ),

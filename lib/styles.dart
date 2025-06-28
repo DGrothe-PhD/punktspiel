@@ -16,4 +16,12 @@ class Themes{
     WidgetStateProperty.all<Color>(const Color.fromARGB(255, 104, 158, 124));
   static dynamic sunflower = 
     WidgetStateProperty.all<Color>(const Color.fromARGB(255, 243, 198, 76));
+
+  static ButtonStyle cardButtonStyle(WidgetStateProperty<Color> color, {WidgetStateProperty<Size?>? fixedSize}) {
+    return ButtonStyle(
+      backgroundColor: color,
+      fixedSize: fixedSize,
+      shape: WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
+    );
+  }
 }

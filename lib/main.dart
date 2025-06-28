@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ]);
   }
 
-  Widget buildselectableNamesMenu(){
+  Widget buildSelectableNamesMenu(){
     //var dropdown = 
     return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Spieler.names)),
@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget buildpointsWinningSwitch() {
+  Widget buildPointsWinningSwitch() {
    return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Locales.pointsRule[Lang.l])),
       isExpanded: true,
@@ -303,7 +303,7 @@ class _MyHomePageState extends State<MyHomePage> {
         //TODO try padding here
         Text(Locales.winFor[Lang.l]),
         const SizedBox(width: 20),
-        SizedBox(width: 200, child: buildpointsWinningSwitch(),),
+        SizedBox(width: 200, child: buildPointsWinningSwitch(),),
         ],),// Row for played rounds and whose turn it is
         Row(
       children: [
@@ -365,39 +365,31 @@ class _MyHomePageState extends State<MyHomePage> {
         ),),
         ElevatedButton(
           onPressed: setOpener,
-          style: ButtonStyle(
-            backgroundColor: Themes.green,
-            shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
-          ),
+          style: Themes.cardButtonStyle(Themes.green),
           child: const Icon(Icons.chair),
         ),
         const SizedBox(width:10),
         ElevatedButton(
           onPressed: deleteLastEntry,
-          style: ButtonStyle(
-            backgroundColor: Themes.pumpkin,
-            shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
-          ),
+          style: Themes.cardButtonStyle(Themes.pumpkin),
           child: const Icon(Icons.delete),
         ),
       ],),
-      buildselectableNamesMenu(),
+      buildSelectableNamesMenu(),
       ElevatedButton(
         onPressed: submitPoints,
-        style: ButtonStyle(
+        style: Themes.cardButtonStyle(
+          Themes.sunflower,
           fixedSize: Themes.mediumButtonWidth,
-          backgroundColor: Themes.sunflower,
-          shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
         ),
         child: Text(Locales.submit[Lang.l]),
       ),
       const SizedBox(height: 10),
       ElevatedButton(
         onPressed: deleteEverything,
-        style: ButtonStyle(
+        style: Themes.cardButtonStyle(
+          Themes.pumpkin,
           fixedSize: Themes.mediumButtonWidth,
-          backgroundColor: Themes.pumpkin,
-          shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
         ),
         child: Text(Locales.deleteAllResults[Lang.l]),
       ),
@@ -407,23 +399,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget myHomePage(){
-    return Stack(
-      children: <Widget>[
-        Lang.tableVisible ? punkteTabelle : _HomeContent(),
-        Align(alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.all(17),
-      child: ElevatedButton.icon(
-        icon: const Icon(Icons.table_view),
-        onPressed: togglePointsView,
-        style: ButtonStyle(
-          fixedSize: Themes.mediumButtonWidth,
-          backgroundColor: Themes.green,
-          shape: WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),),
-        label: Text("${Lang.tableVisible ? "Hide ": "Show "}Table"),
-      ),),)
-      ]
-    );
+    return Stack(children: <Widget>[
+      Lang.tableVisible ? punkteTabelle : _HomeContent(),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.all(17),
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.table_view),
+            onPressed: togglePointsView,
+            style: Themes.cardButtonStyle(
+              Themes.green,
+              fixedSize: Themes.mediumButtonWidth,
+            ),
+            label: Text("${Lang.tableVisible ? "Hide " : "Show "}Table"),
+          ),
+        ),
+      )
+    ]);
   }
 
   Widget aboutMePage() => Column(
@@ -437,20 +430,20 @@ class _MyHomePageState extends State<MyHomePage> {
       ElevatedButton.icon(
         icon: kofiIcon,
         onPressed: () {_launchKoFi();},
-        style: ButtonStyle(
+        style: Themes.cardButtonStyle(
+          Themes.green,
           fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(200.0)),
-          backgroundColor: Themes.green,
-          shape:  WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),),
+        ),
         label: const Text("Support me on Ko-fi"),
       ),
       const SizedBox(height: 7),
       ElevatedButton.icon(
         icon: githubIcon,
         onPressed: () {_launchGitHub();},
-        style: ButtonStyle(
+        style: Themes.cardButtonStyle(
+          Themes.pumpkin,
           fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(200.0)),
-          backgroundColor: Themes.pumpkin,
-          shape: WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),),
+        ),
         label: const Text("Open GitHub"),
       ),
     ]

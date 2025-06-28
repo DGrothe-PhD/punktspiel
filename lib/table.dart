@@ -179,19 +179,13 @@ class TablePage extends StatelessWidget{
             const SizedBox(height:20),
             ElevatedButton(
               onPressed: () => {_onShareTable(tableContext ?? context)},
-              style: ButtonStyle(
-                  backgroundColor: Themes.sunflower,
-                  minimumSize: WidgetStateProperty.all<Size>(buttonSize),
-              ),
+              style: Themes.cardButtonStyle(Themes.sunflower),
               child: Text(Locales.share[Lang.l]),
             ),
             const SizedBox(height:10),
             ElevatedButton(
               onPressed: () => {_onShareResults(tableContext ?? context)},
-              style: ButtonStyle(
-                  backgroundColor: Themes.greenish,
-                  minimumSize: WidgetStateProperty.all<Size>(buttonSize),
-              ),
+              style: Themes.cardButtonStyle(Themes.greenish),
               child: Text(Locales.shareResults[Lang.l]),
             ),
           ]
