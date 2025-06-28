@@ -3,7 +3,7 @@
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
-import './locales.dart';
+import 'package:punktspiel/locales.dart';
 //import 'package:intl/intl.dart';
 //import 'package:flutter/services.dart';
 

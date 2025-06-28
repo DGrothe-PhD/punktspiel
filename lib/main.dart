@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
-import './table.dart';
-import './settings.dart';
-import './calc.dart';
-import './locales.dart';
-import './styles.dart';
+import 'package:punktspiel/table.dart';
+import 'package:punktspiel/settings.dart';
+import 'package:punktspiel/calc.dart';
+import 'package:punktspiel/locales.dart';
+import 'package:punktspiel/styles.dart';
 
 void main() {
   Spieler.settings();

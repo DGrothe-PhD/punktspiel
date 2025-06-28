@@ -8,9 +8,9 @@ import 'package:swipe_to/swipe_to.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:intl/intl.dart';
 import 'dart:io' show Platform;
-import './calc.dart';
-import './locales.dart';
-import './styles.dart';
+import 'package:punktspiel/calc.dart';
+import 'package:punktspiel/locales.dart';
+import 'package:punktspiel/styles.dart';
 
 class StyleDecorator {
   static const double spacing = -0.4;

@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 //import 'package:flutter_html/flutter_html.dart';
-import './locales.dart';
-import './styles.dart';
+import 'package:punktspiel/locales.dart';
+import 'package:punktspiel/styles.dart';
 
 class SettingsAppWidget extends StatelessWidget {
   const SettingsAppWidget({super.key});
