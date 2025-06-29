@@ -13,7 +13,8 @@ You'll find
 - a button with a seat icon to set who is starting a game, \
   handed over to the next one in a row after each game
 - a button to delete the last entered points in case of a typo or something
-- a switch for setting the rule for points. More on this by example here:
+- a switch for setting the rule for points. More on this by example below.
+- a share button to copy the results into another app window, such as chat messenger.
 
 ### Winning with fewer points
 * Rummy
