@@ -387,10 +387,7 @@ class _MyHomePageState extends State<MyHomePage> {
       const SizedBox(height: 10),
       ElevatedButton(
         onPressed: deleteEverything,
-        style: Themes.cardButtonStyle(
-          Themes.pumpkin,
-          fixedSize: Themes.mediumButtonWidth,
-        ),
+        style: Themes.cardButtonStyle(Themes.pumpkin, fixedSize: Themes.mediumButtonWidth),
         child: Text(Locales.deleteAllResults[Lang.l]),
       ),
       const SizedBox(height: 10),
@@ -408,10 +405,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: ElevatedButton.icon(
             icon: const Icon(Icons.table_view),
             onPressed: togglePointsView,
-            style: Themes.cardButtonStyle(
-              Themes.green,
-              fixedSize: Themes.mediumButtonWidth,
-            ),
+            style: Themes.cardButtonStyle(Themes.green, fixedSize: Themes.mediumButtonWidth),
             label: Text("${Lang.tableVisible ? "Hide " : "Show "}Table"),
           ),
         ),
@@ -430,20 +424,14 @@ class _MyHomePageState extends State<MyHomePage> {
       ElevatedButton.icon(
         icon: kofiIcon,
         onPressed: () {_launchKoFi();},
-        style: Themes.cardButtonStyle(
-          Themes.green,
-          fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(200.0)),
-        ),
-        label: const Text("Support me on Ko-fi"),
+        style: Themes.cardButtonStyle(Themes.green, fixedSize: Themes.buttonSize),
+        label: const Text("Support me"),
       ),
       const SizedBox(height: 7),
       ElevatedButton.icon(
         icon: githubIcon,
         onPressed: () {_launchGitHub();},
-        style: Themes.cardButtonStyle(
-          Themes.pumpkin,
-          fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(200.0)),
-        ),
+        style: Themes.cardButtonStyle(Themes.pumpkin, fixedSize: Themes.buttonSize),
         label: const Text("Open GitHub"),
       ),
     ]

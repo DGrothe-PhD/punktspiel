@@ -24,4 +24,6 @@ class Themes{
       shape: WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
     );
   }
+
+  static WidgetStateProperty<Size?>? buttonSize = WidgetStateProperty.all<Size>(const Size.fromWidth(200.0));
 }

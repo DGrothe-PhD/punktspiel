@@ -122,10 +122,7 @@ class MySettingsPageState extends State<MySettingsPage> {
           ElevatedButton(
             onPressed: //() {},
             getLatestAppVersionDetails,
-            style: Themes.cardButtonStyle(
-              Themes.green,
-              fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(200.0)),
-            ),
+            style: Themes.cardButtonStyle(Themes.green, fixedSize: Themes.mediumButtonWidth),
             child: const Text("Version Info"),
           ),
         ]
