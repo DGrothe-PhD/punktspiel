@@ -35,7 +35,7 @@ class Spieler{
   }
 
   static int getSumOfPoints(String name) {
-    return gruppe.firstWhere((element) => element.name == name).sumPoints();
+    return gruppe.firstWhere((element) => element.name == name).sumPoints;
   }
 
   static void deleteLastEntry(String name){
@@ -69,9 +69,9 @@ class Spieler{
   
   static List<Teilnehmer> whoIsWinning(){
     if(gruppe.length > 1 && filledFullRound() && gruppe[0].punkte.length >= gruppe.length){
-      var sumOfPoints = gruppe.map((x) => x.sumPoints());
+      var sumOfPoints = gruppe.map((x) => x.sumPoints);
       var best = leastPointsWinning? sumOfPoints.min : sumOfPoints.max;
-      return gruppe.where((x)=> x.sumPoints() == best).toList();
+      return gruppe.where((x)=> x.sumPoints == best).toList();
     }
     return <Teilnehmer>[];
   }
@@ -82,7 +82,7 @@ class Spieler{
     StringBuffer buffer = StringBuffer(headline);
     
     for(Teilnehmer player in gruppe){
-      buffer.write("${player.name}:\t${player.sumPoints()}\n");
+      buffer.write("${player.name}:\t${player.sumPoints}\n");
     }
     return buffer.toString();
   }
@@ -113,7 +113,8 @@ class Teilnehmer{
     }
   }
 
-  int sumPoints() => punkte.sum;
+  int get sumPoints => punkte.sum;
+  int get countZeros => punkte.where((i) => i == 0).length;
 }
 
 extension IntListParsing on List<int>{

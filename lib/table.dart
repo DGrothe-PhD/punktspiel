@@ -55,13 +55,12 @@ class TableExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     tableContext = context;
     return Scaffold(
-      resizeToAvoidBottomInset : true,//maybe false if keyboard
-      appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
-      body: 
-      SingleChildScrollView(
-        child: TablePage(),
-      )
-    );
+        resizeToAvoidBottomInset: true, //maybe false if keyboard
+        appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
+        body: SingleChildScrollView(
+          //physics: const NeverScrollableScrollPhysics(),
+          child: TablePage(),
+        ));
     // reduce to the max. Returning MaterialApp shows black screen...
   }
 }
@@ -73,14 +72,23 @@ class TablePage extends StatelessWidget{
   TablePage({super.key});
   
   static String headline = "";
+  static const int columnWidth = 11;
   static StringBuffer playerNames = StringBuffer();
   static StringBuffer gameResultText = StringBuffer();
 
+  void _writePlayerStats(Teilnehmer player, int stat,
+      {bool isLastLine = false}) {
+    /// usage: for loop: _writePlayerStats(player, player.countZeros);
+    if (player == Spieler.gruppe.last) {
+      gameResultText.write(" $stat\xA0".padLeft(columnWidth, " "));
+      if (!isLastLine) gameResultText.write("\n");
+    } else {
+      gameResultText.write(" $stat |".padLeft(columnWidth, " "));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    int columnWidth = 11;
-    Size buttonSize = const Size(180, 40);
-
     try {
       gameResultText = StringBuffer();
       headline = "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
@@ -111,6 +119,7 @@ class TablePage extends StatelessWidget{
         playerNames.write("\n");
       }
 
+      // Write points of all games
       for(int j=0;j<maxCounts;j++){
         for(var player in Spieler.gruppe){
           if(player == Spieler.gruppe.last){
@@ -130,32 +139,40 @@ class TablePage extends StatelessWidget{
         }
         gameResultText.write("\n");
       }
+
       // do a `===============`
       gameResultText.write("${"=" * columnWidth * Spieler.gruppe.length}\n");
 
       // Sum of points
       for(var player in Spieler.gruppe){
-        if(player == Spieler.gruppe.last){
-          gameResultText.write(" ${player.sumPoints()}\xA0".padLeft(columnWidth, " "));
-          break;
-        }
-        gameResultText.write(" ${player.sumPoints()} |".padLeft(columnWidth, " "));
+        _writePlayerStats(player, player.sumPoints);
+      }
+
+      gameResultText.write("${Locales.zeroPoints[Lang.l]}\n");
+
+      gameResultText.write("${Locales.debugNonsense[Lang.l]}\n");
+      gameResultText.write("${Locales.debugNonsense[Lang.l]}\n");
+
+      for(var player in Spieler.gruppe){
+        _writePlayerStats(player, player.countZeros);
       }
       
       return Center(
-        child: SwipeTo(
-          /*onRightSwipe: (details) {
-              Lang.tableVisible = false;
-              //Navigator.pop(tableContext ?? context);
-          },*/
-          onLeftSwipe: (details) => {_onShareResults(tableContext ?? context)},
-          child: Column(
+        child: 
+          Column(
           children: <Widget>[
             WidgetAnimator(
               incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
                 duration: const Duration(milliseconds: 2000),
               ),
               child:
+              SwipeTo(
+          onLeftSwipe: (details) => {_onShareResults(tableContext ?? context)},
+          child: 
+          SingleChildScrollView(
+            primary: true,
+            //physics: const NeverScrollableScrollPhysics(),
+            child:
               SelectionArea(
                 child: 
                 RichText(
@@ -175,6 +192,8 @@ class TablePage extends StatelessWidget{
                   ),
                 ),
               ),
+          ),
+              ),
             ),
             const SizedBox(height:20),
             ElevatedButton(
@@ -190,7 +209,6 @@ class TablePage extends StatelessWidget{
             ),
           ]
           )
-        ),
       );  
   }
     catch (exception){
@@ -245,3 +263,4 @@ class TablePage extends StatelessWidget{
     );
   }
 }
+
