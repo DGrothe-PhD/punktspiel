@@ -85,37 +85,4 @@ class Locales {
   static const List<String> emailSubject = [
     "Unsere Spielergebnisse", "Our game results", "Notres résultats de jeu"
   ];
-
-  static const List<String> debugNonsense = [
-    """Ideas keep coming, not always right here,
-But on GitHub and paper, or after a beer.
-This week was a great one, I gave my best.
-Did things I like and had time to rest.
-Retrospective over some coffee and toast:
-An issue I raised some years ago: closed!
-☀️🌻👒🍨
-Merge conflicts hard for beginners to take,
-All that confusion, a wrong block could break.
-But with the right tools and all by hand,
-I can fix quickly what I understand!
-🧹💻📝
-Some lines to replace before it’s done,
-A test build when all the red wiggles are gone.
-    """,
-     """Ideas keep coming, not always right here,
-But on GitHub and paper, or after a beer.
-This week was a great one, I gave my best.
-Did things I like and had time to rest.
-Retrospective over some coffee and toast:
-An issue I raised some years ago: closed!
-☀️🌻👒🍨
-Merge conflicts hard for beginners to take,
-All that confusion, a wrong block could break.
-But with the right tools and all by hand,
-I can fix quickly what I understand!
-🧹💻📝
-Some lines to replace before it’s done,
-A test build when all the red wiggles are gone.
-    """
-  ];
 }

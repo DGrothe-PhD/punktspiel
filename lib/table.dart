@@ -15,34 +15,36 @@ import 'package:punktspiel/styles.dart';
 class StyleDecorator {
   static const double spacing = -0.4;
   static final textstil = TextStyle(
-    fontSize: 12.0, color: const Color.fromARGB(255, 27, 26, 26),// fontWeight: FontWeight.bold,
+    fontSize: 12.0,
+    color:
+        const Color.fromARGB(255, 27, 26, 26), // fontWeight: FontWeight.bold,
     backgroundColor: Themes.greenishColor,
-    letterSpacing: spacing,//-1.1,
+    letterSpacing: spacing, //-1.1,
   );
   static const monoStil = TextStyle(
-    fontSize: 12.0, color: Colors.black, fontFamily: "B612 Mono",
+    fontSize: 12.0,
+    color: Colors.black,
+    fontFamily: "B612 Mono",
     fontFamilyFallback: <String>["Courier"],
     letterSpacing: spacing,
   );
   static const boldStil = TextStyle(
-    fontSize: 12.0,  fontFamily: 'B612 Mono',
+    fontSize: 12.0, fontFamily: 'B612 Mono',
     color: Colors.black,
     fontWeight: FontWeight.bold, // Setzt die fetten Buchstaben
     letterSpacing: spacing,
   );
 
-  static Text typewriter(String input){
+  static Text typewriter(String input) {
     return Text(input, style: monoStil);
   }
 
-  static String write(String inputText){
+  static String write(String inputText) {
     return md.markdownToHtml(inputText);
   }
 
-  static Html viewMd(String inputText, {bool isMD = true}){
-    return Html(
-      data: isMD ? write(inputText) : inputText
-    );
+  static Html viewMd(String inputText, {bool isMD = true}) {
+    return Html(data: isMD ? write(inputText) : inputText);
   }
 }
 
@@ -65,12 +67,12 @@ class TableExampleApp extends StatelessWidget {
   }
 }
 
-class TablePage extends StatelessWidget{
+class TablePage extends StatelessWidget {
   final List names = Spieler.names;
   static const String winningDecoration = "🎉";
   final now = DateTime.now();
   TablePage({super.key});
-  
+
   static String headline = "";
   static const int columnWidth = 11;
   static StringBuffer playerNames = StringBuffer();
@@ -91,50 +93,58 @@ class TablePage extends StatelessWidget{
   Widget build(BuildContext context) {
     try {
       gameResultText = StringBuffer();
-      headline = "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
+      headline =
+          "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
       int maxCounts = Spieler.gruppe.map((x) => x.punkte.length).max;
       playerNames = StringBuffer();
       //playerNames = StringBuffer("\xA0");
-      
-      for(var player in Spieler.gruppe){
-        String decoration = (Spieler.whoIsWinning().contains(player)) ? winningDecoration : "\xA0\xA0";
+
+      for (var player in Spieler.gruppe) {
+        String decoration = (Spieler.whoIsWinning().contains(player))
+            ? winningDecoration
+            : "\xA0\xA0";
         //String decoration = (Spieler.whoIsWinning().contains(player)) ? '' : "\xA0";
-          if(player == Spieler.gruppe.last){
-            playerNames.write("${player.firstName.truncate(8)}$decoration".padLeft(columnWidth, "\xA0"));
-            break;
-          }
-          playerNames.write("${player.firstName.truncate(8)}$decoration|".padLeft(columnWidth, "\xA0"));
+        if (player == Spieler.gruppe.last) {
+          playerNames.write("${player.firstName.truncate(8)}$decoration"
+              .padLeft(columnWidth, "\xA0"));
+          break;
+        }
+        playerNames.write("${player.firstName.truncate(8)}$decoration|"
+            .padLeft(columnWidth, "\xA0"));
       }
       playerNames.write("\n");
-      
+
       // Second part of names in second line
-      if(Spieler.gruppe.any((person) => person.lastName.isNotEmpty)){
-        for(var player in Spieler.gruppe){
-          if(player == Spieler.gruppe.last){
-            playerNames.write(" ${player.lastName.truncate(8)}\xA0".padLeft(columnWidth, "\xA0"));
+      if (Spieler.gruppe.any((person) => person.lastName.isNotEmpty)) {
+        for (var player in Spieler.gruppe) {
+          if (player == Spieler.gruppe.last) {
+            playerNames.write(" ${player.lastName.truncate(8)}\xA0"
+                .padLeft(columnWidth, "\xA0"));
             break;
           }
-          playerNames.write(" ${player.lastName.truncate(8)}\xA0|".padLeft(columnWidth, "\xA0"));
+          playerNames.write(" ${player.lastName.truncate(8)}\xA0|"
+              .padLeft(columnWidth, "\xA0"));
         }
         playerNames.write("\n");
       }
 
       // Write points of all games
-      for(int j=0;j<maxCounts;j++){
-        for(var player in Spieler.gruppe){
-          if(player == Spieler.gruppe.last){
-            if(j >= player.punkte.length){
+      for (int j = 0; j < maxCounts; j++) {
+        for (var player in Spieler.gruppe) {
+          if (player == Spieler.gruppe.last) {
+            if (j >= player.punkte.length) {
               gameResultText.write(" \xA0".padLeft(columnWidth, " "));
               continue;
             }
-            gameResultText.write(" ${player.punkte[j]}\xA0".padLeft(columnWidth, " "));
-          }
-          else{
-            if(j >= player.punkte.length){
+            gameResultText
+                .write(" ${player.punkte[j]}\xA0".padLeft(columnWidth, " "));
+          } else {
+            if (j >= player.punkte.length) {
               gameResultText.write(" |".padLeft(columnWidth, " "));
               continue;
             }
-            gameResultText.write(" ${player.punkte[j]} |".padLeft(columnWidth, " "));
+            gameResultText
+                .write(" ${player.punkte[j]} |".padLeft(columnWidth, " "));
           }
         }
         gameResultText.write("\n");
@@ -144,97 +154,92 @@ class TablePage extends StatelessWidget{
       gameResultText.write("${"=" * columnWidth * Spieler.gruppe.length}\n");
 
       // Sum of points
-      for(var player in Spieler.gruppe){
+      for (var player in Spieler.gruppe) {
         _writePlayerStats(player, player.sumPoints);
       }
 
       gameResultText.write("${Locales.zeroPoints[Lang.l]}\n");
 
-      gameResultText.write("${Locales.debugNonsense[Lang.l]}\n");
-      gameResultText.write("${Locales.debugNonsense[Lang.l]}\n");
-
-      for(var player in Spieler.gruppe){
+      for (var player in Spieler.gruppe) {
         _writePlayerStats(player, player.countZeros);
       }
-      
+
       return Center(
-        child: 
-          Column(
-          children: <Widget>[
-            WidgetAnimator(
-              incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
-                duration: const Duration(milliseconds: 2000),
-              ),
-              child:
-              SwipeTo(
-          onLeftSwipe: (details) => {_onShareResults(tableContext ?? context)},
-          child: 
-          SingleChildScrollView(
-            primary: true,
-            //physics: const NeverScrollableScrollPhysics(),
-            child:
-              SelectionArea(
-                child: 
-                RichText(
-                  selectionRegistrar: SelectionContainer.maybeOf(tableContext ?? context),
-                  textAlign: TextAlign.center,
-                  //textAlign: TextAlign.right,
-                  text: TextSpan(
-                    text: headline,
-                    style: StyleDecorator.monoStil,
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: playerNames.toString(),
-                        style: StyleDecorator.textstil,
-                      ),
-                      TextSpan(text: gameResultText.toString(),),
-                    ],
-                  ),
-                ),
-              ),
+          child: Column(children: <Widget>[
+        WidgetAnimator(
+          incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
+            duration: const Duration(milliseconds: 2000),
           ),
+          child: SwipeTo(
+            onLeftSwipe: (details) =>
+                {_onShareResults(tableContext ?? context)},
+            onRightSwipe: (details) =>
+                {_onShareTable(tableContext ?? context)},
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              primary: true,
+              //physics: const NeverScrollableScrollPhysics(),
+              child: SelectableText.rich(
+                TextSpan(
+                  text: headline,
+                  style: StyleDecorator.monoStil,
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: playerNames.toString(),
+                      style: StyleDecorator.textstil,
+                    ),
+                    TextSpan(
+                      text: gameResultText.toString(),
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.justify,
               ),
             ),
-            const SizedBox(height:20),
-            ElevatedButton(
-              onPressed: () => {_onShareTable(tableContext ?? context)},
-              style: Themes.cardButtonStyle(Themes.sunflower, fixedSize: Themes.mediumButtonWidth),
-              child: Text(Locales.share[Lang.l]),
-            ),
-            const SizedBox(height:10),
-            ElevatedButton(
-              onPressed: () => {_onShareResults(tableContext ?? context)},
-              style: Themes.cardButtonStyle(Themes.greenish, fixedSize: Themes.mediumButtonWidth),
-              child: Text(Locales.shareResults[Lang.l]),
-            ),
-          ]
-          )
-      );  
-  }
-    catch (exception){
+          ),
+        ),
+        const SizedBox(height: 20),
+        if(maxCounts < 30) ElevatedButton(
+          onPressed: () => {_onShareTable(tableContext ?? context)},
+          style: Themes.cardButtonStyle(Themes.sunflower,
+              fixedSize: Themes.mediumButtonWidth),
+          child: Text(Locales.share[Lang.l]),
+        ),
+        const SizedBox(height: 10),
+        if(maxCounts < 30) 
+          ElevatedButton(
+          onPressed: () => {_onShareResults(tableContext ?? context)},
+          style: Themes.cardButtonStyle(Themes.greenish,
+              fixedSize: Themes.mediumButtonWidth),
+          child: Text(Locales.shareResults[Lang.l]),
+        ),
+        const SizedBox(height: 64),
+      ]));
+    } catch (exception) {
       //Make exception readable.
       return Text(exception.toString());
+    }
   }
-}
 
   void _onShareTable(BuildContext context) async {
     final box = context.findRenderObject() as RenderBox?;
-    if(Platform.isWindows){
+    if (Platform.isWindows) {
       Clipboard.setData(ClipboardData(
-        text: gameResultText.isEmpty? "Nichts/None/Rien" 
-        : "$headline\n$playerNames$gameResultText"
-      ));
+          text: gameResultText.isEmpty
+              ? "Nichts/None/Rien"
+              : "$headline\n$playerNames$gameResultText"));
       showDialog(
-        context: context,
-        builder:(context) => const AlertDialog(
-          title: Text("Copied"),
-          content: Text("Game results copied to clipboard."),
-      ));
+          context: context,
+          builder: (context) => const AlertDialog(
+                title: Text("Copied"),
+                content: Text("Game results copied to clipboard."),
+              ));
       return;
     }
     await Share.share(
-      gameResultText.isEmpty? "Nichts/None/Rien" 
-      : "$headline\n$playerNames$gameResultText",
+      gameResultText.isEmpty
+          ? "Nichts/None/Rien"
+          : "$headline\n$playerNames$gameResultText",
       subject: Locales.emailSubject[Lang.l],
       sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
     );
@@ -242,25 +247,22 @@ class TablePage extends StatelessWidget{
 
   void _onShareResults(BuildContext context) async {
     final box = context.findRenderObject() as RenderBox?;
-    if(Platform.isWindows){
+    if (Platform.isWindows) {
       Clipboard.setData(ClipboardData(
-        text: gameResultText.isEmpty? "Nichts/None/Rien" 
-        : Spieler.report()
-      ));
+        text:
+          gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report()));
       showDialog(
         context: context,
-        builder:(context) => const AlertDialog(
+        builder: (context) => const AlertDialog(
           title: Text("Copied"),
           content: Text("Game results copied to clipboard."),
-      ));
+        ));
       return;
     }
     await Share.share(
-      gameResultText.isEmpty? "Nichts/None/Rien" 
-      : Spieler.report(),
+      gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(),
       subject: Locales.emailSubject[Lang.l],
       sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
     );
   }
 }
-
