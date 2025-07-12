@@ -78,7 +78,7 @@ class TablePage extends StatelessWidget {
   static StringBuffer playerNames = StringBuffer();
   static StringBuffer gameResultText = StringBuffer();
 
-  void _writePlayerStats(Teilnehmer player, int stat,
+  void _writePlayerStats(Teilnehmer player, num stat,
       {bool isLastLine = false}) {
     /// usage: for loop: _writePlayerStats(player, player.countZeros);
     if (player == Spieler.gruppe.last) {
@@ -159,9 +159,13 @@ class TablePage extends StatelessWidget {
       }
 
       gameResultText.write("${Locales.zeroPoints[Lang.l]}\n");
-
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player, player.countZeros);
+      }
+
+      gameResultText.write("${Locales.averagePoints[Lang.l]}\n");
+      for (var player in Spieler.gruppe) {
+        _writePlayerStats(player, player.avgPoints);
       }
 
       return Center(

@@ -34,8 +34,13 @@ class Spieler{
     ].addPoints(punkte);
   }
 
+  // only used for testing. So maybe put it there.
   static int getSumOfPoints(String name) {
     return gruppe.firstWhere((element) => element.name == name).sumPoints;
+  }
+
+  static double getAveragePoints(String name){
+    return gruppe.firstWhere((element) => element.name == name).avgPoints;
   }
 
   static void deleteLastEntry(String name){
@@ -114,6 +119,7 @@ class Teilnehmer{
   }
 
   int get sumPoints => punkte.sum;
+  double get avgPoints => punkte.average;
   int get countZeros => punkte.where((i) => i == 0).length;
 }
 

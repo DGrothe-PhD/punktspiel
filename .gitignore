@@ -55,8 +55,8 @@ migrate_working_dir/
 /build/windows/x64/plugins/
 /build/path_provider_android/
 /build/*_android/
-/linux/
-/macos/
+linux/
+macos/
 
 # Symbolication related
 app.*.symbols

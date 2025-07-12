@@ -72,7 +72,16 @@ class Locales {
     ["-- les moins", "++ les plus"]
   ];
 
-  static const List<String> zeroPoints = ["Spiele punktlos:", "Games with zero points:", "Joué zéro points:"];
+  static const List<String> zeroPoints = [
+    "Spiele punktlos:",
+    "Games with zero points:",
+    "Joué zéro points:"
+  ];
+  static const List<String> averagePoints = [
+    "Mittelwert Punkte je Spiel:",
+    "Average of points per game:",
+    "La moyenne de points:"
+  ];
 
 
   static const List<String> isOffline = [
