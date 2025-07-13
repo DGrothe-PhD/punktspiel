@@ -35,12 +35,8 @@ class Spieler{
   }
 
   // only used for testing. So maybe put it there.
-  static int getSumOfPoints(String name) {
+  static num getSumOfPoints(String name) {
     return gruppe.firstWhere((element) => element.name == name).sumPoints;
-  }
-
-  static double getAveragePoints(String name){
-    return gruppe.firstWhere((element) => element.name == name).avgPoints;
   }
 
   static void deleteLastEntry(String name){
@@ -118,9 +114,11 @@ class Teilnehmer{
     }
   }
 
-  int get sumPoints => punkte.sum;
-  double get avgPoints => punkte.average;
-  int get countZeros => punkte.where((i) => i == 0).length;
+  num get sumPoints => punkte.sum;
+  num? get avgPoints => punkte.isNotEmpty ? punkte.average : null;
+  num? get minPoints => punkte.isNotEmpty ? punkte.min : null;
+  num? get maxPoints => punkte.isNotEmpty ? punkte.max : null;
+  int? get countZeros => punkte.isNotEmpty ? punkte.where((i) => i == 0).length : null;
 }
 
 extension IntListParsing on List<int>{

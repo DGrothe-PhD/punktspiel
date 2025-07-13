@@ -63,7 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController selectableNamesMenuController = TextEditingController();
   int currentPageIndex = 0;
 
-  //SettingsHelper settingsHelper = SettingsHelper();
   final SvgPicture kofiIcon = SvgPicture.asset(
     'assets/images/kofi_symbol.svg',
     width: 25.0, height: 25.0,
@@ -300,7 +299,6 @@ class _MyHomePageState extends State<MyHomePage> {
           width: 30,
           child: SvgPicture.asset('assets/images/dice.svg', width: 25.0, height: 25.0,),
         ),
-        //TODO try padding here
         Text(Locales.winFor[Lang.l]),
         const SizedBox(width: 20),
         SizedBox(width: 200, child: buildPointsWinningSwitch(),),

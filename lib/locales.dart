@@ -66,6 +66,7 @@ class Locales {
     "Punkte insgesamt:", "Sum of points:", "Somme de points :"
   ];
   static const List<String> winFor = ["Gewinn", "Winning", "Gagner"];
+  static const List<String> best = ["Bestes Spiel:", "Best game:", "Le meilleur jeu :"];
   static const List<List<String>> pointsRule = [
     ["-- weniger", "++ mehr"],
     ["-- the least", "++ the most"],
@@ -78,9 +79,9 @@ class Locales {
     "Joué zéro points:"
   ];
   static const List<String> averagePoints = [
-    "Mittelwert Punkte je Spiel:",
-    "Average of points per game:",
-    "La moyenne de points:"
+    "Mittelwert Punkte/Spiel:",
+    "Average of points/game:",
+    "La moyenne de points :"
   ];
 
 

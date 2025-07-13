@@ -78,14 +78,14 @@ class TablePage extends StatelessWidget {
   static StringBuffer playerNames = StringBuffer();
   static StringBuffer gameResultText = StringBuffer();
 
-  void _writePlayerStats(Teilnehmer player, num stat,
+  void _writePlayerStats(Teilnehmer player, num? stat,
       {bool isLastLine = false}) {
     /// usage: for loop: _writePlayerStats(player, player.countZeros);
     if (player == Spieler.gruppe.last) {
-      gameResultText.write(" $stat\xA0".padLeft(columnWidth, " "));
+      gameResultText.write(" ${stat ?? '--'}\xA0".padLeft(columnWidth, " "));
       if (!isLastLine) gameResultText.write("\n");
     } else {
-      gameResultText.write(" $stat |".padLeft(columnWidth, " "));
+      gameResultText.write(" ${stat ?? '--'} |".padLeft(columnWidth, " "));
     }
   }
 
@@ -103,7 +103,6 @@ class TablePage extends StatelessWidget {
         String decoration = (Spieler.whoIsWinning().contains(player))
             ? winningDecoration
             : "\xA0\xA0";
-        //String decoration = (Spieler.whoIsWinning().contains(player)) ? '' : "\xA0";
         if (player == Spieler.gruppe.last) {
           playerNames.write("${player.firstName.truncate(8)}$decoration"
               .padLeft(columnWidth, "\xA0"));
@@ -158,7 +157,7 @@ class TablePage extends StatelessWidget {
         _writePlayerStats(player, player.sumPoints);
       }
 
-      gameResultText.write("${Locales.zeroPoints[Lang.l]}\n");
+      gameResultText.write("\n${Locales.zeroPoints[Lang.l]}\n");
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player, player.countZeros);
       }
@@ -166,6 +165,12 @@ class TablePage extends StatelessWidget {
       gameResultText.write("${Locales.averagePoints[Lang.l]}\n");
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player, player.avgPoints);
+      }
+
+      gameResultText.write("${Locales.best[Lang.l]}\n");
+      for (var player in Spieler.gruppe) {
+        _writePlayerStats(player,
+            Spieler.leastPointsWinning ? player.minPoints : player.maxPoints);
       }
 
       return Center(
