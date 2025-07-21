@@ -1,5 +1,8 @@
 //import 'package:collection/collection.dart';
 
+import 'package:intl/intl.dart';
+import 'package:punktspiel/preferences/mysharedpreferences.dart';
+
 // I know that officially this is done differently, however, this is a MVP.
 // Just to let English-speaking people use and understand my little app as well.
 class Lang{
@@ -9,9 +12,16 @@ class Lang{
   static List<String> availableLanguages = ["DE", "EN", "FR"];
 
   static void setLanguage(String code){
+    MySharedPreferences.saveLanguage(code);
+    _applyLanguage(code);
+  }
+
+  static void _applyLanguage(String? code){
     switch(code) {
       case "DE":
         l = 0;
+      case "EN":
+        l = 1;
       case "FR":
         l = 2;
       default:
@@ -19,12 +29,24 @@ class Lang{
     }
   }
 
+  static DateFormat deDateFormat = DateFormat('dd.MM.yyyy HH:mm');
+
   static String currentLanguageCode() => availableLanguages[l];
+
+  static Future<void> initLanguage() async {
+    String? code;
+    try{
+      code = await MySharedPreferences.getLanguage();
+    }
+    catch(exception) {
+      code = "EN";
+    }
+    _applyLanguage(code);
+  }
 }
 
 
 class Locales {
-  //static int i = 0;
   static const List<String> noSecondEntry = [
     "Punkte für %s sind schon eingetragen.",
     "Points for %s already submitted for this round.",

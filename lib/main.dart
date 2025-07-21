@@ -12,6 +12,7 @@ import 'package:punktspiel/styles.dart';
 
 void main() {
   Spieler.settings();
+  Lang.initLanguage();
   runApp(const MyApp());
 }
 

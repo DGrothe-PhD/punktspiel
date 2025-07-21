@@ -6,11 +6,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:intl/intl.dart';
 import 'dart:io' show Platform;
 import 'package:punktspiel/calc.dart';
 import 'package:punktspiel/locales.dart';
 import 'package:punktspiel/styles.dart';
+import 'package:punktspiel/preferences/mysharedpreferences.dart';
 
 class StyleDecorator {
   static const double spacing = -0.4;
@@ -57,13 +57,39 @@ class TableExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     tableContext = context;
     return Scaffold(
-        resizeToAvoidBottomInset: true, //maybe false if keyboard
-        appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
-        body: SingleChildScrollView(
-          //physics: const NeverScrollableScrollPhysics(),
-          child: TablePage(),
-        ));
-    // reduce to the max. Returning MaterialApp shows black screen...
+      resizeToAvoidBottomInset: true, //maybe false if keyboard
+      appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
+      body: SingleChildScrollView(
+        child: TablePage(),
+      ),
+      floatingActionButton: Spieler.filledFullRound()
+          ? FloatingActionButton(
+              onPressed: storeData,
+              backgroundColor: Themes.pumpkinColor,
+              shape: Themes.cardShape,
+              materialTapTargetSize: MaterialTapTargetSize.padded,
+              child: const Icon(Icons.save_rounded),
+            )
+          : null,
+    );
+  }
+
+  void storeData() {
+    var now = DateTime.now();// no elevated button? Then "now" becomes obsolete.
+    UserSettings settings = UserSettings(
+      dateTime: Lang.deDateFormat.format(now),
+      names: Spieler.names,
+      sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
+    );
+    
+    settings.verboseTesting();
+    //MySharedPreferences.saveData(settings);
+    // Put here:
+    /*
+    - Sum of points
+    - Number of games played
+    - Rule of game (whoIsWinningSwitch).
+    */
   }
 }
 
@@ -78,14 +104,24 @@ class TablePage extends StatelessWidget {
   static StringBuffer playerNames = StringBuffer();
   static StringBuffer gameResultText = StringBuffer();
 
+  String floatString(num? value) {
+    if(value == null){
+      return "--";
+    }
+    else if(value is int){
+      return value.toString();
+    }
+      return value.toStringAsFixed(2);
+  }
+
   void _writePlayerStats(Teilnehmer player, num? stat,
       {bool isLastLine = false}) {
     /// usage: for loop: _writePlayerStats(player, player.countZeros);
     if (player == Spieler.gruppe.last) {
-      gameResultText.write(" ${stat ?? '--'}\xA0".padLeft(columnWidth, " "));
+      gameResultText.write(" ${floatString(stat)}\xA0".padLeft(columnWidth, " "));
       if (!isLastLine) gameResultText.write("\n");
     } else {
-      gameResultText.write(" ${stat ?? '--'} |".padLeft(columnWidth, " "));
+      gameResultText.write(" ${floatString(stat)} |".padLeft(columnWidth, " "));
     }
   }
 
@@ -94,7 +130,7 @@ class TablePage extends StatelessWidget {
     try {
       gameResultText = StringBuffer();
       headline =
-          "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n";
+          "${Locales.results[Lang.l]} - ${Lang.deDateFormat.format(now)}\n";
       int maxCounts = Spieler.gruppe.map((x) => x.punkte.length).max;
       playerNames = StringBuffer();
       //playerNames = StringBuffer("\xA0");
