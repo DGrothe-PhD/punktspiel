@@ -2,6 +2,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
+import 'package:punktspiel/preferences/mysharedpreferences.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:punktspiel/locales.dart';
 //import 'package:intl/intl.dart';
@@ -10,6 +11,7 @@ import 'package:punktspiel/locales.dart';
 class Spieler{
   static List<String> _names = ["Eins", "Zwei", "Drei", "Vier" ];
   static List<Teilnehmer> gruppe = [];
+  static bool hasMembers = false;
 
   // default: rummy, lowest number of points is winning, as opposed to scrabble.
   static bool leastPointsWinning = true;
@@ -17,12 +19,25 @@ class Spieler{
   static set names(List<String> values){
     // By making _names private, the new names call settings to update groups.
     _names = values;
-    settings();
+    MySharedPreferences.saveNames(_names);
+    gruppe = [];
+    for(String n in _names){
+      gruppe.add(Teilnehmer(name: n));
+    }
   }
   static List<String> get names => _names;
 
-  static void settings(){
+  static void settings() async{
     gruppe = [];
+    try{
+      List<String>? namesPreset = await MySharedPreferences.getNames();
+      if(namesPreset == null || namesPreset.isEmpty){return;}
+      _names = namesPreset;
+      hasMembers = true;
+    }
+    catch(exception){
+      _names = ["Eins", "Zwei", "Drei", "Vier" ];
+    }
     for(String n in _names){
       gruppe.add(Teilnehmer(name: n));
     }

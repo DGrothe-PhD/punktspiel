@@ -37,6 +37,17 @@ class MySharedPreferences {
     return prefs.getString('languageCode');
   }
 
+  // Player names
+  static Future<void> saveNames(List<String> names) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('names', names);
+  }
+
+  static Future<List<String>?> getNames() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList('names');
+  }
+
   // General data (game results)
   static Future<void> saveData(UserSettings settings) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

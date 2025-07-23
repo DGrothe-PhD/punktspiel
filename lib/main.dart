@@ -86,6 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState(){
     super.initState();
+    if(Spieler.hasMembers){
+      namesFieldController.text = Spieler.names.join(", ");
+      _gamesStarted = true;
+    }
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -264,11 +268,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void togglePointsView() {
     setState(() {
       Lang.tableVisible = !Lang.tableVisible;
-      /*Navigator.push(context,
-        MaterialPageRoute(
-          builder: (context) => punkteTabelle,
-        )
-      );*/
     });
   }
 
@@ -332,7 +331,8 @@ class _MyHomePageState extends State<MyHomePage> {
             controller: namesFieldController,
             readOnly: _dontEditNames,
             enabled: !_dontEditNames,
-            onChanged: (unread) {setState(() => _gamesStarted = false);},
+            //onChanged: (unread) {setState(() => _gamesStarted = false);},
+            onTap: () {setState(() => _gamesStarted = false);},
             onSubmitted: (newText) => _finishEditingNames(newText),
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
