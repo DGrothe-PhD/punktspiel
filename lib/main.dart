@@ -287,6 +287,36 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() { _dontEditNames = false;});
   }
 
+  Widget _TabbedContent(){
+    return DefaultTabController(
+    length: 2,
+    child: Column(
+      children: [
+        // Tab-Leiste oben
+        TabBar(
+          tabs: [
+            Tab(text: Locales.overviewTabTitle[Lang.l]),
+            Tab(text: Locales.gameModeTabTitle[Lang.l]),
+          ],
+          labelColor: Colors.black, // Anpassen je nach Theme
+        ),
+        // Tab-Inhalt
+        Expanded(
+          child: TabBarView(
+            children: [
+              // Dein bisheriger Column-Inhalt:
+              _HomeContent(),
+              // Zweiter Tab, erstmal leer:
+              Center(child: Text(Locales.gameModeTabTitle[Lang.l])),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
   Widget _HomeContent(){
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -396,7 +426,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget myHomePage(){
     return Stack(children: <Widget>[
-      Lang.tableVisible ? punkteTabelle : _HomeContent(),
+      Lang.tableVisible ? punkteTabelle : _TabbedContent(),// _HomeContent(),
       Align(
         alignment: Alignment.bottomCenter,
         child: Padding(

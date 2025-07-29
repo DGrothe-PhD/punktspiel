@@ -83,6 +83,9 @@ class Locales {
   static const List<String> results = ["Ergebnisse", "Results", "Les résultats"];
   static const List<String> settingsTitle = ["Einstellungen", "Settings", "Configurer"];
   static const List<String> nextRound = ["Neue Runde", "Next Round", "Encore une fois"];
+
+  static const List<String> overviewTabTitle = ["Punktevergabe", "Collecting points", "Donner les points"];
+  static const List<String> gameModeTabTitle = ["Spielmodus", "Game mode", "Mode de jeu"];
   static const List<String> resultsTitle = ["SPIELSTAND", "RESULTS", "RESULTATS"];
   static const List<String> pointsTotal = [
     "Punkte insgesamt:", "Sum of points:", "Somme de points :"
