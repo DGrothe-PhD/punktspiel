@@ -292,30 +292,71 @@ class _MyHomePageState extends State<MyHomePage> {
     length: 2,
     child: Column(
       children: [
+        const SizedBox(height: 11),
         // Tab-Leiste oben
-        TabBar(
+        Container(
+          height: 42,
+          decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Themes.greenishColor, // deine Linie unten
+            width: 1,
+          ),
+        ),
+      ),
+        child: TabBar(
           tabs: [
             Tab(text: Locales.overviewTabTitle[Lang.l]),
             Tab(text: Locales.gameModeTabTitle[Lang.l]),
           ],
-          labelColor: Colors.black, // Anpassen je nach Theme
+          labelColor: Colors.black,
+          unselectedLabelColor: Colors.black87,
+          indicatorColor: Themes.greenishColor,
+          indicator: BoxDecoration(
+            color: Themes.greenishColor,
+            borderRadius: const BorderRadius.all(Radius.circular(7))
+          ),
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelPadding: const EdgeInsets.symmetric(vertical: 3), // Höhe reduzieren
+          isScrollable: false,
+        ),
         ),
         // Tab-Inhalt
         Expanded(
           child: TabBarView(
             children: [
-              // Dein bisheriger Column-Inhalt:
               _HomeContent(),
-              // Zweiter Tab, erstmal leer:
-              Center(child: Text(Locales.gameModeTabTitle[Lang.l])),
+              //
+              _GameModeContent(),
             ],
           ),
         ),
       ],
     ),
   );
-}
+  }
 
+  Widget _GameModeContent() {
+    return !_dontEditNames ? ReorderableListView(
+      key: const ValueKey(
+          'reorderable_list'), // Optional, für Hot Reload Stabilität
+      onReorder: (int oldIndex, int newIndex) {
+        setState(() {
+          if (newIndex > oldIndex) newIndex -= 1;
+          String item = Spieler.names[oldIndex];
+          Spieler.movePlayer(item, newIndex);
+          namesFieldController.text = Spieler.names.join(", ");
+        });
+      },
+      children: [
+        for (int index = 0; index < Spieler.names.length; index++)
+          ListTile(
+            key: ValueKey(index),
+            title: Text(Spieler.names[index]),
+          ),
+      ],
+    ) : const Text("⏳");
+  }
 
   Widget _HomeContent(){
     return Column(

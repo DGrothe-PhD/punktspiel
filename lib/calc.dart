@@ -42,22 +42,41 @@ class Spieler{
       gruppe.add(Teilnehmer(name: n));
     }
   }
+
+  static void movePlayer(String name, int newIndex) {
+    if(!names.remove(name)) return;
+    int oldIndex = gruppe.indexWhere((teilnehmer) => teilnehmer.name == name);
+    if (oldIndex == -1) return;
+    Teilnehmer? tn = gruppe.removeAt(oldIndex);
+    // Side exit to remove from active group
+    if(newIndex == -1) return;
+    // Otherwise: inserting
+    Spieler.names.insert(newIndex, name);
+    gruppe.insert(newIndex, tn);
+  }
   
   static void addPoints(String name, int punkte){
-    gruppe[
-      gruppe.indexWhere((element) => element.name == name)
-    ].addPoints(punkte);
+    int index = gruppe.indexWhere((element) => element.name == name);
+    if(index == -1) return;
+    gruppe[index].addPoints(punkte);
   }
 
   // only used for testing. So maybe put it there.
-  static num getSumOfPoints(String name) {
-    return gruppe.firstWhere((element) => element.name == name).sumPoints;
+  static num? getSumOfPoints(String name) {
+    num? sumPoints;
+    try{
+      sumPoints = gruppe.firstWhere((element) => element.name == name).sumPoints;
+    }
+    catch(exception){
+      sumPoints = null;
+    }
+    return sumPoints;
   }
 
   static void deleteLastEntry(String name){
-    gruppe[
-      gruppe.indexWhere((element) => element.name == name)
-    ].popPointsEntry();
+    int index = gruppe.indexWhere((element) => element.name == name);
+    if(index == -1) return;
+    gruppe[index].popPointsEntry();
   }
   static bool filledFullRound(){
     var crunchedData = gruppe.map((x) => x.punkte.length);
