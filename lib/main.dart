@@ -97,7 +97,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildSelectableNamesMenu(){
-    //var dropdown = 
+    if (!Spieler.names.contains(selectedPlayerName)) {
+      selectedPlayerName = Spieler.names.isNotEmpty ? Spieler.names.first : "";
+    }
+
     return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Spieler.names)),
       isExpanded: true,
@@ -353,9 +356,20 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             key: ValueKey(index),
             title: Text(Spieler.names[index]),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                setState(() {
+                  String item = Spieler.names[index];
+                  Spieler.removePlayer(item);
+                  namesFieldController.text = Spieler.names.join(", ");
+                });
+              },
+            ),
           ),
-      ],
-    ) : const Text("⏳");
+        ],
+    )
+    : const Text("⏳");
   }
 
   Widget _HomeContent(){

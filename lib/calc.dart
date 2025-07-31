@@ -54,6 +54,13 @@ class Spieler{
     Spieler.names.insert(newIndex, name);
     gruppe.insert(newIndex, tn);
   }
+
+  static void removePlayer(String name) {
+    if(!names.remove(name)) return;
+    int oldIndex = gruppe.indexWhere((teilnehmer) => teilnehmer.name == name);
+    if (oldIndex == -1) return;
+    gruppe.removeAt(oldIndex);
+  }
   
   static void addPoints(String name, int punkte){
     int index = gruppe.indexWhere((element) => element.name == name);
