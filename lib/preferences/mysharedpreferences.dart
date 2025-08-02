@@ -6,6 +6,8 @@ class UserSettings {
   //final int age;
   //final bool isDarkMode;
   final List<String>? names;
+  final String? game;
+  final String? whoIsWinning;
   final List<int>? sumOfPoints;
 
   UserSettings({
@@ -13,6 +15,8 @@ class UserSettings {
     //required this.age,
     //required this.isDarkMode,
     required this.names,
+    required this.game,
+    required this.whoIsWinning,
     required this.sumOfPoints,
   });
 
@@ -55,6 +59,8 @@ class MySharedPreferences {
     //await prefs.setInt('age', settings.age);
     //await prefs.setBool('isDarkMode', settings.isDarkMode);
     await prefs.setStringList('names', settings.names ?? List.empty());
+    await prefs.setString('game', settings.game ?? "");
+    await prefs.setString('whoIsWinning', settings.whoIsWinning ?? "");
     await prefs.setStringList(
         'sumOfPoints',
         settings.sumOfPoints?.map((i) => i.toString()).toList() ??
@@ -69,11 +75,15 @@ class MySharedPreferences {
     //final isDarkMode = prefs.getBool('isDarkMode');
     String? dateTime = prefs.getString('dateTime');
     List<String>? names = prefs.getStringList('names');
+    String? game = prefs.getString('game');
+    String? whoIsWinning = prefs.getString('whoIsWinning');
     List<String>? sumOfPoints = prefs.getStringList('sumOfPoints');
 
     return UserSettings(
       dateTime: dateTime,
       names: names,
+      game: game,
+      whoIsWinning: whoIsWinning,
       sumOfPoints: sumOfPoints?.map((i) => int.tryParse(i) ?? 0).toList(),
     );
   }
@@ -82,6 +92,8 @@ class MySharedPreferences {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('dateTime');
     await prefs.remove('names');
+    //await prefs.remove('game');
+    //await prefs.remove('whoIsWinning');
     await prefs.remove('sumOfPoints');
     // etc wird schon.
   }

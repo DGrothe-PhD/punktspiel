@@ -79,11 +79,13 @@ class TableExampleApp extends StatelessWidget {
     UserSettings settings = UserSettings(
       dateTime: Lang.deDateFormat.format(now),
       names: Spieler.names,
+      game: "tbd",//! TODO fix
+      whoIsWinning: Locales.pointsRule[Lang.l][(Spieler.leastPointsWinning ? 0 : 1)],
       sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
     );
     
-    settings.verboseTesting();
-    //MySharedPreferences.saveData(settings);
+    //settings.verboseTesting();
+    MySharedPreferences.saveData(settings);
     // Put here:
     /*
     - Sum of points

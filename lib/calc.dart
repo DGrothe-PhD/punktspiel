@@ -43,6 +43,19 @@ class Spieler{
     }
   }
 
+  static void addPlayer(String name){
+    name = name.replaceAll(',', "").split(RegExp(r'\s+')).join(" ").trim();
+    if(name.isEmpty) return;
+    // avoid duplicates: do nothing if name is already there.
+    int trynotfound = gruppe.indexWhere((teilnehmer) => teilnehmer.name == name);
+    if(trynotfound != -1) return;
+    if(names.contains(name)) return;
+    // Good. Go ahead and save.
+    Spieler.names.insert(0, name);
+    MySharedPreferences.saveNames(_names);
+    gruppe.insert(0, Teilnehmer(name: name));
+  }
+
   static void movePlayer(String name, int newIndex) {
     if(!names.remove(name)) return;
     int oldIndex = gruppe.indexWhere((teilnehmer) => teilnehmer.name == name);
@@ -52,11 +65,13 @@ class Spieler{
     if(newIndex == -1) return;
     // Otherwise: inserting
     Spieler.names.insert(newIndex, name);
+    MySharedPreferences.saveNames(_names);
     gruppe.insert(newIndex, tn);
   }
 
   static void removePlayer(String name) {
     if(!names.remove(name)) return;
+    MySharedPreferences.saveNames(_names);
     int oldIndex = gruppe.indexWhere((teilnehmer) => teilnehmer.name == name);
     if (oldIndex == -1) return;
     gruppe.removeAt(oldIndex);
