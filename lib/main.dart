@@ -390,18 +390,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         });
                       }
                     },
-                    validator: (text) {
-                      if (text == null || text.trim().isEmpty) {
-                        return 'Can\'t be empty';
-                      }
-                      if (text.contains(',')) {
-                        return 'Hint: Commas are ignored.';
-                      }
-                      if (Spieler.names.contains(text.split(RegExp(r'\s+')).join(" ").trim())){
-                        return 'This name is already there.';
-                      }
-                      return null;
-                    },
+                    validator: nameValidator,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       enabledBorder: OutlineInputBorder(
@@ -453,6 +442,19 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           )
         : const Text("⏳");
+  }
+
+  String? nameValidator(text) {
+    if (text == null || text.trim().isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.contains(',')) {
+      return 'Hint: Commas are ignored.';
+    }
+    if (Spieler.names.contains(text.split(RegExp(r'\s+')).join(" ").trim())) {
+      return 'This name is already there.';
+    }
+    return null;
   }
 
   Widget _HomeContent() {

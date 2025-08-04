@@ -80,7 +80,7 @@ class TableExampleApp extends StatelessWidget {
       dateTime: Lang.deDateFormat.format(now),
       names: Spieler.names,
       game: "tbd",//! TODO fix
-      whoIsWinning: Locales.pointsRule[Lang.l][(Spieler.leastPointsWinning ? 0 : 1)],
+      leastPointsWinning: Spieler.leastPointsWinning,
       sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
     );
     
@@ -90,7 +90,6 @@ class TableExampleApp extends StatelessWidget {
     /*
     - Sum of points
     - Number of games played
-    - Rule of game (whoIsWinningSwitch).
     */
   }
 }

@@ -7,7 +7,7 @@ class UserSettings {
   //final bool isDarkMode;
   final List<String>? names;
   final String? game;
-  final String? whoIsWinning;
+  final bool? leastPointsWinning;
   final List<int>? sumOfPoints;
 
   UserSettings({
@@ -16,7 +16,7 @@ class UserSettings {
     //required this.isDarkMode,
     required this.names,
     required this.game,
-    required this.whoIsWinning,
+    required this.leastPointsWinning,
     required this.sumOfPoints,
   });
 
@@ -25,6 +25,7 @@ class UserSettings {
     sb.write("$dateTime\n");
     sb.write("${names!.join(", ")}\n");
     sb.write("${sumOfPoints!.map((i) => i.toString()).toList().join(", ")}\n");
+    // ignore: avoid_print
     print(sb.toString());
   }
 }
@@ -39,6 +40,16 @@ class MySharedPreferences {
   static Future<String?> getLanguage() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('languageCode');
+  }
+
+  static Future<void> saveLeastPointsWinning(bool value) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('leastPointsWinning', value);
+  }
+
+  static Future<bool?> getLeastPointsWinning() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('leastPointsWinning');
   }
 
   // Player names
@@ -60,7 +71,7 @@ class MySharedPreferences {
     //await prefs.setBool('isDarkMode', settings.isDarkMode);
     await prefs.setStringList('names', settings.names ?? List.empty());
     await prefs.setString('game', settings.game ?? "");
-    await prefs.setString('whoIsWinning', settings.whoIsWinning ?? "");
+    await prefs.setBool('leastPointsWinning', settings.leastPointsWinning ?? true);
     await prefs.setStringList(
         'sumOfPoints',
         settings.sumOfPoints?.map((i) => i.toString()).toList() ??
@@ -76,14 +87,14 @@ class MySharedPreferences {
     String? dateTime = prefs.getString('dateTime');
     List<String>? names = prefs.getStringList('names');
     String? game = prefs.getString('game');
-    String? whoIsWinning = prefs.getString('whoIsWinning');
+    bool? leastPointsWinning = prefs.getBool('leastPointsWinning');
     List<String>? sumOfPoints = prefs.getStringList('sumOfPoints');
 
     return UserSettings(
       dateTime: dateTime,
       names: names,
       game: game,
-      whoIsWinning: whoIsWinning,
+      leastPointsWinning: leastPointsWinning,
       sumOfPoints: sumOfPoints?.map((i) => int.tryParse(i) ?? 0).toList(),
     );
   }
@@ -93,7 +104,7 @@ class MySharedPreferences {
     await prefs.remove('dateTime');
     await prefs.remove('names');
     //await prefs.remove('game');
-    //await prefs.remove('whoIsWinning');
+    //await prefs.remove('leastPointsWinning');
     await prefs.remove('sumOfPoints');
     // etc wird schon.
   }

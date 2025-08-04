@@ -14,7 +14,13 @@ class Spieler{
   static bool hasMembers = false;
 
   // default: rummy, lowest number of points is winning, as opposed to scrabble.
-  static bool leastPointsWinning = true;
+  static bool _leastPointsWinning = true;
+  static set leastPointsWinning(bool value){
+    _leastPointsWinning = value;
+    MySharedPreferences.saveLeastPointsWinning(value);
+  }
+
+  static bool get leastPointsWinning => _leastPointsWinning;
 
   static set names(List<String> values){
     // By making _names private, the new names call settings to update groups.
@@ -30,6 +36,8 @@ class Spieler{
   static void settings() async{
     gruppe = [];
     try{
+      bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
+      if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
       List<String>? namesPreset = await MySharedPreferences.getNames();
       if(namesPreset == null || namesPreset.isEmpty){return;}
       _names = namesPreset;
@@ -127,7 +135,7 @@ class Spieler{
   static List<Teilnehmer> whoIsWinning(){
     if(gruppe.length > 1 && filledFullRound() && gruppe[0].punkte.length >= gruppe.length){
       var sumOfPoints = gruppe.map((x) => x.sumPoints);
-      var best = leastPointsWinning? sumOfPoints.min : sumOfPoints.max;
+      var best = _leastPointsWinning? sumOfPoints.min : sumOfPoints.max;
       return gruppe.where((x)=> x.sumPoints == best).toList();
     }
     return <Teilnehmer>[];
