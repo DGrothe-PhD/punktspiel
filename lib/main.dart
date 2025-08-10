@@ -132,6 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ? null
             : setState(() => Spieler.leastPointsWinning =
                 (value == Locales.pointsRule[Lang.l].first));
+        // We need that setState, otherwise the dropdown doesn't change.
       },
       items: Locales.pointsRule[Lang.l]
           .map<DropdownMenuItem<String>>((String value) {
@@ -377,9 +378,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () {
                       setState(() => _gamesStarted = false);
                     },
-                    onChanged: (_) {
-                      setState(() {});
-                    },
                     onFieldSubmitted: (newText) {
                       final isValid = _formKey.currentState!.validate();
                       if (isValid) {
@@ -407,42 +405,75 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              Expanded(
-                child: ReorderableListView(
-                  key: const ValueKey(
-                      'reorderable_list'), // Optional, für Hot Reload Stabilität
-                  onReorder: (int oldIndex, int newIndex) {
-                    setState(() {
-                      if (newIndex > oldIndex) newIndex -= 1;
-                      String item = Spieler.names[oldIndex];
-                      Spieler.movePlayer(item, newIndex);
-                      namesFieldController.text = Spieler.names.join(", ");
-                    });
-                  },
-                  children: [
-                    for (int index = 0; index < Spieler.names.length; index++)
-                      ListTile(
-                        key: ValueKey(index),
-                        title: Text(Spieler.names[index]),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              String item = Spieler.names[index];
-                              Spieler.removePlayer(item);
-                              namesFieldController.text =
-                                  Spieler.names.join(", ");
-                            });
-                          },
-                        ),
-                      ),
-                  ],
-                ),
-              ),
+              reorderPlayersView(),
+              ExpansionTile(title: Text(Locales.furtherSettingsTitle[Lang.l]),
+                //subtitle: Text('foo'),
+                controlAffinity: ListTileControlAffinity.trailing,
+                children: <Widget>[
+                  buildGamesMenu(),
+                  const Text("✍️ tbd")],
+        ),
+        const SizedBox(height: 64),
             ],
           )
         : const Text("⏳");
   }
+
+  String? _selectedGame;
+
+  Widget buildGamesMenu() {
+    // TODO have in mind when translating to pick an index instead. Or step up to some Json handling.
+    //! TODO implement #75
+    _selectedGame = Spieler.game ?? (Spieler.games.isNotEmpty ? Spieler.games.keys.first : null);
+
+    return DropdownButton<String>(
+      key: ValueKey(Object.hashAll(Spieler.games.keys)),
+      isExpanded: true,
+      padding: edgeInsets,
+      value: _selectedGame,
+      onChanged: Spieler.games.isNotEmpty ? (String? value) {
+        setState(() {
+          _selectedGame = value;
+          Spieler.game = value;
+        });
+      } : null,
+      items: Spieler.games.keys.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(value: value, child: Text(value));
+      }).toList(),
+    );
+  }
+
+  Widget reorderPlayersView() => Expanded(
+    child: ReorderableListView(
+      // Optional, für Hot Reload Stabilität
+      key: const ValueKey('reorderable_list'), 
+      onReorder: (int oldIndex, int newIndex) {
+        setState(() {
+          if (newIndex > oldIndex) newIndex -= 1;
+          String item = Spieler.names[oldIndex];
+          Spieler.movePlayer(item, newIndex);
+          namesFieldController.text = Spieler.names.join(", ");
+        });
+      },
+      children: [
+        for (int index = 0; index < Spieler.names.length; index++)
+          ListTile(
+            key: ValueKey(index),
+            title: Text(Spieler.names[index]),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                setState(() {
+                  String item = Spieler.names[index];
+                  Spieler.removePlayer(item);
+                  namesFieldController.text = Spieler.names.join(", ");
+                });
+              },
+            ),
+          ),
+      ],
+    ),
+  );
 
   String? nameValidator(text) {
     if (text == null || text.trim().isEmpty) {
@@ -514,7 +545,6 @@ class _MyHomePageState extends State<MyHomePage> {
             controller: namesFieldController,
             readOnly: _dontEditNames,
             enabled: !_dontEditNames,
-            //onChanged: (unread) {setState(() => _gamesStarted = false);},
             onTap: () {
               setState(() => _gamesStarted = false);
             },
@@ -676,7 +706,6 @@ class _MyHomePageState extends State<MyHomePage> {
         bottomNavigationBar: NavigationBar(
           height: 50.0,
           backgroundColor: Themes.greenishColor,
-          //indicatorColor: Colors.grey[200],
           onDestinationSelected: (int index) {
             setState(() {
               currentPageIndex = index;

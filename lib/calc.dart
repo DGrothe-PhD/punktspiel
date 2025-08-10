@@ -10,6 +10,15 @@ import 'package:punktspiel/locales.dart';
 
 class Spieler{
   static List<String> _names = ["Eins", "Zwei", "Drei", "Vier" ];
+  static const Map<String, bool> games = {"Rummy": true, "Scrabble": false, "Table tennis": false};
+
+  static String? _game;
+  static set game(String? value){
+    _game = value;
+    MySharedPreferences.saveGame(value);
+  }
+  static String? get game => _game;
+
   static List<Teilnehmer> gruppe = [];
   static bool hasMembers = false;
 
@@ -19,7 +28,6 @@ class Spieler{
     _leastPointsWinning = value;
     MySharedPreferences.saveLeastPointsWinning(value);
   }
-
   static bool get leastPointsWinning => _leastPointsWinning;
 
   static set names(List<String> values){
@@ -38,6 +46,12 @@ class Spieler{
     try{
       bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
       if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
+      
+      String? gamePreset = await MySharedPreferences.getGame();
+      if(gamePreset != null && games.keys.contains(gamePreset)){
+        _game = gamePreset;
+      }
+      
       List<String>? namesPreset = await MySharedPreferences.getNames();
       if(namesPreset == null || namesPreset.isEmpty){return;}
       _names = namesPreset;

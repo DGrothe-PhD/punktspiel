@@ -12,7 +12,6 @@ class UserSettings {
 
   UserSettings({
     String? dateTime,
-    //required this.age,
     //required this.isDarkMode,
     required this.names,
     required this.game,
@@ -63,11 +62,21 @@ class MySharedPreferences {
     return prefs.getStringList('names');
   }
 
+  // Game
+  static Future<void> saveGame(String? game) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('game', game ?? "");
+  }
+
+  static Future<String?> getGame() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('game');
+  }
+
   // General data (game results)
   static Future<void> saveData(UserSettings settings) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('dateTime', settings.dateTime ?? "----");
-    //await prefs.setInt('age', settings.age);
     //await prefs.setBool('isDarkMode', settings.isDarkMode);
     await prefs.setStringList('names', settings.names ?? List.empty());
     await prefs.setString('game', settings.game ?? "");
@@ -80,9 +89,6 @@ class MySharedPreferences {
 
   static Future<UserSettings?> loadData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    //final username = prefs.getString('username');
-    //final age = prefs.getInt('age');
     //final isDarkMode = prefs.getBool('isDarkMode');
     String? dateTime = prefs.getString('dateTime');
     List<String>? names = prefs.getStringList('names');
