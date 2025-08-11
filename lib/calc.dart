@@ -16,11 +16,23 @@ class Spieler{
   static set game(String? value){
     _game = value;
     MySharedPreferences.saveGame(value);
+    _checkWinningRule(value);
+  }
+
+  static void _checkWinningRule(String? value) {
+    if(games.keys.contains(value) && games[value] != null){
+      leastPointsWinning = games[value]!;
+      hasWinningRuleSet = true;
+    }
+    else{
+      hasWinningRuleSet = false;
+    }
   }
   static String? get game => _game;
 
   static List<Teilnehmer> gruppe = [];
   static bool hasMembers = false;
+  static bool hasWinningRuleSet = false;
 
   // default: rummy, lowest number of points is winning, as opposed to scrabble.
   static bool _leastPointsWinning = true;
@@ -44,12 +56,16 @@ class Spieler{
   static void settings() async{
     gruppe = [];
     try{
-      bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
-      if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
-      
+      // prefer the points winning rule if specified for that game
       String? gamePreset = await MySharedPreferences.getGame();
       if(gamePreset != null && games.keys.contains(gamePreset)){
         _game = gamePreset;
+        _checkWinningRule(_game);
+      }
+      else{
+        bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
+        if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
+        hasWinningRuleSet = false;
       }
       
       List<String>? namesPreset = await MySharedPreferences.getNames();

@@ -127,13 +127,13 @@ class _MyHomePageState extends State<MyHomePage> {
       isExpanded: true,
       value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
       padding: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
-      onChanged: (String? value) {
-        _dontEditNames
-            ? null
-            : setState(() => Spieler.leastPointsWinning =
-                (value == Locales.pointsRule[Lang.l].first));
+      onChanged: (_dontEditNames || Spieler.hasWinningRuleSet) ? null :
+        (String? value) {
+          setState(() => Spieler.leastPointsWinning =
+            (value == Locales.pointsRule[Lang.l].first));
         // We need that setState, otherwise the dropdown doesn't change.
       },
+      //disabledHint: ,
       items: Locales.pointsRule[Lang.l]
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(value: value, child: Text(value));
@@ -433,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
       value: _selectedGame,
       onChanged: Spieler.games.isNotEmpty ? (String? value) {
         setState(() {
-          _selectedGame = value;
+          //_selectedGame = value;
           Spieler.game = value;
         });
       } : null,
