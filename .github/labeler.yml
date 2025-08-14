@@ -1,0 +1,23 @@
+deployment:
+- any: ['.github/workflows/*.yml', '!labeler.yml']
+- '*.exe'
+- 'android/*'
+
+design:
+- 'assets/images/*.*'
+- any: ['*icon*.png', '*icon*.ico']
+
+documentation:
+- '*.md'
+- 'doc/*'
+- '*.pdf'
+
+maintenance:
+- '*.sln'
+- '*.proj'
+
+translation:
+- 'lib/locales.dart'
+
+testcase:
+- 'test/*.*'
