@@ -6,6 +6,7 @@ class Themes{
   static dynamic mediumButtonWidth = WidgetStateProperty.all<Size>(const Size.fromWidth(150.0));
   //Colors
   static Color greenishColor = const Color.fromARGB(255, 165, 206, 185);
+  static const Color unselectedBackgroundColor = Color.fromARGB(20, 0, 0, 0);
   static dynamic greenish = WidgetStateProperty.all<Color>(greenishColor);
 
   static dynamic green = 

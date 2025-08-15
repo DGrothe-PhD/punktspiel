@@ -67,6 +67,17 @@ class Locales {
     "Found duplicate name(s)", 
     "Trouvé un/des double(s) nom(s)"
   ];
+  static const List<String> cantBeEmpty = [
+    "Feld darf nicht leer sein",
+     "Cannot be empty",
+      "Cela ne doit pas être vide."
+  ];
+  static const List<String> commasIgnored = [
+    "Hinweis: Kommas werden ignoriert.", 
+    "Hint: Commas are ignored.", 
+    "Remarque : les virgules sont ignorées."
+  ];
+
   static const List<String> gotIt = ["Verstanden!", "Got it!", "Compris !"];
   static const List<String> answerYes = ["Ja", "Yes", "Oui"];
   static const List<String> answerNo = ["Nein", "No", "Non"];

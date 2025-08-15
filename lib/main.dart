@@ -306,13 +306,13 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         children: [
           const SizedBox(height: 11),
-          // Tab-Leiste oben
           Container(
             height: 42,
             decoration: BoxDecoration(
+              color: Themes.unselectedBackgroundColor,
               border: Border(
                 bottom: BorderSide(
-                  color: Themes.greenishColor, // deine Linie unten
+                  color: Themes.greenishColor,
                   width: 1,
                 ),
               ),
@@ -330,11 +330,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderRadius: const BorderRadius.all(Radius.circular(7))),
               indicatorSize: TabBarIndicatorSize.tab,
               labelPadding:
-                  const EdgeInsets.symmetric(vertical: 3), // Höhe reduzieren
+                  const EdgeInsets.symmetric(vertical: 3), // reduce height
               isScrollable: false,
             ),
           ),
-          // Tab-Inhalt
+          // Tab content
           Expanded(
             child: TabBarView(
               children: [
@@ -477,13 +477,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String? nameValidator(text) {
     if (text == null || text.trim().isEmpty) {
-      return 'Can\'t be empty';
+      return Locales.cantBeEmpty[Lang.l];
     }
     if (text.contains(',')) {
-      return 'Hint: Commas are ignored.';
+      return Locales.commasIgnored[Lang.l];
     }
     if (Spieler.names.contains(text.split(RegExp(r'\s+')).join(" ").trim())) {
-      return 'This name is already there.';
+      return Locales.foundDuplicateName[Lang.l];
     }
     return null;
   }
