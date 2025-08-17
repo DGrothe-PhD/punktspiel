@@ -10,7 +10,15 @@ import 'package:punktspiel/locales.dart';
 
 class Spieler{
   static List<String> _names = ["Eins", "Zwei", "Drei", "Vier" ];
-  static const Map<String, bool> games = {"Rummy": true, "Scrabble": false, "Table tennis": false};
+  static List<Teilnehmer> gruppe = [];
+  static bool hasWinningRuleSet = false;
+  static bool hasMembers = false;
+
+  static const Map<String, bool?> games = {
+    "Rummy": true, "Scrabble": false,
+    "Table tennis": false,
+    "Miscellaneous": null
+  };
 
   static String? _game;
   static set game(String? value){
@@ -18,21 +26,19 @@ class Spieler{
     MySharedPreferences.saveGame(value);
     _checkWinningRule(value);
   }
+  static String? get game => _game;
 
-  static void _checkWinningRule(String? value) {
+  static void _checkWinningRule(String? value) async {
     if(games.keys.contains(value) && games[value] != null){
       leastPointsWinning = games[value]!;
       hasWinningRuleSet = true;
     }
     else{
+      bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
+      if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
       hasWinningRuleSet = false;
     }
   }
-  static String? get game => _game;
-
-  static List<Teilnehmer> gruppe = [];
-  static bool hasMembers = false;
-  static bool hasWinningRuleSet = false;
 
   // default: rummy, lowest number of points is winning, as opposed to scrabble.
   static bool _leastPointsWinning = true;
@@ -58,7 +64,7 @@ class Spieler{
     try{
       // prefer the points winning rule if specified for that game
       String? gamePreset = await MySharedPreferences.getGame();
-      if(gamePreset != null && games.keys.contains(gamePreset)){
+      if(gamePreset != null){
         _game = gamePreset;
         _checkWinningRule(_game);
       }
