@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:punktspiel/locales.dart';
+import 'package:punktspiel/models/games.dart';
 //import 'package:intl/intl.dart';
 //import 'package:flutter/services.dart';
 
@@ -14,11 +15,18 @@ class Spieler{
   static bool hasWinningRuleSet = false;
   static bool hasMembers = false;
 
-  static const Map<String, bool?> games = {
+  static const Map<String, bool?> _legacyGames = {
     "Rummy": true, "Scrabble": false,
     "Table tennis": false,
     "Miscellaneous": null
   };
+
+  static final List<Game> games = [
+    Game(name: "Rummy", leastPointsWinning: true),
+    Game(name: "Scrabble", leastPointsWinning: false),
+    Game(name: "Table tennis", leastPointsWinning: false),
+    Game(name: "Miscellaneous", leastPointsWinning: null),
+  ];
 
   static String? _game;
   static set game(String? value){
@@ -29,15 +37,17 @@ class Spieler{
   static String? get game => _game;
 
   static void _checkWinningRule(String? value) async {
-    if(games.keys.contains(value) && games[value] != null){
-      leastPointsWinning = games[value]!;
-      hasWinningRuleSet = true;
+    if(value != null && games.keys.contains(value)){
+      Game found = games.lookup(value);
+      if(found.leastPointsWinning != null){
+        leastPointsWinning = found.leastPointsWinning!;
+        hasWinningRuleSet = true;
+        return;
+      }
     }
-    else{
-      bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
-      if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
-      hasWinningRuleSet = false;
-    }
+    bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
+    if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
+    hasWinningRuleSet = false;
   }
 
   // default: rummy, lowest number of points is winning, as opposed to scrabble.

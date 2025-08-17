@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:punktspiel/table.dart';
 import 'package:punktspiel/settings.dart';
 import 'package:punktspiel/calc.dart';
+import 'package:punktspiel/models/games.dart';
 import 'package:punktspiel/locales.dart';
 import 'package:punktspiel/styles.dart';
 
@@ -422,8 +423,6 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _selectedGame;
 
   Widget buildGamesMenu() {
-    // TODO have in mind when translating to pick an index instead. Or step up to some Json handling.
-    //! TODO implement #75
     _selectedGame = Spieler.game ?? (Spieler.games.isNotEmpty ? Spieler.games.keys.first : null);
 
     return DropdownButton<String>(
@@ -438,7 +437,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       } : null,
       items: Spieler.games.keys.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(value: value, child: Text(value));
+        return DropdownMenuItem<String>(value: value, child: Text("🎲 $value"));
       }).toList(),
     );
   }
