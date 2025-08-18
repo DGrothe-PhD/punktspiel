@@ -1,23 +1,36 @@
 deployment:
-- any: ['.github/workflows/*.yml', '!labeler.yml']
-- '*.exe'
-- 'android/*'
+  - changed-files:
+      - any-glob-to-any-file: 
+          - '.github/workflows/*.yml'
+          - '!labeler.yml'
+          - '*.exe'
+          - 'android/*'
 
 design:
-- 'assets/images/*.*'
-- any: ['*icon*.png', '*icon*.ico']
+  - changed-files:
+      - any-glob-to-any-file: 
+          - 'assets/images/*.*'
+          - any: ['*icon*.png', '*icon*.ico']
 
 documentation:
-- '*.md'
-- 'doc/*'
-- '*.pdf'
+  - changed-files:
+      - any-glob-to-any-file:
+          - '*.md'
+          - 'doc/*'
+          - '*.pdf'
 
 maintenance:
-- '*.sln'
-- '*.proj'
+  - changed-files:
+      - any-glob-to-any-file: 
+          - '*.sln'
+          - '*.proj'
 
 translation:
-- 'lib/locales.dart'
+  - changed-files:
+      - any-glob-to-any-file: 
+          - 'lib/locales.dart'
 
-testcase:
-- 'test/*.*'
+testing:
+  - changed-files:
+      - any-glob-to-any-file: 
+          - 'test/*.*'
