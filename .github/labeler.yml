@@ -3,8 +3,8 @@ deployment:
       - any-glob-to-any-file: 
           - '.github/workflows/*.yml'
           - '!.github/workflows/labeler.yml'
-          - '*.exe'
-          - 'android/*'
+          - '**/*.exe'
+          - 'android/**/*.*'
 
 design:
   - changed-files:
