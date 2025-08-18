@@ -10,21 +10,21 @@ design:
   - changed-files:
       - any-glob-to-any-file: 
           - 'assets/images/*.*'
-          - '*icon*.png'
-          - '*icon*.ico'
+          - '**/*icon*.png'
+          - '**/*icon*.ico'
 
 documentation:
   - changed-files:
       - any-glob-to-any-file:
-          - '*.md'
-          - 'doc/*'
-          - '*.pdf'
+          - '**/*.md'
+          - 'doc/*.*'
+          - '**/*.pdf'
 
 maintenance:
   - changed-files:
       - any-glob-to-any-file: 
-          - '*.sln'
-          - '*.proj'
+          - '**/*.sln'
+          - '**/*.proj'
 
 translation:
   - changed-files:
@@ -34,4 +34,4 @@ translation:
 testing:
   - changed-files:
       - any-glob-to-any-file: 
-          - 'test/*.*'
+          - 'test/*.dart'
