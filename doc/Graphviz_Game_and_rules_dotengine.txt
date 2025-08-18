@@ -1,0 +1,47 @@
+digraph G {
+
+  subgraph cluster_0 {
+    style=filled;
+    color=lightgrey;
+    node [style=filled,color=white];
+    a0 -> a1;
+    a1 -> a1yes;
+    a1 -> a1no;
+    label = "game and rules";
+  }
+  
+  subgraph cluster_2 {
+    node [style=filled];
+    a1yes -> iswinningruleset -> iswyes;
+    iswinningruleset -> iswno;
+    iswno -> letuserdefine;
+    label = "check winning rule";
+    color=green
+  }
+
+  subgraph cluster_1 {
+    node [style=filled];
+    getnames -> b1;
+    label = "process names";
+    color=blue
+  }
+  start -> a0;
+  a1no -> letuserdefine;
+  b1 -> end;
+  iswyes -> getnames;
+  letuserdefine -> getnames;
+
+  start [shape=Mdiamond, label="init"];
+  a0 [label="get game from shared prefs.", color=lightgreen];
+  a1 [shape=Mdiamond, label="game is set?"];
+  a1yes [label = "yes"];
+  iswinningruleset [shape=Mdiamond, label="rule is predefined?"];
+  letuserdefine [label="read custom \n rule from prefs."];
+  iswyes [label = "yes"];
+  iswno [label = "no"];
+  
+  a1no [label="no"];
+  getnames [label="get names from shared prefs."];
+  b1 [label="add names as members"];
+  end [shape=Msquare];
+}
