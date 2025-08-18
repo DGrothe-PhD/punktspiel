@@ -2,7 +2,7 @@ deployment:
   - changed-files:
       - any-glob-to-any-file: 
           - '.github/workflows/*.yml'
-          - '!labeler.yml'
+          - '!.github/workflows/labeler.yml'
           - '*.exe'
           - 'android/*'
 
@@ -10,7 +10,8 @@ design:
   - changed-files:
       - any-glob-to-any-file: 
           - 'assets/images/*.*'
-          - any: ['*icon*.png', '*icon*.ico']
+          - '*icon*.png'
+          - '*icon*.ico'
 
 documentation:
   - changed-files:
