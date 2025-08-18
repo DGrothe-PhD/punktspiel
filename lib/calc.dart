@@ -161,6 +161,9 @@ class Spieler{
     return minCounts == maxCounts;
   }
 
+  static get numberOfGamesPlayed => gruppe.map((x) => x.punkte.length).isEmpty ?
+  0 : gruppe.map((x) => x.punkte.length).min;
+
   static bool fillingTwice(String name){
     var crunchedData = gruppe.map((x) => x.punkte.length);
     int minCounts = crunchedData.min;

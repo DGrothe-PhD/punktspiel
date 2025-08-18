@@ -8,6 +8,7 @@ class UserSettings {
   final List<String>? names;
   final String? game;
   final bool? leastPointsWinning;
+  final int? numberOfGamesPlayed;
   final List<int>? sumOfPoints;
 
   UserSettings({
@@ -15,6 +16,7 @@ class UserSettings {
     //required this.isDarkMode,
     required this.names,
     required this.game,
+    required this.numberOfGamesPlayed,
     required this.leastPointsWinning,
     required this.sumOfPoints,
   });
@@ -80,6 +82,7 @@ class MySharedPreferences {
     //await prefs.setBool('isDarkMode', settings.isDarkMode);
     await prefs.setStringList('names', settings.names ?? List.empty());
     await prefs.setString('game', settings.game ?? "");
+    await prefs.setInt('numberOfGamesPlayed', settings.numberOfGamesPlayed ?? 0);
     await prefs.setBool('leastPointsWinning', settings.leastPointsWinning ?? true);
     await prefs.setStringList(
         'sumOfPoints',
@@ -93,6 +96,7 @@ class MySharedPreferences {
     String? dateTime = prefs.getString('dateTime');
     List<String>? names = prefs.getStringList('names');
     String? game = prefs.getString('game');
+    int? numberOfGamesPlayed = prefs.getInt('numberOfGamesPlayed');
     bool? leastPointsWinning = prefs.getBool('leastPointsWinning');
     List<String>? sumOfPoints = prefs.getStringList('sumOfPoints');
 
@@ -100,6 +104,7 @@ class MySharedPreferences {
       dateTime: dateTime,
       names: names,
       game: game,
+      numberOfGamesPlayed: numberOfGamesPlayed,
       leastPointsWinning: leastPointsWinning,
       sumOfPoints: sumOfPoints?.map((i) => int.tryParse(i) ?? 0).toList(),
     );

@@ -79,18 +79,14 @@ class TableExampleApp extends StatelessWidget {
     UserSettings settings = UserSettings(
       dateTime: Lang.deDateFormat.format(now),
       names: Spieler.names,
-      game: "tbd",//! TODO fix
+      game: Spieler.game,
+      numberOfGamesPlayed: Spieler.numberOfGamesPlayed,
       leastPointsWinning: Spieler.leastPointsWinning,
       sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
     );
     
     //settings.verboseTesting();
     MySharedPreferences.saveData(settings);
-    // Put here:
-    /*
-    - Sum of points
-    - Number of games played
-    */
   }
 }
 
@@ -131,7 +127,8 @@ class TablePage extends StatelessWidget {
     try {
       gameResultText = StringBuffer();
       headline =
-          "${Locales.results[Lang.l]} - ${Lang.deDateFormat.format(now)}\n";
+          "${Locales.results[Lang.l]} - ${Lang.deDateFormat.format(now)}\n"
+          "${Spieler.game} - n: ${Spieler.numberOfGamesPlayed}\n";
       int maxCounts = Spieler.gruppe.map((x) => x.punkte.length).max;
       playerNames = StringBuffer();
       //playerNames = StringBuffer("\xA0");
@@ -164,7 +161,7 @@ class TablePage extends StatelessWidget {
         playerNames.write("\n");
       }
 
-      // Write points of all games
+      // Write points of all games row by row
       for (int j = 0; j < maxCounts; j++) {
         for (var player in Spieler.gruppe) {
           if (player == Spieler.gruppe.last) {
