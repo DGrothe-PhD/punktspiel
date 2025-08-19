@@ -127,7 +127,7 @@ class Locales {
     "Sorry, the website cannot be displayed",
     "Cette page ne peut pas être affichée."
   ];
-  static const List<String> share = ["Tabelle teilen", "Share all", "Partager tout"];
+  static const List<String> shareEverything = ["Tabelle teilen", "Share all", "Partager tout"];
   static const List<String> shareResults = ["Ergebnis teilen", "Share result", "Partager le résultat"];
   static const List<String> emailSubject = [
     "Unsere Spielergebnisse", "Our game results", "Notres résultats de jeu"

@@ -58,7 +58,21 @@ class TableExampleApp extends StatelessWidget {
     tableContext = context;
     return Scaffold(
       resizeToAvoidBottomInset: true, //maybe false if keyboard
-      appBar: AppBar(title: Text(Locales.resultsTitle[Lang.l])),
+      appBar: AppBar(
+        title: Text(Locales.resultsTitle[Lang.l]),
+        actions: [
+          IconButton(
+            tooltip: Locales.shareEverything[Lang.l],
+            icon: const Icon(Icons.offline_share),
+            onPressed: () => TablePage.onShareTable(context),
+          ),
+          IconButton(
+            tooltip: Locales.shareResults[Lang.l],
+            icon: const Icon(Icons.speaker_notes),
+            onPressed: () => TablePage.onShareResults(context),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: TablePage(),
       ),
@@ -215,9 +229,9 @@ class TablePage extends StatelessWidget {
           ),
           child: SwipeTo(
             onLeftSwipe: (details) =>
-                {_onShareResults(tableContext ?? context)},
+                {onShareResults(tableContext ?? context)},
             onRightSwipe: (details) =>
-                {_onShareTable(tableContext ?? context)},
+                {onShareTable(tableContext ?? context)},
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               primary: true,
@@ -241,22 +255,7 @@ class TablePage extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 20),
-        if(maxCounts < 30) ElevatedButton(
-          onPressed: () => {_onShareTable(tableContext ?? context)},
-          style: Themes.cardButtonStyle(Themes.sunflower,
-              fixedSize: Themes.mediumButtonWidth),
-          child: Text(Locales.share[Lang.l]),
-        ),
-        const SizedBox(height: 10),
-        if(maxCounts < 30) 
-          ElevatedButton(
-          onPressed: () => {_onShareResults(tableContext ?? context)},
-          style: Themes.cardButtonStyle(Themes.greenish,
-              fixedSize: Themes.mediumButtonWidth),
-          child: Text(Locales.shareResults[Lang.l]),
-        ),
-        const SizedBox(height: 64),
+        const SizedBox(height: 80),
       ]));
     } catch (exception) {
       //Make exception readable.
@@ -264,48 +263,57 @@ class TablePage extends StatelessWidget {
     }
   }
 
-  void _onShareTable(BuildContext context) async {
-    final box = context.findRenderObject() as RenderBox?;
+  static void onShareTable(BuildContext context) async {
+    final renderBox = context.findRenderObject();
     if (Platform.isWindows) {
       Clipboard.setData(ClipboardData(
           text: gameResultText.isEmpty
               ? "Nichts/None/Rien"
               : "$headline\n$playerNames$gameResultText"));
-      showDialog(
-          context: context,
-          builder: (context) => const AlertDialog(
-                title: Text("Copied"),
-                content: Text("Game results copied to clipboard."),
-              ));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Game results copied to clipboard."),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
       return;
     }
-    await Share.share(
-      gameResultText.isEmpty
-          ? "Nichts/None/Rien"
-          : "$headline\n$playerNames$gameResultText",
-      subject: Locales.emailSubject[Lang.l],
-      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-    );
+    if (renderBox is RenderBox) {
+      await Share.share(
+        gameResultText.isEmpty
+            ? "Nichts/None/Rien"
+            : "$headline\n$playerNames$gameResultText",
+        subject: Locales.emailSubject[Lang.l],
+        sharePositionOrigin:
+            renderBox.localToGlobal(Offset.zero) & renderBox.size,
+      );
+    }
   }
 
-  void _onShareResults(BuildContext context) async {
-    final box = context.findRenderObject() as RenderBox?;
+  static void onShareResults(BuildContext context) async {
+    final renderBox = context.findRenderObject();
     if (Platform.isWindows) {
       Clipboard.setData(ClipboardData(
         text:
           gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report()));
-      showDialog(
-        context: context,
-        builder: (context) => const AlertDialog(
-          title: Text("Copied"),
-          content: Text("Game results copied to clipboard."),
-        ));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Game results copied to clipboard."),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
       return;
     }
-    await Share.share(
-      gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(),
-      subject: Locales.emailSubject[Lang.l],
-      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-    );
+    if (renderBox is RenderBox) {
+      await Share.share(
+        gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(),
+        subject: Locales.emailSubject[Lang.l],
+        sharePositionOrigin: renderBox!.localToGlobal(Offset.zero) & renderBox.size,
+      );
+    }
   }
 }

@@ -1,25 +1,28 @@
+import 'package:punktspiel/locales.dart';
+
 class Game{
-  String name;
+  final String name;
+  final Map<String, String>? translated;
   bool? leastPointsWinning;
 
   Game({
     required this.name,
     this.leastPointsWinning,
+    this.translated,
   });
+
+  String get localName {
+    if(translated?.containsKey(Lang.currentLanguageCode()) ?? false){
+      return translated![Lang.currentLanguageCode()] ?? name;
+    }
+    return name;
+  }
 }
 
 extension HandleListGames on List<Game> {
   get keys => map((e) => e.name).toList();
   lookup(String key) => firstWhere((e) => e.name == key, orElse: null);
 }
-
-/*
-static const Map<String, bool?> games = {
-    "Rummy": true, "Scrabble": false,
-    "Table tennis": false,
-    "Miscellaneous": null
-  };
-*/
 
 /*class AvailableGames{
   static final List<Game> games = [
