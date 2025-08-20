@@ -14,19 +14,7 @@ class Spieler{
   static List<Teilnehmer> gruppe = [];
   static bool hasWinningRuleSet = false;
   static bool hasMembers = false;
-
-  static const Map<String, bool?> _legacyGames = {
-    "Rummy": true, "Scrabble": false,
-    "Table tennis": false,
-    "Miscellaneous": null
-  };
-
-  static final List<Game> games = [
-    Game(name: "Rummy", leastPointsWinning: true),
-    Game(name: "Scrabble", leastPointsWinning: false),
-    Game(name: "Table tennis", leastPointsWinning: false),
-    Game(name: "Miscellaneous", leastPointsWinning: null),
-  ];
+  static final Features features = Features();
 
   static String? _game;
   static set game(String? value){
@@ -37,8 +25,8 @@ class Spieler{
   static String? get game => _game;
 
   static void _checkWinningRule(String? value) async {
-    if(value != null && games.keys.contains(value)){
-      Game found = games.lookup(value);
+    if(value != null && features.games.keys.contains(value)){
+      Game found = features.games.lookup(value);
       if(found.leastPointsWinning != null){
         leastPointsWinning = found.leastPointsWinning!;
         hasWinningRuleSet = true;

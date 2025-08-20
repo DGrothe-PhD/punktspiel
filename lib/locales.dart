@@ -9,7 +9,7 @@ class Lang{
   static bool tableVisible = false;
 
   static int l = 0;
-  static List<String> availableLanguages = ["DE", "EN", "FR"];
+  static List<String> availableLanguages = ["de", "en", "fr"];
 
   static void setLanguage(String code){
     MySharedPreferences.saveLanguage(code);
@@ -18,11 +18,11 @@ class Lang{
 
   static void _applyLanguage(String? code){
     switch(code) {
-      case "DE":
+      case "de":
         l = 0;
-      case "EN":
+      case "en":
         l = 1;
-      case "FR":
+      case "fr":
         l = 2;
       default:
         l = 1;
@@ -39,7 +39,7 @@ class Lang{
       code = await MySharedPreferences.getLanguage();
     }
     catch(exception) {
-      code = "EN";
+      code = "en";
     }
     _applyLanguage(code);
   }
