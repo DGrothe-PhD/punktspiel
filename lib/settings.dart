@@ -54,7 +54,7 @@ class MySettingsPageState extends State<MySettingsPage> {
     isExpanded: true,
     value: Lang.currentLanguageCode(),
     onChanged: (String? value){
-      setState(() => Lang.setLanguage(value ?? "EN"));
+      setState(() => Lang.setLanguage(value ?? "en"));
     },
     items: Lang.availableLanguages.map<DropdownMenuItem<String>>(
       (String value) {

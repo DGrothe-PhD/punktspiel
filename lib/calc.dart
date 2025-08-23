@@ -14,7 +14,7 @@ class Spieler{
   static List<Teilnehmer> gruppe = [];
   static bool hasWinningRuleSet = false;
   static bool hasMembers = false;
-  static final Features features = Features();
+  static final Features _features = Features();
 
   static String? _game;
   static set game(String? value){
@@ -25,8 +25,8 @@ class Spieler{
   static String? get game => _game;
 
   static void _checkWinningRule(String? value) async {
-    if(value != null && features.games.keys.contains(value)){
-      Game found = features.games.lookup(value);
+    if(value != null && _features.games.keys.contains(value)){
+      Game found = _features.games.lookup(value);
       if(found.leastPointsWinning != null){
         leastPointsWinning = found.leastPointsWinning!;
         hasWinningRuleSet = true;

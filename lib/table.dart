@@ -73,6 +73,7 @@ class TableExampleApp extends StatelessWidget {
           ),
         ],
       ),
+      //drawer: ElevatedButton(child: const Column(children:[Text("tbd")]), onPressed: () {},),
       body: SingleChildScrollView(
         child: TablePage(),
       ),
@@ -312,7 +313,7 @@ class TablePage extends StatelessWidget {
       await Share.share(
         gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(),
         subject: Locales.emailSubject[Lang.l],
-        sharePositionOrigin: renderBox!.localToGlobal(Offset.zero) & renderBox.size,
+        sharePositionOrigin: renderBox.localToGlobal(Offset.zero) & renderBox.size,
       );
     }
   }

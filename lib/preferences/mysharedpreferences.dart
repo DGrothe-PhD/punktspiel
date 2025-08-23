@@ -24,8 +24,8 @@ class UserSettings {
   void verboseTesting(){
     StringBuffer sb = StringBuffer();
     sb.write("$dateTime\n");
-    sb.write("${names!.join(", ")}\n");
-    sb.write("${sumOfPoints!.map((i) => i.toString()).toList().join(", ")}\n");
+    sb.write("${names?.join(", ") ?? "<names empty>"}\n");
+    sb.write("${sumOfPoints?.map((i) => i.toString()).toList().join(", ") ?? '<no points given>'}\n");
     // ignore: avoid_print
     print(sb.toString());
   }

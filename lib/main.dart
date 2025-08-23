@@ -25,13 +25,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Punktspiel',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      //title: 'Punktspiel',
+      //theme: ThemeData(
+      //  colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      //  useMaterial3: true,
+      //),
       home: const MyHomePage(title: 'Punktspiel'),
     );
   }
@@ -87,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool _dontEditNames = false;
   bool _gamesStarted = false;
+  final Features _features = Features();
 
   @override
   void initState() {
@@ -380,7 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() => _gamesStarted = false);
                     },
                     onFieldSubmitted: (newText) {
-                      final isValid = _formKey.currentState!.validate();
+                      final isValid = _formKey.currentState?.validate() ?? false;
                       if (isValid) {
                         setState(() {
                           Spieler.addPlayer(newText);
@@ -423,21 +424,24 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _selectedGame;
 
   Widget buildGamesMenu() {
-    _selectedGame = Spieler.game ?? (Spieler.games.isNotEmpty ? Spieler.games.keys.first : null);
+    _selectedGame = Spieler.game ?? (_features.games.isNotEmpty ? _features.games.keys.first : null);
 
     return DropdownButton<String>(
-      key: ValueKey(Object.hashAll(Spieler.games.keys)),
+      key: ValueKey(Object.hashAll(_features.games.keys)),
       isExpanded: true,
       padding: edgeInsets,
       value: _selectedGame,
-      onChanged: Spieler.games.isNotEmpty ? (String? value) {
+      onChanged: _features.games.isNotEmpty ? (String? value) {
         setState(() {
           //_selectedGame = value;
           Spieler.game = value;
         });
       } : null,
-      items: Spieler.games.keys.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(value: value, child: Text("🎲 $value"));
+      items: _features.games.keys.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(_features.games.lookup(value).localName),
+        );
       }).toList(),
     );
   }
