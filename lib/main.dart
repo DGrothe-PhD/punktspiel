@@ -27,11 +27,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      //title: 'Punktspiel',
-      //theme: ThemeData(
-      //  colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      //  useMaterial3: true,
-      //),
       home: const MyHomePage(title: 'Punktspiel'),
     );
   }
@@ -129,12 +124,13 @@ class _MyHomePageState extends State<MyHomePage> {
       isExpanded: true,
       value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
       padding: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
-      onChanged: (_dontEditNames || Spieler.hasWinningRuleSet) ? null :
-        (String? value) {
-          setState(() => Spieler.leastPointsWinning =
-            (value == Locales.pointsRule[Lang.l].first));
-        // We need that setState, otherwise the dropdown doesn't change.
-      },
+      onChanged: (_dontEditNames || Spieler.hasWinningRuleSet)
+          ? null
+          : (String? value) {
+              setState(() => Spieler.leastPointsWinning =
+                  (value == Locales.pointsRule[Lang.l].first));
+              // We need that setState, otherwise the dropdown doesn't change.
+            },
       //disabledHint: ,
       items: Locales.pointsRule[Lang.l]
           .map<DropdownMenuItem<String>>((String value) {
@@ -381,7 +377,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() => _gamesStarted = false);
                     },
                     onFieldSubmitted: (newText) {
-                      final isValid = _formKey.currentState?.validate() ?? false;
+                      final isValid =
+                          _formKey.currentState?.validate() ?? false;
                       if (isValid) {
                         setState(() {
                           Spieler.addPlayer(newText);
@@ -407,15 +404,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              reorderPlayersView(),
-              ExpansionTile(title: Text(Locales.furtherSettingsTitle[Lang.l]),
+              _reorderPlayersView(),
+              const Expanded(child: Text("")),//Flexible space.
+              ExpansionTile(
+                title: Text(Locales.furtherSettingsTitle[Lang.l]),
                 //subtitle: Text('foo'),
                 controlAffinity: ListTileControlAffinity.trailing,
-                children: <Widget>[
-                  buildGamesMenu(),
-                  const Text("✍️ tbd")],
-        ),
-        const SizedBox(height: 64),
+                children: <Widget>[buildGamesMenu(), const Text("✍️ tbd")],
+              ),
+              const SizedBox(
+                  height:
+                      64), //! TODO consider moving this up when stuff happens.
             ],
           )
         : const Text("⏳");
@@ -424,19 +423,22 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _selectedGame;
 
   Widget buildGamesMenu() {
-    _selectedGame = Spieler.game ?? (_features.games.isNotEmpty ? _features.games.keys.first : null);
+    _selectedGame = Spieler.game ??
+        (_features.games.isNotEmpty ? _features.games.keys.first : null);
 
     return DropdownButton<String>(
       key: ValueKey(Object.hashAll(_features.games.keys)),
       isExpanded: true,
       padding: edgeInsets,
       value: _selectedGame,
-      onChanged: _features.games.isNotEmpty ? (String? value) {
-        setState(() {
-          //_selectedGame = value;
-          Spieler.game = value;
-        });
-      } : null,
+      onChanged: _features.games.isNotEmpty
+          ? (String? value) {
+              setState(() {
+                //_selectedGame = value;
+                Spieler.game = value;
+              });
+            }
+          : null,
       items: _features.games.keys.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -446,35 +448,39 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget reorderPlayersView() => Expanded(
-    child: ReorderableListView(
-      // Optional, für Hot Reload Stabilität
-      key: const ValueKey('reorderable_list'), 
-      onReorder: (int oldIndex, int newIndex) {
-        setState(() {
-          if (newIndex > oldIndex) newIndex -= 1;
-          String item = Spieler.names[oldIndex];
-          Spieler.movePlayer(item, newIndex);
-          namesFieldController.text = Spieler.names.join(", ");
-        });
-      },
-      children: [
-        for (int index = 0; index < Spieler.names.length; index++)
-          ListTile(
-            key: ValueKey(index),
-            title: Text(Spieler.names[index]),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                setState(() {
-                  String item = Spieler.names[index];
-                  Spieler.removePlayer(item);
-                  namesFieldController.text = Spieler.names.join(", ");
-                });
-              },
+  Widget _reorderPlayersView() => Expanded(
+    child: Align(
+      alignment: Alignment.topCenter,
+      child: ReorderableListView(
+        shrinkWrap: true,
+        // Optional, für Hot Reload Stabilität
+        key: const ValueKey('reorderable_list'),
+        onReorder: (int oldIndex, int newIndex) {
+          setState(() {
+            if (newIndex > oldIndex) newIndex -= 1;
+            String item = Spieler.names[oldIndex];
+            Spieler.movePlayer(item, newIndex);
+            namesFieldController.text = Spieler.names.join(", ");
+          });
+        },
+        children: [
+          for (int index = 0; index < Spieler.names.length; index++)
+            ListTile(
+              key: ValueKey(index),
+              title: Text(Spieler.names[index]),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  setState(() {
+                    String item = Spieler.names[index];
+                    Spieler.removePlayer(item);
+                    namesFieldController.text = Spieler.names.join(", ");
+                  });
+                },
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     ),
   );
 
@@ -706,49 +712,73 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Colors.amber,
           title: Text(widget.title),
         ),
-        bottomNavigationBar: NavigationBar(
-          height: 50.0,
-          backgroundColor: Themes.greenishColor,
-          onDestinationSelected: (int index) {
-            setState(() {
-              currentPageIndex = index;
-            });
-          },
-          //Style and coloring
-          indicatorColor: Themes.active,
-          labelTextStyle: WidgetStateProperty.all<TextStyle>(
-              TextStyle(color: Themes.darkgreen)),
-          labelPadding: const EdgeInsets.all(5),
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-          indicatorShape: Themes.cardShape,
-          //Functionality
-          selectedIndex: currentPageIndex,
-          destinations: const <Widget>[
-            NavigationDestination(
-              icon: Icon(
-                Icons.home,
-                color: Color.fromARGB(255, 16, 44, 31),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/texture.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: NavigationBar(
+            height: 50.0,
+            backgroundColor: Themes.greenishColor.withAlpha(175),
+            //shadowColor: Colors.black87,
+            //elevation: 4,
+            onDestinationSelected: (int index) {
+              setState(() {
+                currentPageIndex = index;
+              });
+            },
+            //Style and coloring
+            indicatorColor: Themes.active,
+            indicatorShape: ShadowedShapeBorder(
+              shape: Themes.cardShape, // dein statisches RoundedRectangleBorder
+              shadows: [
+                const BoxShadow(
+                  color: Colors.black54,
+                  blurRadius: 2,
+                  offset: Offset(2, 3),
+                ),
+                BoxShadow(
+                  color: Themes.active,
+                  blurRadius: 0,
+                  offset: const Offset(0, 0),
+                ),
+              ],
+            ),
+            labelTextStyle: WidgetStateProperty.all<TextStyle>(
+                TextStyle(color: Themes.darkgreen)),
+            labelPadding: const EdgeInsets.all(5),
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+            //Functionality
+            selectedIndex: currentPageIndex,
+            destinations: const <Widget>[
+              NavigationDestination(
+                icon: Icon(
+                  Icons.home,
+                  color: Color.fromARGB(255, 16, 44, 31),
+                ),
+                selectedIcon: Icon(Icons.home_outlined,
+                    color: Color.fromARGB(255, 80, 59, 57)),
+                label: 'Home',
               ),
-              selectedIcon: Icon(Icons.home_outlined,
-                  color: Color.fromARGB(255, 80, 59, 57)),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.settings),
-              selectedIcon: Icon(Icons.settings_outlined),
-              label: 'Settings',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.help_rounded),
-              selectedIcon: Icon(Icons.help_outline_rounded),
-              label: 'Help',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.info_rounded),
-              selectedIcon: Icon(Icons.info_outline_rounded),
-              label: 'About Me',
-            ),
-          ],
+              NavigationDestination(
+                icon: Icon(Icons.settings),
+                selectedIcon: Icon(Icons.settings_outlined),
+                label: 'Settings',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.help_rounded),
+                selectedIcon: Icon(Icons.help_outline_rounded),
+                label: 'Help',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.info_rounded),
+                selectedIcon: Icon(Icons.info_outline_rounded),
+                label: 'About Me',
+              ),
+            ],
+          ),
         ),
         body: currentPage,
       ),

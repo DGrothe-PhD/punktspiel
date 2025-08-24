@@ -16,9 +16,8 @@ class StyleDecorator {
   static const double spacing = -0.4;
   static final textstil = TextStyle(
     fontSize: 12.0,
-    color:
-        const Color.fromARGB(255, 27, 26, 26), // fontWeight: FontWeight.bold,
-    backgroundColor: Themes.greenishColor,
+    color: const Color.fromARGB(255, 27, 26, 26), // fontWeight: FontWeight.bold,
+    backgroundColor: Themes.active,
     letterSpacing: spacing, //-1.1,
   );
   static const monoStil = TextStyle(
@@ -59,7 +58,11 @@ class TableExampleApp extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true, //maybe false if keyboard
       appBar: AppBar(
+        flexibleSpace: Themes.cardboardCanvas,
         title: Text(Locales.resultsTitle[Lang.l]),
+        backgroundColor: Themes.greenishColor,
+        shadowColor: Colors.black87,
+        elevation: 4,
         actions: [
           IconButton(
             tooltip: Locales.shareEverything[Lang.l],
@@ -224,6 +227,7 @@ class TablePage extends StatelessWidget {
 
       return Center(
           child: Column(children: <Widget>[
+            const SizedBox(height: 17),
         WidgetAnimator(
           incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
             duration: const Duration(milliseconds: 2000),

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
-//import 'package:flutter_html/flutter_html.dart';
 import 'package:punktspiel/locales.dart';
 import 'package:punktspiel/styles.dart';
 
@@ -15,7 +14,11 @@ class SettingsAppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset : true,
-      appBar: AppBar(backgroundColor: Colors.amber,
+      appBar: AppBar(
+        backgroundColor: Themes.greenishColor,
+        shadowColor: Colors.black87,
+        elevation: 4,
+        flexibleSpace: Themes.cardboardCanvas,
         title: Text(Locales.settingsTitle[Lang.l]),
       ),
       body: const SingleChildScrollView(
@@ -35,9 +38,6 @@ class MySettingsPageState extends State<MySettingsPage> {
   String currentVersionInfo = "";
   String availableVersionInfo = "";
   final now = DateTime.now();
-
-  //SettingsPage({super.key});
-  //late String latestAppVersion;
 
   @override
   void initState(){
