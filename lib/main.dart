@@ -471,12 +471,36 @@ class _MyHomePageState extends State<MyHomePage> {
               trailing: IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
+                  final messenger = ScaffoldMessenger.of(context);
+                  final removedIndex = index;
+                  final removedItem = Spieler.names[index];
+
+                  // Optimistic approach: remove that item and insert on undo.
                   setState(() {
-                    String item = Spieler.names[index];
-                    Spieler.removePlayer(item);
+                    Spieler.removePlayer(removedItem);
                     namesFieldController.text = Spieler.names.join(", ");
                   });
-                },
+
+                  // Closing other snack bars to keep clean
+                  messenger.hideCurrentSnackBar();
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text(Locales.deletePlayer[Lang.l].format([removedItem]),),
+                      duration: const Duration(seconds: 2),
+                      action: SnackBarAction(
+                        label: Locales.undo[Lang.l],
+                        onPressed: () {
+                          if (!mounted) return;
+                          setState(() {
+                            // Reinsert
+                            Spieler.names.insert(removedIndex, removedItem);
+                            namesFieldController.text = Spieler.names.join(", ");
+                          });
+                        },
+                      ),
+                    ),
+                  );
+                }
               ),
             ),
         ],
