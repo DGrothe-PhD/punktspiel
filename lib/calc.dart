@@ -85,7 +85,8 @@ class Spieler{
     }
   }
 
-  static void addPlayer(String name){
+  static void addNewPlayer(String name){
+    /// No points given yet.
     name = name.replaceAll(',', "").split(RegExp(r'\s+')).join(" ").trim();
     if(name.isEmpty) return;
     // avoid duplicates: do nothing if name is already there.
@@ -107,16 +108,43 @@ class Spieler{
     if(newIndex == -1) return;
     // Otherwise: inserting
     Spieler.names.insert(newIndex, name);
-    MySharedPreferences.saveNames(_names);
+    //MySharedPreferences.saveNames(_names);
     gruppe.insert(newIndex, tn);
+    _storeData();
   }
 
-  static void removePlayer(String name) {
-    if(!names.remove(name)) return;
+  static void insertPlayer(Teilnehmer member, int newIndex){
+    // Inserting a full member with their points.
+    Spieler.names.insert(newIndex, member.name);
+    gruppe.insert(newIndex, member);
+    _storeData();
+  }
+  
+  static Teilnehmer? removePlayer(String name) {
+    if(!names.remove(name)) {
+      return null;
+    }
     MySharedPreferences.saveNames(_names);
     int oldIndex = gruppe.indexWhere((teilnehmer) => teilnehmer.name == name);
-    if (oldIndex == -1) return;
-    gruppe.removeAt(oldIndex);
+    if (oldIndex == -1) {
+      return null;
+    }
+    return gruppe.removeAt(oldIndex);
+  }
+
+  static void _storeData() {
+    var now = DateTime.now();// no elevated button? Then "now" becomes obsolete.
+    UserSettings settings = UserSettings(
+      dateTime: Lang.deDateFormat.format(now),
+      names: Spieler.names,
+      game: Spieler.game,
+      numberOfGamesPlayed: Spieler.numberOfGamesPlayed,
+      leastPointsWinning: Spieler.leastPointsWinning,
+      sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
+    );
+    
+    //settings.verboseTesting();
+    MySharedPreferences.saveData(settings);
   }
   
   static void addPoints(String name, int punkte){

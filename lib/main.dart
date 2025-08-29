@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(title: 'Punktspiel'),
+      home: MyHomePage(title: 'Punktspiel'),
     );
   }
 }
@@ -359,8 +359,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final _formKey = GlobalKey<FormState>();
 
+  final bool _weAreDebugging = false;//true;
+
   Widget _GameModeContent() {
-    return !_dontEditNames
+    return (!_dontEditNames || _weAreDebugging)
         ? Column(
             children: [
               Container(
@@ -371,8 +373,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   key: _formKey,
                   child: TextFormField(
                     controller: _addNameController,
-                    readOnly: _dontEditNames,
-                    enabled: !_dontEditNames,
+                    readOnly: _dontEditNames && !_weAreDebugging,
+                    enabled: !_dontEditNames || _weAreDebugging,
                     onTap: () {
                       setState(() => _gamesStarted = false);
                     },
@@ -381,7 +383,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           _formKey.currentState?.validate() ?? false;
                       if (isValid) {
                         setState(() {
-                          Spieler.addPlayer(newText);
+                          Spieler.addNewPlayer(newText);
                           _addNameController.clear();
                           namesFieldController.text = Spieler.names.join(", ");
                         });
@@ -405,7 +407,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               _reorderPlayersView(),
-              const Expanded(child: Text("")),//Flexible space.
+              //const Expanded(child: Text("")),//Flexible space.
               ExpansionTile(
                 title: Text(Locales.furtherSettingsTitle[Lang.l]),
                 //subtitle: Text('foo'),
@@ -473,11 +475,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   final messenger = ScaffoldMessenger.of(context);
                   final removedIndex = index;
-                  final removedItem = Spieler.names[index];
+                  final String removedName = Spieler.names[index];
+                  Teilnehmer? removedPlayer;
 
                   // Optimistic approach: remove that item and insert on undo.
                   setState(() {
-                    Spieler.removePlayer(removedItem);
+                    removedPlayer = Spieler.removePlayer(removedName);
                     namesFieldController.text = Spieler.names.join(", ");
                   });
 
@@ -485,15 +488,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   messenger.hideCurrentSnackBar();
                   messenger.showSnackBar(
                     SnackBar(
-                      content: Text(Locales.deletePlayer[Lang.l].format([removedItem]),),
-                      duration: const Duration(seconds: 2),
+                      content: Text(Locales.deletePlayer[Lang.l].format([removedName]),),
+                      //duration: const Duration(seconds: 2),
                       action: SnackBarAction(
                         label: Locales.undo[Lang.l],
                         onPressed: () {
                           if (!mounted) return;
                           setState(() {
                             // Reinsert
-                            Spieler.names.insert(removedIndex, removedItem);
+                            //Spieler.names.insert(removedIndex, removedName);
+                            Spieler.insertPlayer(removedPlayer ?? Teilnehmer(name: removedName), removedIndex);
                             namesFieldController.text = Spieler.names.join(", ");
                           });
                         },
@@ -576,8 +580,8 @@ class _MyHomePageState extends State<MyHomePage> {
           //width: 100,
           child: TextField(
             controller: namesFieldController,
-            readOnly: _dontEditNames,
-            enabled: !_dontEditNames,
+            readOnly: _dontEditNames && !_weAreDebugging,
+            enabled: !_dontEditNames || _weAreDebugging,
             onTap: () {
               setState(() => _gamesStarted = false);
             },
