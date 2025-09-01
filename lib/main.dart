@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:punktspiel/table.dart';
-import 'package:punktspiel/settings.dart';
+import 'package:punktspiel/screens/help_screen.dart';
+import 'package:punktspiel/screens/settings_screen.dart';
+import 'package:punktspiel/screens/table_screen.dart';
 import 'package:punktspiel/calc.dart';
 import 'package:punktspiel/models/games.dart';
 import 'package:punktspiel/locales.dart';
@@ -143,6 +144,8 @@ class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
   SettingsAppWidget settingsPage = const SettingsAppWidget();
+  HelpScreen helpPage = const HelpScreen();
+
   int _counter = 0;
 
   void _incrementCounter() {
@@ -378,6 +381,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () {
                       setState(() => _gamesStarted = false);
                     },
+                    //only if we need it.
+                    //onTapOutside: (_) => closeKbd(),
                     onFieldSubmitted: (newText) {
                       final isValid =
                           _formKey.currentState?.validate() ?? false;
@@ -406,6 +411,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
+              const SizedBox(height: 5),
               _reorderPlayersView(),
               //const Expanded(child: Text("")),//Flexible space.
               ExpansionTile(
@@ -704,10 +710,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ]);
 
-  Widget myHelpPage() {
-    return const Text("tbd");
-  }
-
   @override
   Widget build(BuildContext context) {
     Widget currentPage; // = myHomePage();
@@ -719,7 +721,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentPage = settingsPage;
         break;
       case 2:
-        currentPage = myHelpPage();
+        currentPage = const HelpScreen();
         break;
       case 3:
         currentPage = aboutMePage();

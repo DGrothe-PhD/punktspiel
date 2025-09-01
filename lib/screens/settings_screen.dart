@@ -48,19 +48,18 @@ class MySettingsPageState extends State<MySettingsPage> {
     ]);
   }
 
-  Widget buildSelectLanguagesMenu({bool wellBehaving = true}){
-    return DropdownButton<String>(
-    key: ValueKey(Object.hashAll(Lang.availableLanguages)),
-    isExpanded: true,
-    value: Lang.currentLanguageCode(),
-    onChanged: (String? value){
-      setState(() => Lang.setLanguage(value ?? "en"));
-    },
-    items: Lang.availableLanguages.map<DropdownMenuItem<String>>(
-      (String value) {
-        return DropdownMenuItem<String>(value: value, child: Text(value));
-      }).toList(),
-    menuWidth: 100,
+  Widget buildSelectLanguagesMenu({bool wellBehaving = true}) {
+    return PopupMenuButton<String>(
+      onSelected: (String? value) {
+        setState(() => Lang.setLanguage(value ?? "en"));
+      }, // (value) => Lang.setLanguage(value ?? "en"),
+      itemBuilder: (context) => Lang.availableLanguages
+          .map((lang) => PopupMenuItem(
+                value: lang,
+                child: Text(lang),
+              ))
+          .toList(),
+      child: Text(Lang.currentLanguageCode()),
     );
   }
   
@@ -108,32 +107,34 @@ class MySettingsPageState extends State<MySettingsPage> {
   Widget build(BuildContext context) {
     try {
       return Center(
-        child: Column(
-        children: <Widget>[
-          Row(
-        children:<Widget>[
-          const Icon(Icons.language),
-          const Text("\xA0"),
-          SizedBox(width: 111, child: buildSelectLanguagesMenu(),),
-          ],),
-          const SizedBox(height:177),
-          availableVersionInfo.isNotEmpty ? Text(availableVersionInfo) : const Text("…"),
-          // for FutureBuilder things look into GH history
-          ElevatedButton(
-            onPressed: //() {},
+          child: Column(children: <Widget>[
+            const Text("Sprache/Language"),
+        Row(
+          children: <Widget>[
+            const Icon(Icons.language),
+            SizedBox(
+              width: 111,
+              child: buildSelectLanguagesMenu(),
+            ),
+          ],
+        ),
+        const SizedBox(height: 177),
+        availableVersionInfo.isNotEmpty
+            ? Text(availableVersionInfo)
+            : const Text("…"),
+        // for FutureBuilder things look into GH history
+        ElevatedButton(
+          onPressed: //() {},
             getLatestAppVersionDetails,
-            style: Themes.cardButtonStyle(Themes.green, fixedSize: Themes.mediumButtonWidth),
-            child: const Text("Version Info"),
-          ),
-        ]
-      ));  
-    }
-  on HttpException catch(e){
+          style: Themes.cardButtonStyle(Themes.green,
+              fixedSize: Themes.mediumButtonWidth),
+          child: const Text("Version Info"),
+        ),
+      ]));
+    } on HttpException catch (e) {
       return Text(e.toString());
+    } catch (exception) {
+      return Text(exception.toString());
+    }
   }
-  catch (exception){
-    return Text(exception.toString());
-  }
-}
-
 }
