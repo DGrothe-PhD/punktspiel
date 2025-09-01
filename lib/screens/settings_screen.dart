@@ -50,7 +50,7 @@ class SettingsPage extends StatelessWidget {
 
   Widget _content(){
     //String currentVersionInfo = "";
-    String availableVersionInfo = "";
+    //String availableVersionInfo = "";
     //final now = DateTime.now();
     try {
       return Center(

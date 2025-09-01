@@ -166,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> submitPoints() async {
+    final messenger = ScaffoldMessenger.of(context);
     // Validating names list
     if (!_dontEditNames) {
       var namesList = namesFieldController.text.split(",");
@@ -192,6 +193,17 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
     Spieler.addPoints(selectedPlayerName, selectedPlayerPoints);
+    messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(
+      SnackBar(
+        content: Text("$selectedPlayerName gets $selectedPlayerPoints points."),
+        backgroundColor: const Color.fromARGB(255, 68, 146, 72),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),),
+        duration: const Duration(seconds: 2),
+      ),
+    );
     setState(() {
       numberFieldController.clear();
       selectedPlayerPoints = 0;
@@ -291,14 +303,18 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void deleteEverything() {
-    for (Teilnehmer t in Spieler.gruppe) {
-      t.punkte.clear();
-      _counter = 0;
+  Future<void> deleteEverything() async {
+    final confirmedDelete = await _showYesNoDialog("Are you sure?");
+    if (confirmedDelete) {
+      for (Teilnehmer t in Spieler.gruppe) {
+        t.punkte.clear();
+        _counter = 0;
+      }
+      setState(() {
+        //! ValueNotifier candidate
+        _dontEditNames = false;
+      });
     }
-    setState(() {
-      _dontEditNames = false;
-    });
   }
 
   Widget _TabbedContent() {
@@ -645,7 +661,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ElevatedButton(
           onPressed: submitPoints,
           style: Themes.cardButtonStyle(
-            Themes.sunflower,
+            elevation: 15,
+            WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.hovered)) {
+                return Themes.active;
+              }
+              return Themes.sunflowerColor;
+            }),
             fixedSize: Themes.mediumButtonWidth,
           ),
           child: Text(Locales.submit[Lang.l]),

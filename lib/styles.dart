@@ -29,13 +29,20 @@ class Themes{
   static Color active = const Color.fromARGB(255, 231, 209, 146);
   static Color pumpkinColor = const Color.fromARGB(255, 230, 124, 75);
   static dynamic pumpkin = WidgetStateProperty.all<Color>(pumpkinColor);
-  static dynamic sunflower = 
-    WidgetStateProperty.all<Color>(const Color.fromARGB(255, 243, 198, 76));
+  static Color sunflowerColor = const Color.fromARGB(255, 243, 198, 76);
+  static dynamic sunflower = WidgetStateProperty.all<Color>(sunflowerColor);
 
-  static ButtonStyle cardButtonStyle(WidgetStateProperty<Color> color, {WidgetStateProperty<Size?>? fixedSize}) {
+  static ButtonStyle cardButtonStyle<T>(
+      WidgetStateProperty<Color> color,
+      {WidgetStateProperty<Size?>? fixedSize,
+      double? elevation,
+      WidgetStateProperty<double?>? sophisticatedElevation,
+      }
+    ) {
     return ButtonStyle(
       backgroundColor: color,
       fixedSize: fixedSize,
+      elevation: sophisticatedElevation ?? WidgetStateProperty.all(elevation),
       shape: WidgetStateProperty.all<OutlinedBorder>(Themes.cardShape),
     );
   }
