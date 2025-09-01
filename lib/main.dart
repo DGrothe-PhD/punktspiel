@@ -143,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _MyHomePageState();
   TableExampleApp punkteTabelle = const TableExampleApp();
-  SettingsAppWidget settingsPage = const SettingsAppWidget();
+  SettingsPage settingsPage = SettingsPage();
   HelpScreen helpPage = const HelpScreen();
 
   int _counter = 0;

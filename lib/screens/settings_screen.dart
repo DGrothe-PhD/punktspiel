@@ -1,14 +1,35 @@
 import 'dart:io';
-import 'dart:convert';
+//import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:package_info_plus/package_info_plus.dart';
+//import 'package:flutter/services.dart';
+//import 'package:http/http.dart' as http;
+//import 'package:package_info_plus/package_info_plus.dart';
 import 'package:punktspiel/locales.dart';
 import 'package:punktspiel/styles.dart';
 
-class SettingsAppWidget extends StatelessWidget {
-  const SettingsAppWidget({super.key});
+class SettingsPage extends StatelessWidget {
+  SettingsPage({super.key});
+  
+  final ValueNotifier<String> selectedLanguage =
+      ValueNotifier(Lang.currentLanguageCode());
+
+  Widget _selectLanguagesMenu() {
+    return ValueListenableBuilder<String>(
+      valueListenable: selectedLanguage,
+      builder: (context, value, child) {
+        return PopupMenuButton<String>(
+          onSelected: (val) {
+            selectedLanguage.value = val;
+            Lang.setLanguage(val);
+          },
+          itemBuilder: (context) => Lang.availableLanguages
+              .map((lang) => PopupMenuItem(value: lang, child: Text(lang)))
+              .toList(),
+          child: Text(value),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,52 +42,54 @@ class SettingsAppWidget extends StatelessWidget {
         flexibleSpace: Themes.cardboardCanvas,
         title: Text(Locales.settingsTitle[Lang.l]),
       ),
-      body: const SingleChildScrollView(
-        child: MySettingsPage(),
+      body: SingleChildScrollView(
+        child: _content(),
       )
     );
   }
-}
 
-class MySettingsPage extends StatefulWidget{
-  const MySettingsPage({super.key});
-  @override
-  MySettingsPageState createState() => MySettingsPageState();
-}
-
-class MySettingsPageState extends State<MySettingsPage> {
-  String currentVersionInfo = "";
-  String availableVersionInfo = "";
-  final now = DateTime.now();
-
-  @override
-  void initState(){
-    super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-  }
-
-  Widget buildSelectLanguagesMenu({bool wellBehaving = true}) {
-    return PopupMenuButton<String>(
-      onSelected: (String? value) {
-        setState(() => Lang.setLanguage(value ?? "en"));
-      }, // (value) => Lang.setLanguage(value ?? "en"),
-      itemBuilder: (context) => Lang.availableLanguages
-          .map((lang) => PopupMenuItem(
-                value: lang,
-                child: Text(lang),
-              ))
-          .toList(),
-      child: Text(Lang.currentLanguageCode()),
-    );
+  Widget _content(){
+    //String currentVersionInfo = "";
+    String availableVersionInfo = "";
+    //final now = DateTime.now();
+    try {
+      return Center(
+          child: Column(children: <Widget>[
+            const Text("Sprache/Language"),
+        Row(
+          children: <Widget>[
+            const Icon(Icons.language),
+            SizedBox(
+              width: 111,
+              child: _selectLanguagesMenu(),
+            ),
+          ],
+        ),
+        const SizedBox(height: 177),
+        /*availableVersionInfo.isNotEmpty
+            ? Text(availableVersionInfo)
+            : const Text("…"),*/
+        // for FutureBuilder things look into GH history
+        /*ElevatedButton(
+          onPressed: //() {},
+            _getLatestAppVersionDetails,
+          style: Themes.cardButtonStyle(Themes.green,
+              fixedSize: Themes.mediumButtonWidth),
+          child: const Text("Version Info"),
+        ),*/
+      ]));
+    } on HttpException catch (e) {
+      return Text(e.toString());
+    } catch (exception) {
+      return Text(exception.toString());
+    }
   }
   
   //Network Request to get latest release version of this app.
-  void getLatestAppVersionDetails() async {
-    currentVersionInfo = "";
-    availableVersionInfo = "";
+  /*
+  void _getLatestAppVersionDetails() async {
+    String currentVersionInfo = "";
+    String availableVersionInfo = "";
     try{
       final PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String appName = packageInfo.appName;
@@ -89,10 +112,10 @@ class MySettingsPageState extends State<MySettingsPage> {
         Map<String, dynamic> json = jsonDecode(response.body);
         String tagName = json['tag_name'];
         String publishedAt = json['published_at'];
-        setState(() {
+        //setState(() {
           availableVersionInfo = "Installed:\n$currentVersionInfo\n\n" 
           "Latest version: $tagName\nPublished at: $publishedAt\n";
-        });
+        //});
       }
       else{
         throw HttpException(Locales.isOffline[Lang.l]);
@@ -101,40 +124,5 @@ class MySettingsPageState extends State<MySettingsPage> {
     catch(exception){
       availableVersionInfo = Locales.isOffline[Lang.l];
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    try {
-      return Center(
-          child: Column(children: <Widget>[
-            const Text("Sprache/Language"),
-        Row(
-          children: <Widget>[
-            const Icon(Icons.language),
-            SizedBox(
-              width: 111,
-              child: buildSelectLanguagesMenu(),
-            ),
-          ],
-        ),
-        const SizedBox(height: 177),
-        availableVersionInfo.isNotEmpty
-            ? Text(availableVersionInfo)
-            : const Text("…"),
-        // for FutureBuilder things look into GH history
-        ElevatedButton(
-          onPressed: //() {},
-            getLatestAppVersionDetails,
-          style: Themes.cardButtonStyle(Themes.green,
-              fixedSize: Themes.mediumButtonWidth),
-          child: const Text("Version Info"),
-        ),
-      ]));
-    } on HttpException catch (e) {
-      return Text(e.toString());
-    } catch (exception) {
-      return Text(exception.toString());
-    }
-  }
+  }*/
 }
