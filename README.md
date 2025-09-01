@@ -19,7 +19,7 @@ You'll find
 ### Winning with fewer points
 * Rummy
 
-### Winning with more points (to be done)
+### Winning with more points
 * Scrabble (crossword game): get points for words
 
 ## Features
