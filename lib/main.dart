@@ -84,32 +84,10 @@ class _MyHomePageState extends State<MyHomePage> {
   final double buttonHeight = 30;
 
   int selectedPlayerPoints = 0;
-  int whoseTurnIndex = 0;
-  int whoseFirstTurnIndex = 0;
-  String selectedPlayerName = Spieler.names.first;
+  final ValueNotifier<int> whoseTurnIndex = ValueNotifier(0);
+  final ValueNotifier<int> whoseFirstTurnIndex = ValueNotifier(0);
+  final ValueNotifier<String> selectedPlayerName = ValueNotifier(Spieler.names.first);
 
-  /*
-  final ValueNotifier<String> selectedLanguage =
-      ValueNotifier(Lang.currentLanguageCode());
-
-      Widget _selectLanguagesMenu() {
-    return ValueListenableBuilder<String>(
-      valueListenable: selectedLanguage,
-      builder: (context, value, child) {
-        return PopupMenuButton<String>(
-          onSelected: (val) {
-            selectedLanguage.value = val;
-            Lang.setLanguage(val);
-          },
-          itemBuilder: (context) => Lang.availableLanguages
-              .map((lang) => PopupMenuItem(value: lang, child: Text(lang)))
-              .toList(),
-          child: Text(value),
-        );
-      },
-    );
-  }
-  */
   final ValueNotifier<bool> _dontEditNames = ValueNotifier(false);
   final ValueNotifier<bool> _gamesStarted = ValueNotifier(false);
   final Features _features = Features();
@@ -128,18 +106,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildSelectableNamesMenu() {
-    if (!Spieler.names.contains(selectedPlayerName)) {
-      selectedPlayerName = Spieler.names.isNotEmpty ? Spieler.names.first : "";
+    if (!Spieler.names.contains(selectedPlayerName.value)) {
+      selectedPlayerName.value = Spieler.names.isNotEmpty ? Spieler.names.first : "";
     }
 
     return DropdownButton<String>(
       key: ValueKey(Object.hashAll(Spieler.names)),
       isExpanded: true,
       padding: edgeInsets,
-      value: selectedPlayerName,
+      value: selectedPlayerName.value,
       onChanged: (String? value) {
         setState(() {
-          selectedPlayerName = value ?? "";
+          selectedPlayerName.value = value ?? "";
         });
       },
       items: Spieler.names.map<DropdownMenuItem<String>>((String value) {
@@ -174,22 +152,17 @@ class _MyHomePageState extends State<MyHomePage> {
   SettingsPage settingsPage = SettingsPage();
   HelpScreen helpPage = const HelpScreen();
 
-  int _counter = 0;
+  final ValueNotifier<int> _counter = ValueNotifier(0);
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-      whoseTurnIndex = (whoseFirstTurnIndex + _counter) % Spieler.names.length;
-    });
+    _counter.value++;
+    whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) % Spieler.names.length;
   }
 
   void _decrementCounter() {
-    if (_counter > 0) {
-      setState(() {
-        _counter--;
-        whoseTurnIndex =
-            (whoseFirstTurnIndex + _counter) % Spieler.names.length;
-      });
+    if (_counter.value > 0) {
+      _counter.value--;
+      whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) % Spieler.names.length;
     }
   }
 
@@ -202,11 +175,8 @@ class _MyHomePageState extends State<MyHomePage> {
         bool onlyOnePlayer = await _showYesNoDialog(
             Locales.noColon[Lang.l].format([namesFieldController.text]));
         if (!onlyOnePlayer) {
-          setState(() {
-            // ! tryna get rid of setstate here too
-            numberFieldController.clear();
-            selectedPlayerPoints = 0;
-          });
+          numberFieldController.clear();
+          selectedPlayerPoints = 0;
           return;
         }
       }
@@ -214,18 +184,18 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // Validating and submitting points
-    if (Spieler.fillingTwice(selectedPlayerName)) {
+    if (Spieler.fillingTwice(selectedPlayerName.value)) {
       var empty = Spieler.whoIsEmpty();
       _showAlertDialog(
-          "${Locales.noSecondEntry[Lang.l].format([selectedPlayerName])}\n" +
+          "${Locales.noSecondEntry[Lang.l].format([selectedPlayerName.value])}\n" +
               "${Locales.hint[Lang.l]} ${empty.join(', ')}");
       return;
     }
-    Spieler.addPoints(selectedPlayerName, selectedPlayerPoints);
+    Spieler.addPoints(selectedPlayerName.value, selectedPlayerPoints);
     messenger.hideCurrentSnackBar();
       messenger.showSnackBar(
       SnackBar(
-        content: Text("$selectedPlayerName gets $selectedPlayerPoints points."),
+        content: Text("${selectedPlayerName.value} gets $selectedPlayerPoints points."),
         backgroundColor: const Color.fromARGB(255, 68, 146, 72),
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
@@ -255,19 +225,15 @@ class _MyHomePageState extends State<MyHomePage> {
         return;
       }
       Spieler.names = names;
-      selectedPlayerName = Spieler.names.first;
+      selectedPlayerName.value = Spieler.names.first;
       setState(() => _gamesStarted.value = true);
     }
   }
 
-//! ###
+//! ### this setstate is a waste of resources.
   void setOpener() {
-    if (!_dontEditNames.value) {
-      setState(() {
-        whoseFirstTurnIndex = Spieler.names.indexOf(selectedPlayerName);
-        whoseTurnIndex = whoseFirstTurnIndex;
-      });
-    }
+    whoseFirstTurnIndex.value = Spieler.names.indexOf(selectedPlayerName.value);
+    whoseTurnIndex.value = whoseFirstTurnIndex.value;
   }
 
   void closeKbd() {
@@ -327,7 +293,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void deleteLastEntry() {
     bool rowWasJustFilled = Spieler.filledFullRound();
-    Spieler.deleteLastEntry(selectedPlayerName);
+    Spieler.deleteLastEntry(selectedPlayerName.value);
     if (rowWasJustFilled) {
       _decrementCounter();
     }
@@ -338,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (confirmedDelete) {
       for (Teilnehmer t in Spieler.gruppe) {
         t.punkte.clear();
-        _counter = 0;
+        _counter.value = 0;
       }
       _dontEditNames.value = false;
     }
@@ -617,22 +583,30 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 60,
               child: Text(Locales.playedRounds[Lang.l]),
             ),
-            //! TODO _counter a listenable.
             Container(
               alignment: Alignment.bottomRight,
               width: 42,
-              child: Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headlineSmall,
+              child: ValueListenableBuilder(
+                valueListenable: _counter,
+                builder: (context, numberOfGames, _) {
+                  return Text(
+                    '$numberOfGames',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  );
+                },
               ),
             ),
-            //! TODO whoseTurnIndex a listenable.
             Container(
               margin: edgeInsets,
-              child: Text((whoseTurnIndex < Spieler.names.length)
-                  ? Locales.opener[Lang.l]
-                      .format([Spieler.names[whoseTurnIndex].truncate(10)])
-                  : "< empty >"),
+              child: ValueListenableBuilder(
+                valueListenable: whoseTurnIndex,
+                builder: (context, whoseTurn, _) {
+                  return Text((whoseTurn < Spieler.names.length)
+                      ? Locales.opener[Lang.l]
+                          .format([Spieler.names[whoseTurn].truncate(10)])
+                      : "< empty >");
+                },
+              ),
             ),
           ],
         ),
@@ -691,10 +665,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
-            ElevatedButton(
-              onPressed: setOpener,
-              style: Themes.cardButtonStyle(Themes.green),
-              child: const Icon(Icons.chair),
+            ValueListenableBuilder<bool>(
+              valueListenable: _dontEditNames,
+              builder: (context, dontEdit, _) {
+                return ElevatedButton(
+                  onPressed: dontEdit ? null : setOpener,
+                  style: Themes.cardButtonStyle(
+                    WidgetStateProperty.resolveWith<Color>(
+                      (states) {
+                        if (states.contains(WidgetState.disabled)) {
+                          return Colors.grey; // disabled-Farbe
+                        }
+                        return Themes.greenColor; // aktive Farbe
+                      },
+                    ),
+                  ),
+                  child: const Icon(Icons.chair),
+                );
+              },
             ),
             const SizedBox(width: 10),
             ElevatedButton(
