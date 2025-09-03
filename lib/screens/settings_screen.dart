@@ -35,13 +35,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset : true,
-      appBar: AppBar(
-        backgroundColor: Themes.greenishColor,
-        shadowColor: Colors.black87,
-        elevation: 4,
-        flexibleSpace: Themes.cardboardCanvas,
-        title: Text(Locales.settingsTitle[Lang.l]),
-      ),
+      appBar: Themes.cardboardAppBar(Locales.settingsTitle[Lang.l]),
       body: SingleChildScrollView(
         child: _content(),
       )

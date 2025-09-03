@@ -57,12 +57,8 @@ class TableExampleApp extends StatelessWidget {
     tableContext = context;
     return Scaffold(
       resizeToAvoidBottomInset: true, //maybe false if keyboard
-      appBar: AppBar(
-        flexibleSpace: Themes.cardboardCanvas,
-        title: Text(Locales.resultsTitle[Lang.l]),
-        backgroundColor: Themes.greenishColor,
-        shadowColor: Colors.black87,
-        elevation: 4,
+      appBar: Themes.cardboardAppBar(
+        Locales.resultsTitle[Lang.l],
         actions: [
           IconButton(
             tooltip: Locales.shareEverything[Lang.l],

@@ -15,6 +15,14 @@ class Themes{
       ),
     ],
   );
+  static AppBar cardboardAppBar(String title, {List<Widget>? actions}) => AppBar(
+    backgroundColor: Themes.greenishColor,
+    shadowColor: Colors.black87,
+    elevation: 4,
+    flexibleSpace: Themes.cardboardCanvas,
+    title: Text(title),
+    actions: actions,
+  );
 
   static dynamic mediumButtonWidth = WidgetStateProperty.all<Size>(const Size.fromWidth(150.0));
   //Colors
