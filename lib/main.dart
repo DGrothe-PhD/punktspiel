@@ -4,9 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+// Screens
 import 'package:punktspiel/screens/help_screen.dart';
 import 'package:punktspiel/screens/settings_screen.dart';
 import 'package:punktspiel/screens/table_screen.dart';
+
+// Utils
+//import 'package:punktspiel/utils/listenables.dart';
+
+// Backend and styles
 import 'package:punktspiel/calc.dart';
 import 'package:punktspiel/models/games.dart';
 import 'package:punktspiel/locales.dart';
@@ -81,8 +88,30 @@ class _MyHomePageState extends State<MyHomePage> {
   int whoseFirstTurnIndex = 0;
   String selectedPlayerName = Spieler.names.first;
 
-  bool _dontEditNames = false;
-  bool _gamesStarted = false;
+  /*
+  final ValueNotifier<String> selectedLanguage =
+      ValueNotifier(Lang.currentLanguageCode());
+
+      Widget _selectLanguagesMenu() {
+    return ValueListenableBuilder<String>(
+      valueListenable: selectedLanguage,
+      builder: (context, value, child) {
+        return PopupMenuButton<String>(
+          onSelected: (val) {
+            selectedLanguage.value = val;
+            Lang.setLanguage(val);
+          },
+          itemBuilder: (context) => Lang.availableLanguages
+              .map((lang) => PopupMenuItem(value: lang, child: Text(lang)))
+              .toList(),
+          child: Text(value),
+        );
+      },
+    );
+  }
+  */
+  final ValueNotifier<bool> _dontEditNames = ValueNotifier(false);
+  final ValueNotifier<bool> _gamesStarted = ValueNotifier(false);
   final Features _features = Features();
 
   @override
@@ -90,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     if (Spieler.hasMembers) {
       namesFieldController.text = Spieler.names.join(", ");
-      _gamesStarted = true;
+      _gamesStarted.value = true;
     }
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -119,24 +148,23 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+//no ValueListenableBuilder here, it's changing every few hours in most use cases.
   Widget buildPointsWinningSwitch() {
-    return DropdownButton<String>(
+    return PopupMenuButton<String>(
       key: ValueKey(Object.hashAll(Locales.pointsRule[Lang.l])),
-      isExpanded: true,
-      value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
+      //value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
       padding: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
-      onChanged: (_dontEditNames || Spieler.hasWinningRuleSet)
+      onSelected: (_dontEditNames.value || Spieler.hasWinningRuleSet.value)
           ? null
-          : (String? value) {
+          : (value) {
               setState(() => Spieler.leastPointsWinning =
                   (value == Locales.pointsRule[Lang.l].first));
               // We need that setState, otherwise the dropdown doesn't change.
             },
       //disabledHint: ,
-      items: Locales.pointsRule[Lang.l]
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(value: value, child: Text(value));
-      }).toList(),
+      itemBuilder: (context) => Locales.pointsRule[Lang.l]
+          .map((rule) => PopupMenuItem<String>(value: rule, child: Text(rule))).toList(),
+      child: Text(Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1]),
       //menuWidth: 200,
     );
   }
@@ -168,20 +196,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> submitPoints() async {
     final messenger = ScaffoldMessenger.of(context);
     // Validating names list
-    if (!_dontEditNames) {
+    if (!_dontEditNames.value) {
       var namesList = namesFieldController.text.split(",");
       if (namesList.length < 2) {
         bool onlyOnePlayer = await _showYesNoDialog(
             Locales.noColon[Lang.l].format([namesFieldController.text]));
         if (!onlyOnePlayer) {
           setState(() {
+            // ! tryna get rid of setstate here too
             numberFieldController.clear();
             selectedPlayerPoints = 0;
           });
           return;
         }
       }
-      setState(() => _dontEditNames = true);
+      _dontEditNames.value = true;
     }
 
     // Validating and submitting points
@@ -227,12 +256,13 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       Spieler.names = names;
       selectedPlayerName = Spieler.names.first;
-      setState(() => _gamesStarted = true);
+      setState(() => _gamesStarted.value = true);
     }
   }
 
+//! ###
   void setOpener() {
-    if (!_dontEditNames) {
+    if (!_dontEditNames.value) {
       setState(() {
         whoseFirstTurnIndex = Spieler.names.indexOf(selectedPlayerName);
         whoseTurnIndex = whoseFirstTurnIndex;
@@ -310,10 +340,7 @@ class _MyHomePageState extends State<MyHomePage> {
         t.punkte.clear();
         _counter = 0;
       }
-      setState(() {
-        //! ValueNotifier candidate
-        _dontEditNames = false;
-      });
+      _dontEditNames.value = false;
     }
   }
 
@@ -378,11 +405,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final bool _weAreDebugging = false;//true;
+  //final bool _weAreDebugging = true;
 
+//! ### a lot of setState tangling up here
+//! TODO watch out for the return ternary here. ValueListenable?
   Widget _GameModeContent() {
-    return (!_dontEditNames || _weAreDebugging)
-        ? Column(
+    return 
+    //(!_dontEditNames.value //|| _weAreDebugging
+    //)
+    //    ? 
+    Column(
             children: [
               Container(
                 margin: edgeInsets,
@@ -390,13 +422,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 //width: 100,
                 child: Form(
                   key: _formKey,
-                  child: TextFormField(
+                  child: ValueListenableBuilder(
+                    valueListenable: _dontEditNames, 
+                    builder: (context, dontEdit, _) {
+                  return TextFormField(
                     controller: _addNameController,
-                    readOnly: _dontEditNames && !_weAreDebugging,
-                    enabled: !_dontEditNames || _weAreDebugging,
-                    onTap: () {
-                      setState(() => _gamesStarted = false);
-                    },
+                    readOnly: dontEdit,// && !_weAreDebugging,
+                    enabled: !dontEdit,// || _weAreDebugging,
+                    onTap: () => _gamesStarted.value = false,
                     //only if we need it.
                     //onTapOutside: (_) => closeKbd(),
                     onFieldSubmitted: (newText) {
@@ -424,24 +457,30 @@ class _MyHomePageState extends State<MyHomePage> {
                       isDense: true,
                       suffixIcon: _getClearButton(),
                     ),
-                  ),
+                  );},),
                 ),
               ),
               const SizedBox(height: 5),
               _reorderPlayersView(),
               //const Expanded(child: Text("")),//Flexible space.
-              ExpansionTile(
-                title: Text(Locales.furtherSettingsTitle[Lang.l]),
-                //subtitle: Text('foo'),
-                controlAffinity: ListTileControlAffinity.trailing,
-                children: <Widget>[buildGamesMenu(), const Text("✍️ tbd")],
+              ValueListenableBuilder<bool>(
+                valueListenable: _dontEditNames,
+                builder: (context, dontEdit, _) {
+                  if(dontEdit){return const Text("⏳");}
+                  return ExpansionTile(
+                    title: Text(Locales.furtherSettingsTitle[Lang.l]),
+                    //subtitle: Text('foo'),
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    children: <Widget>[buildGamesMenu(), const Text("✍️ tbd")],
+                  );
+                }
               ),
               const SizedBox(
                   height:
                       64), //! TODO consider moving this up when stuff happens.
             ],
-          )
-        : const Text("⏳");
+          );
+        //: const Text("⏳");
   }
 
   String? _selectedGame;
@@ -546,7 +585,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return null;
   }
-
+  //! ### setState tangled up
   Widget _HomeContent() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -578,6 +617,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 60,
               child: Text(Locales.playedRounds[Lang.l]),
             ),
+            //! TODO _counter a listenable.
             Container(
               alignment: Alignment.bottomRight,
               width: 42,
@@ -586,6 +626,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
+            //! TODO whoseTurnIndex a listenable.
             Container(
               margin: edgeInsets,
               child: Text((whoseTurnIndex < Spieler.names.length)
@@ -598,25 +639,26 @@ class _MyHomePageState extends State<MyHomePage> {
         // Field for names
         Container(
           margin: edgeInsets,
-          //height: 100,
-          //width: 100,
-          child: TextField(
-            controller: namesFieldController,
-            readOnly: _dontEditNames && !_weAreDebugging,
-            enabled: !_dontEditNames || _weAreDebugging,
-            onTap: () {
-              setState(() => _gamesStarted = false);
+          child: ValueListenableBuilder<bool>(
+            valueListenable: _dontEditNames,
+            builder: (context, dontEdit, _) {
+              return TextField(
+                controller: namesFieldController,
+                readOnly: dontEdit,// && !_weAreDebugging,
+                enabled: !dontEdit,// || _weAreDebugging,
+                onTap: () => _gamesStarted.value = false,
+                onSubmitted: (newText) => _finishEditingNames(newText),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Themes.greenishColor)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Themes.active)),
+                  labelText: Locales.players[Lang.l],
+                  isDense: true,
+                ),
+              );
             },
-            onSubmitted: (newText) => _finishEditingNames(newText),
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Themes.greenishColor)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Themes.active)),
-              labelText: Locales.players[Lang.l],
-              isDense: true,
-            ),
           ),
         ),
         // Number field row
@@ -627,21 +669,26 @@ class _MyHomePageState extends State<MyHomePage> {
               //height: 100,
               width: 150,
               // Number field to enter points
-              child: TextField(
-                enabled: _gamesStarted,
-                controller: numberFieldController,
-                onChanged: (newText) {
-                  selectedPlayerPoints = int.tryParse(newText) ?? 0;
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _gamesStarted,
+                builder: (context, gamesRunning, _) {
+                  return TextField(
+                    enabled: gamesRunning,
+                    controller: numberFieldController,
+                    onChanged: (newText) {
+                      selectedPlayerPoints = int.tryParse(newText) ?? 0;
+                    },
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: Locales.points[Lang.l],
+                      isDense: true,
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                  );
                 },
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: Locales.points[Lang.l],
-                  isDense: true,
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
               ),
             ),
             ElevatedButton(
@@ -661,10 +708,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ElevatedButton(
           onPressed: submitPoints,
           style: Themes.cardButtonStyle(
-            elevation: 15,
             WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.hovered)) {
-                return Themes.active;
+                return Colors.yellow.shade300;
               }
               return Themes.sunflowerColor;
             }),
@@ -774,8 +820,6 @@ class _MyHomePageState extends State<MyHomePage> {
           child: NavigationBar(
             height: 50.0,
             backgroundColor: Themes.greenishColor.withAlpha(175),
-            //shadowColor: Colors.black87,
-            //elevation: 4,
             onDestinationSelected: (int index) {
               setState(() {
                 currentPageIndex = index;
@@ -784,7 +828,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //Style and coloring
             indicatorColor: Themes.active,
             indicatorShape: ShadowedShapeBorder(
-              shape: Themes.cardShape, // dein statisches RoundedRectangleBorder
+              shape: Themes.cardShape,
               shadows: [
                 const BoxShadow(
                   color: Colors.black54,

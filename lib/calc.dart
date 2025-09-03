@@ -1,6 +1,7 @@
 //import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart' show ValueNotifier;
 import 'package:intl/intl.dart';
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
 import 'package:sprintf/sprintf.dart';
@@ -12,7 +13,8 @@ import 'package:punktspiel/models/games.dart';
 class Spieler{
   static List<String> _names = ["Eins", "Zwei", "Drei", "Vier" ];
   static List<Teilnehmer> gruppe = [];
-  static bool hasWinningRuleSet = false;
+  //static bool hasWinningRuleSet = false;
+  static final hasWinningRuleSet = ValueNotifier<bool>(false);
   static bool hasMembers = false;
   static final Features _features = Features();
 
@@ -29,13 +31,13 @@ class Spieler{
       Game found = _features.games.lookup(value);
       if(found.leastPointsWinning != null){
         leastPointsWinning = found.leastPointsWinning!;
-        hasWinningRuleSet = true;
+        hasWinningRuleSet.value = true;
         return;
       }
     }
     bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
     if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
-    hasWinningRuleSet = false;
+    hasWinningRuleSet.value = false;
   }
 
   // default: rummy, lowest number of points is winning, as opposed to scrabble.
@@ -69,7 +71,7 @@ class Spieler{
       else{
         bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
         if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
-        hasWinningRuleSet = false;
+        hasWinningRuleSet.value = false;
       }
       
       List<String>? namesPreset = await MySharedPreferences.getNames();
