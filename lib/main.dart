@@ -90,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final ValueNotifier<bool> _dontEditNames = ValueNotifier(false);
   final ValueNotifier<bool> _gamesStarted = ValueNotifier(false);
+  final ValueNotifier<bool> _tableVisible = ValueNotifier(false);
   final Features _features = Features();
 
   @override
@@ -105,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ]);
   }
 
+//! TODO listenable here
   Widget buildSelectableNamesMenu() {
     if (!Spieler.names.contains(selectedPlayerName.value)) {
       selectedPlayerName.value = Spieler.names.isNotEmpty ? Spieler.names.first : "";
@@ -203,10 +205,10 @@ class _MyHomePageState extends State<MyHomePage> {
         duration: const Duration(seconds: 2),
       ),
     );
-    setState(() {
-      numberFieldController.clear();
-      selectedPlayerPoints = 0;
-    });
+
+    numberFieldController.clear();
+    selectedPlayerPoints = 0;
+
     if (Spieler.filledFullRound()) {
       _incrementCounter();
     }
@@ -226,11 +228,11 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       Spieler.names = names;
       selectedPlayerName.value = Spieler.names.first;
+      //! TODO get _gamesStarted notified to where needed and then remove setstate
       setState(() => _gamesStarted.value = true);
     }
   }
 
-//! ### this setstate is a waste of resources.
   void setOpener() {
     whoseFirstTurnIndex.value = Spieler.names.indexOf(selectedPlayerName.value);
     whoseTurnIndex.value = whoseFirstTurnIndex.value;
@@ -286,9 +288,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void togglePointsView() {
-    setState(() {
-      Lang.tableVisible = !Lang.tableVisible;
-    });
+    _tableVisible.value = !_tableVisible.value;
   }
 
   void deleteLastEntry() {
@@ -720,7 +720,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget myHomePage() {
     return Stack(children: <Widget>[
-      Lang.tableVisible ? punkteTabelle : _TabbedContent(), // _HomeContent(),
+      ValueListenableBuilder(
+        valueListenable: _tableVisible,
+        builder: (context, isVisible, _) {
+          if (isVisible) {
+            return punkteTabelle;
+          }
+            return _TabbedContent();
+      }),
       Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
@@ -729,8 +736,13 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: const Icon(Icons.table_view),
             onPressed: togglePointsView,
             style: Themes.cardButtonStyle(Themes.green,
-                fixedSize: Themes.mediumButtonWidth),
-            label: Text("${Lang.tableVisible ? "Hide " : "Show "}Table"),
+              fixedSize: Themes.mediumButtonWidth),
+            label: ValueListenableBuilder(
+              valueListenable: _tableVisible,
+              builder: (context, isVisible, _){
+                  return Text("${isVisible ? "Hide " : "Show "}Table");
+              }
+            ),
           ),
         ),
       )

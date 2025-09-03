@@ -6,8 +6,6 @@ import 'package:punktspiel/preferences/mysharedpreferences.dart';
 // I know that officially this is done differently, however, this is a MVP.
 // Just to let English-speaking people use and understand my little app as well.
 class Lang{
-  static bool tableVisible = false;
-
   static int l = 0;
   static List<String> availableLanguages = ["de", "en", "fr"];
 
