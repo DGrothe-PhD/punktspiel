@@ -10,8 +10,9 @@ import 'package:punktspiel/screens/help_screen.dart';
 import 'package:punktspiel/screens/settings_screen.dart';
 import 'package:punktspiel/screens/table_screen.dart';
 
+import 'package:punktspiel/widgets/points_entry_row.dart';
 // Utils
-//import 'package:punktspiel/utils/listenables.dart';
+import 'package:punktspiel/utils/listenables.dart';
 
 // Backend and styles
 import 'package:punktspiel/calc.dart';
@@ -65,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //Otherwise, stuff happens, such as that a name appears in a number field.
   final TextEditingController numberFieldController = TextEditingController();
   final TextEditingController namesFieldController = TextEditingController();
+
   final TextEditingController _addNameController = TextEditingController();
   final TextEditingController selectableNamesMenuController =
       TextEditingController();
@@ -84,11 +86,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final double buttonHeight = 30;
 
   int selectedPlayerPoints = 0;
-  final ValueNotifier<int> whoseTurnIndex = ValueNotifier(0);
-  final ValueNotifier<int> whoseFirstTurnIndex = ValueNotifier(0);
-  final ValueNotifier<String> selectedPlayerName = ValueNotifier(Spieler.names.first);
+  final ValueNotifier<int> whoseTurnIndex = ValueNotifier(0);//check
+  final ValueNotifier<int> whoseFirstTurnIndex = ValueNotifier(0);//check
+  final ValueNotifier<String> selectedPlayerName = ValueNotifier(Spieler.names.first);//coeck
 
-  final ValueNotifier<bool> _dontEditNames = ValueNotifier(false);
+  final ValueNotifier<bool> _dontEditNames = ValueNotifier(false);//check
   final ValueNotifier<bool> _gamesStarted = ValueNotifier(false);
   final ValueNotifier<bool> _tableVisible = ValueNotifier(false);
   final Features _features = Features();
@@ -100,31 +102,34 @@ class _MyHomePageState extends State<MyHomePage> {
       namesFieldController.text = Spieler.names.join(", ");
       _gamesStarted.value = true;
     }
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
   }
 
-//! TODO listenable here
-  Widget buildSelectableNamesMenu() {
+   Widget buildSelectableNamesMenu() {
     if (!Spieler.names.contains(selectedPlayerName.value)) {
       selectedPlayerName.value = Spieler.names.isNotEmpty ? Spieler.names.first : "";
     }
 
-    return DropdownButton<String>(
-      key: ValueKey(Object.hashAll(Spieler.names)),
-      isExpanded: true,
-      padding: edgeInsets,
-      value: selectedPlayerName.value,
-      onChanged: (String? value) {
-        setState(() {
-          selectedPlayerName.value = value ?? "";
-        });
-      },
-      items: Spieler.names.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(value: value, child: Text(value));
-      }).toList(),
+    return ValueListenableBuilder(
+      valueListenable: selectedPlayerName,
+      builder: (context, theName, _,) {
+        return DropdownButton<String>(
+          key: ValueKey(Object.hashAll(Spieler.names)),
+          isExpanded: true,
+          padding: edgeInsets,
+          value: theName,
+          onChanged: (String? value) {
+            selectedPlayerName.value = value ?? "";
+          },
+          items: Spieler.names.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(value: value, child: Text(value));
+          }).toList(),
+        );
+      }
     );
   }
 
@@ -228,8 +233,8 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       Spieler.names = names;
       selectedPlayerName.value = Spieler.names.first;
-      //! TODO get _gamesStarted notified to where needed and then remove setstate
-      setState(() => _gamesStarted.value = true);
+      _gamesStarted.value = true;
+      setState((){});
     }
   }
 
@@ -646,21 +651,12 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ValueListenableBuilder<bool>(
                 valueListenable: _gamesStarted,
                 builder: (context, gamesRunning, _) {
-                  return TextField(
-                    enabled: gamesRunning,
+                  return PointsEntryRow(
                     controller: numberFieldController,
+                    enabled: gamesRunning,
                     onChanged: (newText) {
                       selectedPlayerPoints = int.tryParse(newText) ?? 0;
                     },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: Locales.points[Lang.l],
-                      isDense: true,
-                    ),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
                   );
                 },
               ),
