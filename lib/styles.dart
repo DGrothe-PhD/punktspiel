@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Themes{
   //Shapes
-  static RoundedRectangleBorder cardShape = RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(7));
+  static RoundedRectangleBorder cardShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(7));
   static Stack cardboardCanvas = Stack(
     fit: StackFit.expand,
     children: [
