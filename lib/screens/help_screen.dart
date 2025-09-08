@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+//import 'package:flutter_html/flutter_html.dart';
 import 'package:punktspiel/locales.dart';
 import 'package:punktspiel/styles.dart';
 
@@ -27,7 +27,8 @@ class HelpScreen extends StatelessWidget {
   //&ldquo;Game mode&rdquo;
 
   Widget helpScreenContent(){
-    return Html(
+    return const Text("");
+    /* Html(
       data: """<style>$_cssHelpStyle</style>
       <h1>How to use this app</h1>
       <h2>Start a game</h2>
@@ -37,6 +38,6 @@ class HelpScreen extends StatelessWidget {
       <p>Next, choose a player who will start, and denote the player as the one who starts by tapping the seat button.</p>
       <p>Submitting points is as easy as tapping on the Points: field, typing something in (a number keypad will appear) and then hit <b>Submit</b>.
       There are also buttons to delete the last number you submitted, or to delete it all</p>"""
-    );
+    );*/
   }
 }

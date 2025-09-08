@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown/markdown.dart' as md;
-import 'package:flutter_html/flutter_html.dart';
+//import 'package:flutter_html/flutter_html.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'package:share_plus/share_plus.dart';
@@ -42,9 +42,9 @@ class StyleDecorator {
     return md.markdownToHtml(inputText);
   }
 
-  static Html viewMd(String inputText, {bool isMD = true}) {
+  /*static Html viewMd(String inputText, {bool isMD = true}) {
     return Html(data: isMD ? write(inputText) : inputText);
-  }
+  }*/
 }
 
 BuildContext? tableContext;
