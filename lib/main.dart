@@ -838,8 +838,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-            labelTextStyle: WidgetStateProperty.all<TextStyle>(
-                TextStyle(color: Themes.darkgreen)),
+            /*labelTextStyle: WidgetStateProperty.all<TextStyle>(
+                TextStyle(color: Themes.darkgreen)),*/
             labelPadding: const EdgeInsets.all(5),
             labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
             //Functionality
@@ -894,3 +894,4 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 }
+
