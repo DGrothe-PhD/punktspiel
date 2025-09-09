@@ -840,7 +840,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             /*labelTextStyle: WidgetStateProperty.all<TextStyle>(
                 TextStyle(color: Themes.darkgreen)),*/
-            labelPadding: const EdgeInsets.all(5),
+            //labelPadding: const EdgeInsets.all(5),
             labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
             //Functionality
             selectedIndex: currentPageIndex,
@@ -894,4 +894,5 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 }
+
 
