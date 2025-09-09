@@ -202,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
     messenger.hideCurrentSnackBar();
       messenger.showSnackBar(
       SnackBar(
-        content: Text("${selectedPlayerName.value} gets $selectedPlayerPoints points."),
+        content: Text(Locales.submitFeedback[Lang.l].format([selectedPlayerName.value, selectedPlayerPoints])),
         backgroundColor: const Color.fromARGB(255, 68, 146, 72),
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
@@ -689,7 +689,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
         buildSelectableNamesMenu(),
-        ElevatedButton(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          ElevatedButton(
           onPressed: submitPoints,
           style: Themes.cardButtonStyle(
             WidgetStateProperty.resolveWith((states) {
@@ -698,17 +701,19 @@ class _MyHomePageState extends State<MyHomePage> {
               }
               return Themes.sunflowerColor;
             }),
-            fixedSize: Themes.mediumButtonWidth,
+            fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(117.0)),
           ),
           child: Text(Locales.submit[Lang.l]),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(width: 20),
         ElevatedButton(
           onPressed: deleteEverything,
           style: Themes.cardButtonStyle(Themes.pumpkin,
-              fixedSize: Themes.mediumButtonWidth),
+              fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(135.0)),
+          ),
           child: Text(Locales.deleteAllResults[Lang.l]),
         ),
+        ],),
         const SizedBox(height: 10),
       ],
     );
@@ -894,5 +899,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 }
+
 
 
