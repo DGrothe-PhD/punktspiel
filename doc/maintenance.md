@@ -1,4 +1,4 @@
-# Thema 1: Windows Buildfehler
+<details><summary><h1>Thema 1: Windows Buildfehler</h1></summary>
 
 Launching lib\main.dart on Windows in debug mode...
 CMake Error: Error: generator : Visual Studio 17 2022
@@ -10,17 +10,18 @@ Exited (1).
 
 Wie behebe ich das am einfachsten?
 
-Remove-Item -Recurse -Force .\build\windows\CMakeCache.txt, .\build\windows\CMakeFiles\
+<pre>Remove-Item -Recurse -Force .\build\windows\CMakeCache.txt, .\build\windows\CMakeFiles\
 flutter clean
 // ich habe eingeschoben weil sich alles geringelt hat
 flutter pub get
 // dann 
-flutter run -d windows
+flutter run -d windows</pre>
+</details>
 
-# Thema 2: Copilot in VSCode ausschalten
+<details><summary><h1>Topic 2: Turn off Copilot in VSCode</h1></summary>
 
-Open the Command Palette (Ctrl+Shift+P or Cmd+Shift+P) and select "Preferences: Open Settings (JSON)".
-Right there in ".vscode/settings.json" we do:
+Open the Command Palette (Ctrl+Shift+P or Cmd+Shift+P) and select "Preferences: Open Settings (JSON)".<br>
+Right there in ".vscode/settings.json" of repository root folder, we do:
 ```
 * JSON text data
 {
