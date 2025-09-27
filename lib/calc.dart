@@ -28,9 +28,9 @@ class Spieler{
 
   static void _checkWinningRule(String? value) async {
     if(value != null && _features.games.keys.contains(value)){
-      Game found = _features.games.lookup(value);
-      if(found.leastPointsWinning != null){
-        leastPointsWinning = found.leastPointsWinning!;
+      Game? found = _features.games.lookup(value);
+      if(found?.leastPointsWinning != null){
+        leastPointsWinning = found!.leastPointsWinning!;
         hasWinningRuleSet.value = true;
         return;
       }

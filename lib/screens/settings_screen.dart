@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:punktspiel/locales.dart';
 import 'package:punktspiel/styles.dart';
 
+import 'package:punktspiel/preferences/mysharedpreferences.dart';
+
 class SettingsPage extends StatelessWidget {
   SettingsPage({super.key});
   
@@ -21,6 +23,9 @@ class SettingsPage extends StatelessWidget {
           onSelected: (val) {
             selectedLanguage.value = val;
             Lang.setLanguage(val);
+
+            MySharedPreferences.androidMessage.value += 
+              "${MySharedPreferences.androidMessage.value == "" ? "" : "\n"}[INFO] language changed\n";
           },
           itemBuilder: (context) => Lang.availableLanguages
               .map((lang) => PopupMenuItem(value: lang, child: Text(lang)))
@@ -71,6 +76,24 @@ class SettingsPage extends StatelessWidget {
               fixedSize: Themes.mediumButtonWidth),
           child: const Text("Version Info"),
         ),*/
+        ValueListenableBuilder(valueListenable: MySharedPreferences.androidMessage,
+         builder: (context, message, _) {
+              return Column(
+                children: [
+                  const Text("Debug info:"),
+                  InkWell(
+                    onTap: () {
+                      MySharedPreferences.androidMessage.value = "";
+                    },
+                    child: const Text("Clear All"),
+                  ),
+                  SingleChildScrollView(
+                    child: Text(message),
+                  )
+                ],
+              );
+            }
+         ),
       ]));
     } on HttpException catch (e) {
       return Text(e.toString());

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:punktspiel/models/games.dart';
 //import 'package:flutter_html/flutter_html.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -105,6 +106,7 @@ class TableExampleApp extends StatelessWidget {
 }
 
 class TablePage extends StatelessWidget {
+  final Features _features = Features();
   final List names = Spieler.names;
   static const String winningDecoration = "🎉";
   final now = DateTime.now();
@@ -140,9 +142,10 @@ class TablePage extends StatelessWidget {
   Widget build(BuildContext context) {
     try {
       gameResultText = StringBuffer();
+      final gameLocale = _features.games.lookup(Spieler.game ?? "")?.localName;
       headline =
           "${Locales.results[Lang.l]} - ${Lang.deDateFormat.format(now)}\n"
-          "${Spieler.game} - n: ${Spieler.numberOfGamesPlayed}\n";
+          "$gameLocale - n: ${Spieler.numberOfGamesPlayed}\n";
       int maxCounts = Spieler.gruppe.map((x) => x.punkte.length).max;
       playerNames = StringBuffer();
       //playerNames = StringBuffer("\xA0");

@@ -28,7 +28,7 @@ class Themes{
   //Colors
   static Color greenishColor = const Color.fromARGB(255, 165, 206, 185);
   static const Color unselectedBackgroundColor = Color.fromARGB(20, 0, 0, 0);
-  static dynamic greenish = WidgetStateProperty.all<Color>(greenishColor);
+  static WidgetStateProperty<Color> greenish = WidgetStateProperty.all<Color>(greenishColor);
 
   static Color greenColor = const Color.fromARGB(255, 104, 158, 124);
   static WidgetStateProperty<Color> green = WidgetStateProperty.all<Color>(greenColor);  
@@ -38,9 +38,9 @@ class Themes{
   static Color pumpkinColor = const Color.fromARGB(255, 230, 124, 75);
   static WidgetStateProperty<Color> pumpkin = WidgetStateProperty.all<Color>(pumpkinColor);
   static Color sunflowerColor = const Color.fromARGB(255, 243, 198, 76);
-  static dynamic sunflower = WidgetStateProperty.all<Color>(sunflowerColor);
+  static WidgetStateProperty<Color> sunflower = WidgetStateProperty.all<Color>(sunflowerColor);
 
-  static ButtonStyle cardButtonStyle<T>(
+  static ButtonStyle cardButtonStyle(
       WidgetStateProperty<Color> color,
       {WidgetStateProperty<Size?>? fixedSize,
       double? elevation,
