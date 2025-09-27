@@ -21,6 +21,7 @@ import 'package:punktspiel/locales.dart';
 import 'package:punktspiel/styles.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   Spieler.settings();
   Lang.initLanguage();
   runApp(const MyApp());
@@ -476,7 +477,7 @@ class _MyHomePageState extends State<MyHomePage> {
       items: _features.games.keys.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(_features.games.lookup(value).localName),
+          child: Text(_features.games.lookup(value)?.localName ?? _features.games.first.localName),
         );
       }).toList(),
     );

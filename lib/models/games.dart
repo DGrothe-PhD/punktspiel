@@ -21,7 +21,7 @@ class Game{
 
 extension HandleListGames on List<Game> {
   get keys => map((e) => e.name).toList();
-  Game lookup(String key) => firstWhere((e) => e.name == key, orElse: null);
+  Game? lookup(String key) => firstWhere((e) => e.name == key, orElse: null);
 }
 
 
