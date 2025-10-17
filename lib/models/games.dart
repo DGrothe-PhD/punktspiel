@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:punktspiel/locales.dart';
 
 class Game{
@@ -21,9 +22,15 @@ class Game{
 
 extension HandleListGames on List<Game> {
   get keys => map((e) => e.name).toList();
-  Game? lookup(String key) => firstWhere((e) => e.name == key, orElse: null);
+  Game? lookup(String key) => firstWhereOrNull((e) => e.name == key);
 }
-
+/*
+Legacy suggestion
+Game? lookup(String key) => firstWhere(
+      (e) => e.name == key,
+      orElse: () => null,
+    );
+*/
 
 class Features{
   // singleton pattern as described in  https://dev.to/lucianojung/global-variable-access-in-flutter-3ijm
@@ -47,7 +54,7 @@ class Features{
       name: "Miscellaneous",
       leastPointsWinning: null,
       translated: {"de": "Verschiedenes", "en": "Miscellaneous", "fr" : "Un jeu de votre choix"},
-    ),
+    )
   ];
 
 
