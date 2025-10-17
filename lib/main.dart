@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int selectedPlayerPoints = 0;
   final ValueNotifier<int> whoseTurnIndex = ValueNotifier(0);//check
   final ValueNotifier<int> whoseFirstTurnIndex = ValueNotifier(0);//check
-  final ValueNotifier<String> selectedPlayerName = ValueNotifier(Spieler.names.first);//coeck
+  final ValueNotifier<String> selectedPlayerName = ValueNotifier(Spieler.names.first);
 
   final ValueNotifier<bool> _dontEditNames = ValueNotifier(false);//check
   final ValueNotifier<bool> _gamesStarted = ValueNotifier(false);
@@ -111,22 +111,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
    Widget buildSelectableNamesMenu() {
-    if (!Spieler.names.contains(selectedPlayerName.value)) {
-      selectedPlayerName.value = Spieler.names.isNotEmpty ? Spieler.names.first : "";
+    if (!Spieler.playerNames.value.contains(selectedPlayerName.value)) {
+      //firstOrNull can be done from dart >= 3.0.0
+      selectedPlayerName.value = Spieler.playerNames.value.isNotEmpty 
+      ? Spieler.playerNames.value.first : "";
     }
 
-    return ValueListenableBuilder(
-      valueListenable: selectedPlayerName,
-      builder: (context, theName, _,) {
+    return ValueListenableBuilder2(
+      first: selectedPlayerName,
+      second: Spieler.playerNames,
+      builder: (context, theName, theMembers, _) {
         return DropdownButton<String>(
-          key: ValueKey(Object.hashAll(Spieler.names)),
+          key: const ValueKey('playerNameDropDown'),
           isExpanded: true,
           padding: edgeInsets,
           value: theName,
           onChanged: (String? value) {
             selectedPlayerName.value = value ?? "";
           },
-          items: Spieler.names.map<DropdownMenuItem<String>>((String value) {
+          items: theMembers.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(value: value, child: Text(value));
           }).toList(),
         );
@@ -172,13 +175,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     _counter.value++;
-    whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) % Spieler.names.length;
+    whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) % Spieler.playerNames.value.length;
   }
 
   void _decrementCounter() {
     if (_counter.value > 0) {
       _counter.value--;
-      whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) % Spieler.names.length;
+      whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) % Spieler.playerNames.value.length;
     }
   }
 
@@ -240,15 +243,15 @@ class _MyHomePageState extends State<MyHomePage> {
         _showAlertDialog(Locales.foundDuplicateName[Lang.l]);
         return;
       }
-      Spieler.names = names;
-      selectedPlayerName.value = Spieler.names.first;
+      Spieler.updateNames(names);
+      selectedPlayerName.value = Spieler.playerNames.value.first;
       _gamesStarted.value = true;
       setState((){});
     }
   }
 
   void setOpener() {
-    whoseFirstTurnIndex.value = Spieler.names.indexOf(selectedPlayerName.value);
+    whoseFirstTurnIndex.value = Spieler.playerNames.value.indexOf(selectedPlayerName.value);
     whoseTurnIndex.value = whoseFirstTurnIndex.value;
   }
 
@@ -373,28 +376,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget? _getClearButton() {
-    if (_addNameController.text.isEmpty) {
-      return null;
-    }
-    return IconButton(
-      onPressed: () => _addNameController.clear(),
-      icon: const Icon(Icons.clear),
-    );
-  }
-
   final _formKey = GlobalKey<FormState>();
 
-  //final bool _weAreDebugging = true;
-
-//! ### a lot of setState tangling up here
-//! TODO watch out for the return ternary here. ValueListenable?
   Widget _GameModeContent() {
-    return 
-    //(!_dontEditNames.value //|| _weAreDebugging
-    //)
-    //    ? 
-    Column(
+    return Column(
             children: [
               Container(
                 margin: edgeInsets,
@@ -407,8 +392,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context, dontEdit, _) {
                   return TextFormField(
                     controller: _addNameController,
-                    readOnly: dontEdit,// && !_weAreDebugging,
-                    enabled: !dontEdit,// || _weAreDebugging,
+                    readOnly: dontEdit,
+                    enabled: !dontEdit,
                     onTap: () => _gamesStarted.value = false,
                     //only if we need it.
                     //onTapOutside: (_) => closeKbd(),
@@ -416,11 +401,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       final isValid =
                           _formKey.currentState?.validate() ?? false;
                       if (isValid) {
-                        setState(() {
+                       // setState(() {
                           Spieler.addNewPlayer(newText);
                           _addNameController.clear();
-                          namesFieldController.text = Spieler.names.join(", ");
-                        });
+                          namesFieldController.text = Spieler.playerNames.value.join(", ");
+                       // });
                       }
                     },
                     validator: nameValidator,
@@ -435,8 +420,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           borderSide: BorderSide(color: Colors.red)),
                       labelText: Locales.players[Lang.l],
                       isDense: true,
-                      suffixIcon: _getClearButton(),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () => _addNameController.clear(),
+                        tooltip: 'Text löschen',
+                      ),
                     ),
+                    
                   );},),
                 ),
               ),
@@ -468,12 +458,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildGamesMenu() {
     _selectedGame = Spieler.game ??
         (_features.games.isNotEmpty ? _features.games.keys.first : null);
-
+    
     return DropdownButton<String>(
       key: const ValueKey('gameDropDown'),
       isExpanded: true,
       padding: edgeInsets,
-      value: _selectedGame,
+      value: _selectedGame != null && _features.games.keys.contains(_selectedGame)
+        ? _selectedGame : null,
       onChanged: _features.games.isNotEmpty
           ? (String? value) {
               setState(() {
@@ -483,75 +474,76 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           : null,
       items: _features.games.keys.map<DropdownMenuItem<String>>((String value) {
+        final game = _features.games.lookup(value);
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(_features.games.lookup(value)?.localName ?? _features.games.first.localName),
+          child: Text(game?.localName ?? game?.name ?? "unnamed" ),
         );
       }).toList(),
     );
   }
 
   Widget _reorderPlayersView() => Expanded(
-    child: Align(
-      alignment: Alignment.topCenter,
-      child: ReorderableListView(
-        shrinkWrap: true,
-        // Optional, für Hot Reload Stabilität
-        key: const ValueKey('reorderable_list'),
-        onReorder: (int oldIndex, int newIndex) {
-          setState(() {
-            if (newIndex > oldIndex) newIndex -= 1;
-            String item = Spieler.names[oldIndex];
-            Spieler.movePlayer(item, newIndex);
-            namesFieldController.text = Spieler.names.join(", ");
-          });
-        },
-        children: [
-          for (int index = 0; index < Spieler.names.length; index++)
-            ListTile(
-              key: ValueKey(index),
-              title: Text(Spieler.names[index]),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () {
-                  final messenger = ScaffoldMessenger.of(context);
-                  final removedIndex = index;
-                  final String removedName = Spieler.names[index];
-                  Teilnehmer? removedPlayer;
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ValueListenableBuilder(
+              valueListenable: Spieler.playerNames,
+              builder: (context, theMembers, _) {
+                return ReorderableListView(
+                  shrinkWrap: true,
+                  // Optional, für Hot Reload Stabilität
+                  key: const ValueKey('reorderable_list'),
+                  onReorder: (int oldIndex, int newIndex) {
+                    if (newIndex > oldIndex) newIndex -= 1;
+                    String item = theMembers[oldIndex];
+                    Spieler.movePlayer(item, newIndex);
+                    //Now we have updated things in the background - them to the UI, not the old state.
+                    namesFieldController.text = Spieler.playerNames.value.join(", ");
+                  },
+                  children: [
+                    for (int index = 0; index < theMembers.length; index++)
+                      ListTile(
+                        key: ValueKey(index),
+                        title: Text(theMembers[index]),
+                        trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              final messenger = ScaffoldMessenger.of(context);
+                              final removedIndex = index;
+                              final String removedName = theMembers[index];
+                              Teilnehmer? removedPlayer;
 
-                  // Optimistic approach: remove that item and insert on undo.
-                  setState(() {
-                    removedPlayer = Spieler.removePlayer(removedName);
-                    namesFieldController.text = Spieler.names.join(", ");
-                  });
+                              // Optimistic approach: remove that item and insert on undo.
+                              removedPlayer = Spieler.removePlayer(removedName);
+                              namesFieldController.text = Spieler.playerNames.value.join(", ");
 
-                  // Closing other snack bars to keep clean
-                  messenger.hideCurrentSnackBar();
-                  messenger.showSnackBar(
-                    SnackBar(
-                      content: Text(Locales.deletePlayer[Lang.l].format([removedName]),),
-                      //duration: const Duration(seconds: 2),
-                      action: SnackBarAction(
-                        label: Locales.undo[Lang.l],
-                        onPressed: () {
-                          if (!mounted) return;
-                          setState(() {
-                            // Reinsert
-                            //Spieler.names.insert(removedIndex, removedName);
-                            Spieler.insertPlayer(removedPlayer ?? Teilnehmer(name: removedName), removedIndex);
-                            namesFieldController.text = Spieler.names.join(", ");
-                          });
-                        },
+                              // Closing other snack bars to keep clean
+                              messenger.hideCurrentSnackBar();
+                              messenger.showSnackBar(
+                                SnackBar(
+                                  content: Text(Locales.deletePlayer[Lang.l].format([removedName]),),
+                                  //duration: const Duration(seconds: 2),
+                                  action: SnackBarAction(
+                                    label: Locales.undo[Lang.l],
+                                    onPressed: () {
+                                      if (!mounted) return;
+                                        // Reinsert
+                                        //Spieler.names.insert(removedIndex, removedName);
+                                      Spieler.insertPlayer(
+                                        removedPlayer ?? Teilnehmer(name: removedName),
+                                        removedIndex);
+                                      namesFieldController.text = Spieler.playerNames.value.join(", ");
+                                },
+                              ),
+                            ),
+                          );
+                        }),
                       ),
-                    ),
-                  );
-                }
-              ),
-            ),
-        ],
-      ),
-    ),
-  );
+                  ],
+                );
+              }),
+        ),
+      );
 
   String? nameValidator(text) {
     if (text == null || text.trim().isEmpty) {
@@ -612,13 +604,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Container(
               margin: edgeInsets,
-              child: ValueListenableBuilder(
-                valueListenable: whoseTurnIndex,
-                builder: (context, whoseTurn, _) {
-                  return Text((whoseTurn < Spieler.names.length)
-                      ? Locales.opener[Lang.l]
-                          .format([Spieler.names[whoseTurn].truncate(10)])
-                      : "< empty >");
+              child: ValueListenableBuilder2(
+                first: whoseTurnIndex,
+                second: Spieler.playerNames,
+                builder: (context, whoseTurn, theMembers, _) {
+                  return Text((whoseTurn < theMembers.length)
+                    ? Locales.opener[Lang.l]
+                        .format([theMembers[whoseTurn].truncate(10)])
+                    : "< empty >");
                 },
               ),
             ),
@@ -627,11 +620,12 @@ class _MyHomePageState extends State<MyHomePage> {
         // Field for names
         Container(
           margin: edgeInsets,
-          child: ValueListenableBuilder<bool>(
-            valueListenable: _dontEditNames,
-            builder: (context, dontEdit, _) {
+          child: ValueListenableBuilder2<bool, TextEditingValue>(
+            first: _dontEditNames,
+            second: namesFieldController,
+            builder: (context, dontEdit, textEntry, _) {
               return TextField(
-                controller: namesFieldController,
+                controller: namesFieldController,//this.
                 readOnly: dontEdit,// && !_weAreDebugging,
                 enabled: !dontEdit,// || _weAreDebugging,
                 onTap: () => _gamesStarted.value = false,

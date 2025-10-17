@@ -10,7 +10,7 @@ import 'package:punktspiel/models/games.dart';
 //import 'package:flutter/services.dart';
 
 class Spieler{
-  static List<String> _names = ["Eins", "Zwei", "Drei", "Vier" ];
+  static final ValueNotifier<List<String>> playerNames = ValueNotifier(["Eins", "Zwei", "Drei", "Vier" ]);
   static List<Teilnehmer> gruppe = [];
   //static bool hasWinningRuleSet = false;
   static final hasWinningRuleSet = ValueNotifier<bool>(false);
@@ -46,16 +46,16 @@ class Spieler{
     MySharedPreferences.saveLeastPointsWinning(value);
   }
 
-  static set names(List<String> values){
+  static updateNames(List<String> values){
     // By making _names private, the new names call settings to update groups.
-    _names = values;
-    MySharedPreferences.saveNames(_names);
+    playerNames.value = values;
+    MySharedPreferences.saveNames(playerNames.value);
     gruppe = [];
-    for(String n in _names){
+    for(String n in playerNames.value){
       gruppe.add(Teilnehmer(name: n));
     }
   }
-  static List<String> get names => _names;
+  static List<String> get names => playerNames.value;
 
   static void settings() async{
     gruppe = [];
@@ -74,13 +74,13 @@ class Spieler{
       
       List<String>? namesPreset = await MySharedPreferences.getNames();
       if(namesPreset == null || namesPreset.isEmpty){return;}
-      _names = namesPreset;
+      playerNames.value = namesPreset;
       hasMembers = true;
     }
     catch(exception){
-      _names = ["Eins", "Zwei", "Drei", "Vier" ];
+      playerNames.value = ["Eins", "Zwei", "Drei", "Vier" ];
     }
-    for(String n in _names){
+    for(String n in playerNames.value){
       gruppe.add(Teilnehmer(name: n));
     }
   }
@@ -94,9 +94,11 @@ class Spieler{
     if(trynotfound != -1) return;
     if(names.contains(name)) return;
     // Good. Go ahead and save.
-    Spieler.names.insert(0, name);
-    MySharedPreferences.saveNames(_names);
-    gruppe.insert(0, Teilnehmer(name: name));
+    Teilnehmer newPlayer = Teilnehmer(name: name);
+    insertPlayer(newPlayer, 0);
+    // keep if old phones go panic on storeData
+    // in this case tell insertPlayer to do only this, not storeData:
+    //MySharedPreferences.saveNames(playerNames.value);
   }
 
   static void movePlayer(String name, int newIndex) {
@@ -107,24 +109,25 @@ class Spieler{
     // Side exit to remove from active group
     if(newIndex == -1) return;
     // Otherwise: inserting
-    Spieler.names.insert(newIndex, name);
-    //MySharedPreferences.saveNames(_names);
-    gruppe.insert(newIndex, tn);
-    _storeData();
+    insertPlayer(tn, newIndex);
   }
 
   static void insertPlayer(Teilnehmer member, int newIndex){
     // Inserting a full member with their points.
-    Spieler.names.insert(newIndex, member.name);
+    final newList = List<String>.from(playerNames.value);
+    newList.insert(newIndex, member.name);
+    playerNames.value = newList;
     gruppe.insert(newIndex, member);
     _storeData();
   }
   
   static Teilnehmer? removePlayer(String name) {
-    if(!names.remove(name)) {
+    final newList = List<String>.from(playerNames.value);
+    if(!newList.remove(name)) {
       return null;
     }
-    MySharedPreferences.saveNames(_names);
+    playerNames.value = newList;
+    MySharedPreferences.saveNames(playerNames.value);
     int oldIndex = gruppe.indexWhere((teilnehmer) => teilnehmer.name == name);
     if (oldIndex == -1) {
       return null;
@@ -178,7 +181,7 @@ class Spieler{
   }
 
   static get numberOfGamesPlayed => gruppe.map((x) => x.punkte.length).isEmpty ?
-  0 : gruppe.map((x) => x.punkte.length).min;
+    0 : gruppe.map((x) => x.punkte.length).min;
 
   static bool fillingTwice(String name){
     var crunchedData = gruppe.map((x) => x.punkte.length);

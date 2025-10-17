@@ -16,12 +16,6 @@ class HelpScreen extends StatelessWidget {
         ));
   }
 
-  static const String _cssHelpStyle = """
-  html { font-size: 11px;}
-  h1{font-size: 2.5rem;}
-  h2{font-size:1.875rem;}
-  p{}
-  """;
   //&ldquo;Game mode&rdquo;
   static const TextStyle styleH1 =
       TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
