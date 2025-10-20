@@ -136,7 +136,7 @@ class Spieler{
   }
 
   static void _storeData() {
-    var now = DateTime.now();// no elevated button? Then "now" becomes obsolete.
+    var now = DateTime.now();
     UserSettings settings = UserSettings(
       dateTime: Lang.deDateFormat.format(now),
       names: Spieler.names,

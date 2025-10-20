@@ -246,7 +246,6 @@ class _MyHomePageState extends State<MyHomePage> {
       Spieler.updateNames(names);
       selectedPlayerName.value = Spieler.playerNames.value.first;
       _gamesStarted.value = true;
-      setState((){});
     }
   }
 
@@ -423,7 +422,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.clear),
                         onPressed: () => _addNameController.clear(),
-                        tooltip: 'Text löschen',
+                        tooltip: Locales.clearNameField[Lang.l],
                       ),
                     ),
                     
