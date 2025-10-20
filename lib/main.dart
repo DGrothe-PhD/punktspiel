@@ -140,12 +140,14 @@ class _MyHomePageState extends State<MyHomePage> {
 //no ValueListenableBuilder here, it's changing every few hours in most use cases.
   Widget buildPointsWinningSwitch() {
     return PopupMenuButton<String>(
-      key: ValueKey(Object.hashAll(Locales.pointsRule[Lang.l])),
+      key: const ValueKey('winningRuleDropDown'),
       //value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
       padding: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
       onSelected: (_dontEditNames.value || Spieler.hasWinningRuleSet.value)
           ? null
           : (value) {
+            Spieler.leastPointsWinning =
+                  (value == Locales.pointsRule[Lang.l].first);
             //! setstate zeugs.
               setState(() => Spieler.leastPointsWinning =
                   (value == Locales.pointsRule[Lang.l].first));
@@ -239,7 +241,6 @@ class _MyHomePageState extends State<MyHomePage> {
       Spieler.updateNames(names);
       selectedPlayerName.value = Spieler.playerNames.value.first;
       _gamesStarted.value = true;
-      setState((){});
     }
   }
 
@@ -416,7 +417,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.clear),
                         onPressed: () => _addNameController.clear(),
-                        tooltip: 'Text löschen',
+                        tooltip: Locales.clearNameField[Lang.l],
                       ),
                     ),
                     
