@@ -43,9 +43,9 @@ class StyleDecorator {
     return md.markdownToHtml(inputText);
   }
 
-  static Html viewMd(String inputText, {bool isMD = true}) {
+  /*static Html viewMd(String inputText, {bool isMD = true}) {
     return Html(data: isMD ? write(inputText) : inputText);
-  }
+  }*/
 }
 
 BuildContext? tableContext;
@@ -321,3 +321,4 @@ class TablePage extends StatelessWidget {
     }
   }
 }
+

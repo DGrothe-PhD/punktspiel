@@ -134,4 +134,5 @@ class Locales {
   static const List<String> emailSubject = [
     "Unsere Spielergebnisse", "Our game results", "Notres résultats de jeu"
   ];
+
 }

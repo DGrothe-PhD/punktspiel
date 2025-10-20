@@ -24,13 +24,13 @@ jobs:
           java-version: '17.x'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.29.3'
+          flutter-version: '3.24.4'
       - run: flutter pub get
       - run: flutter --version
       - run: flutter build apk --split-per-abi
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/debug/*.apk"
-          tag: v0.0.${{ github.run_number}}
+          artifacts: "build/app/outputs/flutter-apk/*.apk"
+          tag: v1.0.${{ github.run_number}}
           token: "${{ secrets.GITHUB_TOKEN }}"
