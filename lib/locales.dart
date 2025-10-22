@@ -101,6 +101,8 @@ class Locales {
   static const List<String> gameModeTabTitle = ["Spielmodus", "Game mode", "Mode de jeu"];
   static const List<String> helpTitle = ["Anleitung", "How to use this app", "Mode d'emploi"];
   static const List<String> resultsTitle = ["SPIELSTAND", "RESULTS", "RESULTATS"];
+  static const List<String> showTable = ["Spielstand", "Show results", "Les résultats"];
+  static const List<String> hideTable = ["Zurück", "Back", "Retourner"];
   static const List<String> pointsTotal = [
     "Punkte insgesamt:", "Sum of points:", "Somme de points :"
   ];
