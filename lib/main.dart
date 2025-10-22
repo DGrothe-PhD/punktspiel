@@ -739,7 +739,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: ValueListenableBuilder(
               valueListenable: _tableVisible,
               builder: (context, isVisible, _){
-                  return Text("${isVisible ? "Hide " : "Show "}Table");
+                  return Text(isVisible ? Locales.hideTable[Lang.l] : Locales.showTable[Lang.l]);
               }
             ),
           ),
