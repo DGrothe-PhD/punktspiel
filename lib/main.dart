@@ -139,26 +139,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //no ValueListenableBuilder here, it's changing every few hours in most use cases.
   Widget buildPointsWinningSwitch() {
-    return PopupMenuButton<String>(
-      key: const ValueKey('winningRuleDropDown'),
-      //value: Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1],
-      padding: const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
-      onSelected: (_dontEditNames.value || Spieler.hasWinningRuleSet.value)
-          ? null
-          : (value) {
-            Spieler.leastPointsWinning =
-                  (value == Locales.pointsRule[Lang.l].first);
-            //! setstate zeugs.
-              setState(() => Spieler.leastPointsWinning =
-                  (value == Locales.pointsRule[Lang.l].first));
-              // We need that setState, otherwise the dropdown doesn't change.
-            },
-      //disabledHint: ,
-      itemBuilder: (context) => Locales.pointsRule[Lang.l]
-          .map((rule) => PopupMenuItem<String>(value: rule, child: Text(rule))).toList(),
-      child: Text(Locales.pointsRule[Lang.l][Spieler.leastPointsWinning ? 0 : 1]),
-      //menuWidth: 200,
-    );
+    return ValueListenableBuilder3(
+        first: _dontEditNames,
+        second: Spieler.hasWinningRuleSet,
+        third: Spieler.leastPointsWinning,
+        builder: (context, dontEdit, hasRuleSet, lPW, _) {
+          return PopupMenuButton<String>(
+            key: const ValueKey('winningRuleDropDown'),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
+            onSelected:
+                (dontEdit || hasRuleSet)
+                    ? null
+                    : (value) {
+                        Spieler.updateLeastPointsWinning(value == Locales.pointsRule[Lang.l].first);
+                      },
+            //disabledHint: ,
+            itemBuilder: (context) => Locales.pointsRule[Lang.l]
+                .map((rule) =>
+                    PopupMenuItem<String>(value: rule, child: Text(rule)))
+                .toList(),
+            child: Text(
+                Locales.pointsRule[Lang.l][lPW ? 0 : 1]),
+            //menuWidth: 200,
+          );
+    });
   }
 
   _MyHomePageState();
@@ -395,11 +400,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       final isValid =
                           _formKey.currentState?.validate() ?? false;
                       if (isValid) {
-                       // setState(() {
-                          Spieler.addNewPlayer(newText);
-                          _addNameController.clear();
-                          namesFieldController.text = Spieler.playerNames.value.join(", ");
-                       // });
+                        Spieler.addNewPlayer(newText);
+                        _addNameController.clear();
+                        namesFieldController.text = Spieler.playerNames.value.join(", ");
                       }
                     },
                     validator: nameValidator,
