@@ -2,7 +2,6 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show ValueNotifier;
-import 'package:intl/intl.dart';
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:punktspiel/locales.dart';
@@ -208,11 +207,8 @@ class Spieler{
     return <Teilnehmer>[];
   }
 
-  static String report(){
-    final now = DateTime.now();
-    final String headline = "${Locales.results[Lang.l]} - ${DateFormat('dd.MM.yyyy').format(now)}\n\n";
+  static String report(String headline){
     StringBuffer buffer = StringBuffer(headline);
-    
     for(Teilnehmer player in gruppe){
       buffer.write("${player.name}:\t${player.sumPoints}\n");
     }

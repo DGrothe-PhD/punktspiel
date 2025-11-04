@@ -301,7 +301,7 @@ class TablePage extends StatelessWidget {
     if (Platform.isWindows) {
       Clipboard.setData(ClipboardData(
         text:
-          gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report()));
+          gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(headline)));
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -314,7 +314,7 @@ class TablePage extends StatelessWidget {
     }
     if (renderBox is RenderBox) {
       await Share.share(
-        gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(),
+        gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(headline),
         subject: Locales.emailSubject[Lang.l],
         sharePositionOrigin: renderBox.localToGlobal(Offset.zero) & renderBox.size,
       );
