@@ -29,23 +29,22 @@ class Spieler{
     if(value != null && _features.games.keys.contains(value)){
       Game? found = _features.games.lookup(value);
       if(found?.leastPointsWinning != null){
-        leastPointsWinning = found!.leastPointsWinning!;
+        leastPointsWinning.value = found!.leastPointsWinning!;
         hasWinningRuleSet.value = true;
         return;
       }
     }
     bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
-    if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
+    if(leastPointsWinningPreset != null){leastPointsWinning.value = leastPointsWinningPreset;}
     hasWinningRuleSet.value = false;
   }
 
   // default: rummy, lowest number of points is winning, as opposed to scrabble.
-  static bool _leastPointsWinning = true;
-  static set leastPointsWinning(bool value){
-    _leastPointsWinning = value;
+  static final ValueNotifier<bool> leastPointsWinning = ValueNotifier(true);
+  static updateLeastPointsWinning(bool value){
+    leastPointsWinning.value = value;
     MySharedPreferences.saveLeastPointsWinning(value);
   }
-  static bool get leastPointsWinning => _leastPointsWinning;
 
   static set names(List<String> values){
     // By making _names private, the new names call settings to update groups.
@@ -69,7 +68,7 @@ class Spieler{
       }
       else{
         bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
-        if(leastPointsWinningPreset != null){_leastPointsWinning = leastPointsWinningPreset;}
+        if(leastPointsWinningPreset != null){leastPointsWinning.value = leastPointsWinningPreset;}
         hasWinningRuleSet.value = false;
       }
       
@@ -140,7 +139,7 @@ class Spieler{
       names: Spieler.names,
       game: Spieler.game,
       numberOfGamesPlayed: Spieler.numberOfGamesPlayed,
-      leastPointsWinning: Spieler.leastPointsWinning,
+      leastPointsWinning: Spieler.leastPointsWinning.value,
       sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
     );
     
@@ -201,7 +200,7 @@ class Spieler{
   static List<Teilnehmer> whoIsWinning(){
     if(gruppe.length > 1 && filledFullRound() && gruppe[0].punkte.length >= gruppe.length){
       var sumOfPoints = gruppe.map((x) => x.sumPoints);
-      var best = _leastPointsWinning? sumOfPoints.min : sumOfPoints.max;
+      var best = leastPointsWinning.value ? sumOfPoints.min : sumOfPoints.max;
       return gruppe.where((x)=> x.sumPoints == best).toList();
     }
     return <Teilnehmer>[];

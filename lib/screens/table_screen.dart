@@ -96,7 +96,7 @@ class TableExampleApp extends StatelessWidget {
       names: Spieler.names,
       game: Spieler.game,
       numberOfGamesPlayed: Spieler.numberOfGamesPlayed,
-      leastPointsWinning: Spieler.leastPointsWinning,
+      leastPointsWinning: Spieler.leastPointsWinning.value,
       sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
     );
     
@@ -221,7 +221,7 @@ class TablePage extends StatelessWidget {
       gameResultText.write("${Locales.best[Lang.l]}\n");
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player,
-            Spieler.leastPointsWinning ? player.minPoints : player.maxPoints);
+            Spieler.leastPointsWinning.value ? player.minPoints : player.maxPoints);
       }
 
       return Center(
