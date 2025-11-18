@@ -30,15 +30,15 @@ class HelpScreen extends StatelessWidget {
 
   Widget helpScreenContent() {
     return Container(
-        padding: const EdgeInsets.all(11),
+        padding: const EdgeInsets.all(17),
         child: RichText(
           text: const TextSpan(
             style: TextStyle(color: Colors.black, fontSize: 14),
             children: [
-              TextSpan(
-                text: 'How to use this app\n\n',
-                style: styleH1,
-              ),
+            //  TextSpan(
+            //    text: 'How to use this app\n\n',
+             //   style: styleH1,
+            //  ),
               TextSpan(
                 text: 'Start a game\n\n',
                 style: styleH2,
