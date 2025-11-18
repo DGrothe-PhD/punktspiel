@@ -42,6 +42,7 @@ class SettingsPage extends StatelessWidget {
       resizeToAvoidBottomInset : true,
       appBar: Themes.cardboardAppBar(Locales.settingsTitle[Lang.l]),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(17),
         child: _content(),
       )
     );
@@ -52,8 +53,11 @@ class SettingsPage extends StatelessWidget {
     //String availableVersionInfo = "";
     //final now = DateTime.now();
     try {
-      return Center(
-          child: Column(children: <Widget>[
+      return Align(
+          alignment: Alignment.topLeft,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
             const Text("Sprache/Language"),
         Row(
           children: <Widget>[

@@ -40,6 +40,7 @@ migrate_working_dir/
 /build/*/*.stamp
 /build/*test*/*
 /build/cache*
+/build/.cxx
 /build/windows/x64/runner/Debug/
 /build/windows/x64/runner/CMake*
 /build/windows/x64/runner/punktspie*

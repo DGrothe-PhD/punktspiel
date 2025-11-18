@@ -458,7 +458,6 @@ class _MyHomePageState extends State<MyHomePage> {
     
     return DropdownButton<String>(
       key: const ValueKey('gameDropDown'),
-      //key: ValueKey(Object.hashAll(_features.games.keys)),
       isExpanded: true,
       padding: edgeInsets,
       value: _selectedGame != null && _features.games.keys.contains(_selectedGame)
@@ -526,7 +525,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     onPressed: () {
                                       if (!mounted) return;
                                         // Reinsert
-                                        //Spieler.names.insert(removedIndex, removedName);
                                       Spieler.insertPlayer(
                                         removedPlayer ?? Teilnehmer(name: removedName),
                                         removedIndex);
@@ -751,34 +749,37 @@ class _MyHomePageState extends State<MyHomePage> {
     ]);
   }
 
-  Widget aboutMePage() => Column(children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.all(5),
-          child: Text(
-              "A local app to add points when playing cards or similar games in a group.\n" +
-                  "Designed for the fun of it and for learning!"),
-        ),
-        const SizedBox(height: 7),
-        ElevatedButton.icon(
-          icon: kofiIcon,
-          onPressed: () {
-            _launchKoFi();
-          },
-          style: Themes.cardButtonStyle(Themes.green,
-              fixedSize: Themes.buttonSize),
-          label: const Text("Support me"),
-        ),
-        const SizedBox(height: 7),
-        ElevatedButton.icon(
-          icon: githubIcon,
-          onPressed: () {
-            _launchGitHub();
-          },
-          style: Themes.cardButtonStyle(Themes.pumpkin,
-              fixedSize: Themes.buttonSize),
-          label: const Text("Open GitHub"),
-        ),
-      ]);
+  Widget aboutMePage() => Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: Themes.cardboardAppBar(Locales.aboutTitle[Lang.l]),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(17),
+        child: Column(children: <Widget>[
+          const Text(
+                "A local app to add points when playing cards or similar games in a group.\n" +
+                    "Designed for the fun of it and for learning!"),
+          const SizedBox(height: 7),
+          ElevatedButton.icon(
+            icon: kofiIcon,
+            onPressed: () {
+              _launchKoFi();
+            },
+            style: Themes.cardButtonStyle(Themes.green,
+                fixedSize: Themes.buttonSize),
+            label: const Text("Support me"),
+          ),
+          const SizedBox(height: 7),
+          ElevatedButton.icon(
+            icon: githubIcon,
+            onPressed: () {
+              _launchGitHub();
+            },
+            style: Themes.cardButtonStyle(Themes.pumpkin,
+                fixedSize: Themes.buttonSize),
+            label: const Text("Open GitHub"),
+          ),
+        ]),
+      ));
 
   @override
   Widget build(BuildContext context) {
