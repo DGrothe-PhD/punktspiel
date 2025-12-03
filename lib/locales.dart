@@ -45,21 +45,12 @@ class Lang{
 
 
 class Locales {
-  static const List<String> noSecondEntry = [
-    "Punkte für %s sind schon eingetragen.",
-    "Points for %s already submitted for this round.",
-    "Les points pour %s sont déjà inscrits."
-  ];
   static const List<String> noColon = [
     "Ohne Komma wird „%s“ als ein Name gelesen, korrekt?",
     "Without at least one colon, ‘%s’ is read as one name. Proceed anyway?",
     "Sans virgule(s), « %s » est lu comme un seul nom, correct ?"
   ];
-  
-  static const List<String> hint = [
-    "Hinweis: Punkte fehlen für ", "Hint: Missing results for ",
-    "Remarque : il manque des points pour"
-  ];
+
   static const List<String> foundDuplicateName = [
     "Doppelte(n) Namen gefunden", 
     "Found duplicate name(s)", 
