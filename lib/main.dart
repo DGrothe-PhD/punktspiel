@@ -17,7 +17,14 @@ import 'package:punktspiel/utils/listenables.dart';
 // Backend and styles
 import 'package:punktspiel/calc.dart';
 import 'package:punktspiel/models/games.dart';
+
+// Legacy translation
 import 'package:punktspiel/locales.dart';
+
+// State of the art translation
+import 'package:punktspiel/generated/l10n.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:punktspiel/styles.dart';
 
 void main() {
@@ -35,9 +42,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: 'Punktspiel'),
+      home: const MyHomePage(title: 'Punktspiel'),
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
     );
   }
 }
@@ -187,6 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> submitPoints() async {
     final messenger = ScaffoldMessenger.of(context);
+    final s = S.of(context);
     // Validating names list
     if (!_dontEditNames.value) {
       var namesList = namesFieldController.text.split(",");
@@ -206,15 +221,15 @@ class _MyHomePageState extends State<MyHomePage> {
     if (Spieler.fillingTwice(selectedPlayerName.value)) {
       var empty = Spieler.whoIsEmpty();
       _showAlertDialog(
-          "${Locales.noSecondEntry[Lang.l].format([selectedPlayerName.value])}\n" +
-              "${Locales.hint[Lang.l]} ${empty.join(', ')}");
+          "${s.noSecondEntry(selectedPlayerName.value)}\n${s.hintPointsMissing(empty.join(', '))}");
       return;
     }
     Spieler.addPoints(selectedPlayerName.value, selectedPlayerPoints);
     messenger.hideCurrentSnackBar();
       messenger.showSnackBar(
       SnackBar(
-        content: Text(Locales.submitFeedback[Lang.l].format([selectedPlayerName.value, selectedPlayerPoints])),
+        content: Text(s.pointSubmitFeedback(selectedPlayerName.value, selectedPlayerPoints)),
+         // Locales.submitFeedback[Lang.l].format([selectedPlayerName.value, selectedPlayerPoints])),
         backgroundColor: const Color.fromARGB(255, 68, 146, 72),
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
