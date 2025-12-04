@@ -2,6 +2,12 @@ name: Build apk
 
 on:
   workflow_dispatch:
+    inputs:
+      generate_intl:
+        description: 'Update localization'
+        required: false
+        default: false
+        type: boolean
   #push:
   #  paths:
   #    - '*.dart'
@@ -13,6 +19,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      GENERATE_INTL: ${{ github.event.inputs.generate_intl || 'false' }}
     permissions:
       contents: write
       pull-requests: write
@@ -27,6 +35,9 @@ jobs:
           flutter-version: '3.24.4'
       - run: flutter pub get
       - run: flutter --version
+      - name: Generate intl (optional)
+        if: ${{ env.GENERATE_INTL == 'true' }}
+        run: dart run intl_utils:generate
       - run: flutter build apk --split-per-abi
       - name: Push to Releases
         uses: ncipollo/release-action@v1
