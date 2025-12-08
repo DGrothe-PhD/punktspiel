@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:punktspiel/main.dart';
 import 'package:punktspiel/calc.dart';
+
+// Legacy translation
 import 'package:punktspiel/locales.dart';
+
+// State of the art translation
+import 'package:punktspiel/generated/l10n.dart';
 
 void main() {
   PointsSubmittingTest testSuite = PointsSubmittingTest();
@@ -13,6 +18,7 @@ void main() {
 class PointsSubmittingTest{
   Finder? firstPlayer, numPointsField, submittingPointsButton, secondPlayer;
   Finder? tapAnchor;
+  S locale = S();
 
   Future givePoints({required WidgetTester tester, required int points}) 
     async {
@@ -55,7 +61,7 @@ class PointsSubmittingTest{
       expect(firstPlayer, findsOneWidget);// ☺
       numPointsField = find.bySemanticsLabel(Locales.points[Lang.l]);
       expect(numPointsField, findsOneWidget);
-      submittingPointsButton = find.bySemanticsLabel(Locales.submit[Lang.l]);
+      submittingPointsButton = find.bySemanticsLabel(locale.submitPoints);
       expect(submittingPointsButton, findsOneWidget);
 
       // Enter points for first player
@@ -111,7 +117,7 @@ class PointsSubmittingTest{
       expect(firstPlayer, findsOneWidget);// ☺
       numPointsField = find.bySemanticsLabel(Locales.points[Lang.l]);
       expect(numPointsField, findsOneWidget);
-      submittingPointsButton = find.bySemanticsLabel(Locales.submit[Lang.l]);
+      submittingPointsButton = find.bySemanticsLabel(locale.submitPoints);
       expect(submittingPointsButton, findsOneWidget);
 
       // ! Enter points for first player

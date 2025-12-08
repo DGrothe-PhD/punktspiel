@@ -75,10 +75,9 @@ class Locales {
   static const List<String> opener = ["%s fängt an", "%s starts", "%s commence"];
   static const List<String> points = ["Punkte:", "Points:", "Points :"];
   //
-  static const List<String> submit = ["Eintragen", "Submit", "Inscrire"];
-  static const List<String> deleteLastEntry = ["Letzten löschen", "Delete last", "Effacer le dernier"];
+  //static const List<String> submit = ["Eintragen", "Submit", "Inscrire"];
   static const List<String> deletePlayer = ["Spieler %s löschen?", "Delete player %s?", "Effacer joueur/se %s ?"];
-  static const List<String> submitFeedback = ["%s bekommt %i Punkte.","%s gets %i points.", "%s reçoit %i points."];
+  //static const List<String> submitFeedback = ["%s bekommt %i Punkte.","%s gets %i points.", "%s reçoit %i points."];
   static const List<String> undo = ["Widerrufen", "Undo", "Annuler"];
   static const List<String> deleteAllResults = ["Alles löschen", "Delete it all", "Tout effacer"];
   //

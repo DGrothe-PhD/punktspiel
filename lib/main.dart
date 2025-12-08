@@ -717,7 +717,7 @@ class _MyHomePageState extends State<MyHomePage> {
             }),
             fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(117.0)),
           ),
-          child: Text(Locales.submit[Lang.l]),
+          child: Text(S.of(context).submitPoints),
         ),
         const SizedBox(width: 20),
         ElevatedButton(
