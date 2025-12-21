@@ -207,7 +207,8 @@ class _MyHomePageState extends State<MyHomePage> {
       var namesList = namesFieldController.text.split(",");
       if (namesList.length < 2) {
         bool onlyOnePlayer = await _showYesNoDialog(
-            Locales.noColon[Lang.l].format([namesFieldController.text]));
+          S.of(context).noColon(namesFieldController.text)
+        );
         if (!onlyOnePlayer) {
           numberFieldController.clear();
           selectedPlayerPoints = 0;
@@ -255,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList();
     if (names.isNotEmpty) {
       if (names.toSet().length < names.length) {
-        _showAlertDialog(Locales.foundDuplicateName[Lang.l]);
+        _showAlertDialog(S.of(context).foundDuplicateName);
         return;
       }
       Spieler.updateNames(names);
@@ -281,7 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(message),
           actions: <Widget>[
             CupertinoButton(
-              child: Text(Locales.gotIt[Lang.l]),
+              child: Text(S.of(context).gotIt),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -300,13 +301,13 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(message),
           actions: <Widget>[
             CupertinoButton(
-              child: Text(Locales.answerYes[Lang.l]),
+              child: Text(S.of(context).answerYes),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
             ),
             CupertinoButton(
-              child: Text(Locales.answerNo[Lang.l]),
+              child: Text(S.of(context).answerNo),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
@@ -325,6 +326,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void deleteLastEntry() {
     bool rowWasJustFilled = Spieler.filledFullRound();
     Spieler.deleteLastEntry(selectedPlayerName.value);
+    //TODO #108 snack bar maybe with undo
     if (rowWasJustFilled) {
       _decrementCounter();
     }
@@ -430,7 +432,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       errorStyle: const TextStyle(color: Colors.red),
                       focusedErrorBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red)),
-                      labelText: Locales.players[Lang.l],
+                      labelText: S.of(context).playersLabel,
                       isDense: true,
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.clear),
@@ -558,13 +560,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String? nameValidator(text) {
     if (text == null || text.trim().isEmpty) {
-      return Locales.cantBeEmpty[Lang.l];
+      return S.of(context).cantBeEmpty;
     }
     if (text.contains(',')) {
-      return Locales.commasIgnored[Lang.l];
+      return S.of(context).commasIgnored;
     }
     if (Spieler.names.contains(text.split(RegExp(r'\s+')).join(" ").trim())) {
-      return Locales.foundDuplicateName[Lang.l];
+      return S.of(context).foundDuplicateName;
     }
     return null;
   }
@@ -598,7 +600,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               margin: edgeInsets,
               width: 60,
-              child: Text(Locales.playedRounds[Lang.l]),
+              child: Text(S.of(context).playedRoundsLabel),
             ),
             Container(
               alignment: Alignment.bottomRight,
@@ -647,7 +649,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderSide: BorderSide(color: Themes.greenishColor)),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Themes.active)),
-                  labelText: Locales.players[Lang.l],
+                  labelText: S.of(context).playersLabel,
                   isDense: true,
                 ),
               );
