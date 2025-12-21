@@ -44,7 +44,7 @@ class PointsSubmittingTest{
       // Let's type some names and check if that's effective.
       //TODO fix this test.
       await tester.enterText(
-        find.bySemanticsLabel(Locales.players[Lang.l]),
+        find.bySemanticsLabel(locale.playersLabel),
         "Anna 🍂,Dagmar 🦆",
       );
       // Just tap somewhere I can code for. 
@@ -89,7 +89,7 @@ class PointsSubmittingTest{
       // Build our app and trigger a frame.
       await tester.pumpWidget(const MyApp());
 
-      tapAnchor = find.text(Locales.playedRounds[Lang.l]);
+      tapAnchor = find.text(locale.playedRoundsLabel);
 
       // Let's type some names and check if that's effective.
       // TODO https://api.flutter.dev/flutter/flutter_test/TestTextInput/receiveAction.html
@@ -105,7 +105,7 @@ class PointsSubmittingTest{
       await tester.testTextInput.receiveAction(TextInputAction.done);
       // Just tap somewhere I can code for. 
       // First try was AppBar or Scaffold by type. Guess that's due to some hierarchical confusion.
-      await tester.tap(find.text(Locales.playedRounds[Lang.l]));
+      await tester.tap(find.text(locale.playedRoundsLabel));
       await tester.pumpAndSettle();
 
       // Assert that there's just Anna on top, nothing else.
