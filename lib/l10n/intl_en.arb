@@ -1,0 +1,71 @@
+{
+  "@@locale": "en",
+  "hello": "Hello!",
+  "@hello": {
+    "description": "A friendly greeting"
+  },
+  "welcomeUser": "Welcome, {name}!",
+  "@welcomeUser": {
+    "description": "Greet a user by name",
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "submitPoints": "Submit",
+  "@submitPoints": {
+    "description": "Button: submit points"
+  },
+  "deleteLastEntry": "Effacer le dernier",
+  "@deleteLastEntry": {
+    "description": "Button: Delete last entry (mostly only wearing a dust-bin symbol)"
+  },
+  "noSecondEntry": "Points for {name} already submitted for this round.",
+  "@noSecondEntry": {
+    "description": "Tell the user someone's points are already submitted.",
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "gotIt": "Got it!",
+  "@gotIt": {
+    "description": "User confirms having read the message."
+  },
+  "answerYes": "Yes",
+  "answerNo": "No",
+  "playedRoundsLabel": "Played:",
+  "playersLabel": "Players:",
+  "hintPointsMissing": "Hint: Missing results for {names}",
+  "@hintPointsMissing": {
+    "description": "List names who didn't get points in this round yet.",
+    "placeholders": {
+      "names": {"type": "String"}
+    }
+  },
+  "pointSubmitFeedback": "{name} gets {points} point(s).",
+  "@pointSubmitFeedback": {
+    "description": "Typically a snack bar message announcing points were given.",
+    "placeholders": {
+      "name": {"type": "String"},
+      "points": {"type": "int"}
+    }
+  },
+  "noColon": "Without at least one colon, “{name}” is read as one name. Proceed anyway?",
+  "@noColon": {
+    "description": "Avoid colons here.",
+    "placeholders": {
+      "name": {"type" : "String"}
+    }
+  },
+  "cantBeEmpty": "Cannot be empty",
+  "@cantBeEmpty": {
+    "description": "This field cannot be empty."
+  },
+  "commasIgnored": "Hint: Commas are ignored.",
+  "@commasIgnored": {
+    "description": "Commas are ignored in input field (splitting confusion)."
+  },
+  "foundDuplicateName": "Found duplicate name(s)",
+  "@foundDuplicateName": {
+    "description": "Announcing we found duplicate name(s)."
+  }
+}
