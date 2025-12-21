@@ -1,0 +1,19 @@
+{
+  "@@locale": "de",
+  "hello": "Hallo!",
+  "welcomeUser": "Willkommen, {name}!",
+  "submitPoints": "Eintragen",
+  "deleteLastEntry": "Letzten löschen",
+  "noSecondEntry": "Punkte für {name} sind schon eingetragen.",
+  "gotIt": "Verstanden!",
+  "answerYes": "Ja",
+  "answerNo": "Nein",
+  "playedRoundsLabel": "Gespielt:",
+  "playersLabel": "Teilnehmer:",
+  "hintPointsMissing": "Hinweis: Punkte fehlen für {names}",
+  "pointSubmitFeedback": "{name} bekommt {points} Punkt(e).",
+  "noColon": "Ohne Komma wird „{name}“ als ein Name gelesen, korrekt?",
+  "cantBeEmpty": "Feld darf nicht leer sein",
+  "commasIgnored": "Hinweis: Kommas werden ignoriert.",
+  "foundDuplicateName": "Doppelte(n) Namen gefunden"
+}
