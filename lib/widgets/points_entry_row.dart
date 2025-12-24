@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:punktspiel/locales.dart';
+import 'package:punktspiel/generated/l10n.dart';
 
 class PointsEntryRow extends StatelessWidget {
   final TextEditingController controller;
   final bool enabled;
   final void Function(String) onChanged;
+  final S locale = S();
 
-  const PointsEntryRow({
+  PointsEntryRow({
     super.key,
     required this.controller,
     required this.enabled,
@@ -42,7 +43,7 @@ class PointsEntryRow extends StatelessWidget {
             onChanged: onChanged,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              labelText: Locales.points[Lang.l],
+              labelText: locale.pointsLabel,
               isDense: true,
             ),
             keyboardType: const TextInputType.numberWithOptions(signed: true),

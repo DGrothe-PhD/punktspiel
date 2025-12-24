@@ -9,7 +9,13 @@ import 'package:swipe_to/swipe_to.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io' show Platform;
 import 'package:punktspiel/calc.dart';
+
+// legacy
 import 'package:punktspiel/locales.dart';
+
+//
+import 'package:punktspiel/generated/l10n.dart';
+
 import 'package:punktspiel/styles.dart';
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
 
@@ -51,7 +57,8 @@ class StyleDecorator {
 BuildContext? tableContext;
 
 class TableExampleApp extends StatelessWidget {
-  const TableExampleApp({super.key});
+  final S locale = S();
+  TableExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +66,7 @@ class TableExampleApp extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true, //maybe false if keyboard
       appBar: Themes.cardboardAppBar(
-        Locales.resultsTitle[Lang.l],
+        locale.resultsTitle,
         actions: [
           IconButton(
             tooltip: Locales.shareEverything[Lang.l],
@@ -106,6 +113,7 @@ class TableExampleApp extends StatelessWidget {
 }
 
 class TablePage extends StatelessWidget {
+  final S locale = S();
   final Features _features = Features();
   final List names = Spieler.names;
   static const String winningDecoration = "🎉";
@@ -144,7 +152,7 @@ class TablePage extends StatelessWidget {
       gameResultText = StringBuffer();
       final gameLocale = _features.games.lookup(Spieler.game ?? "")?.localName;
       headline =
-          "${Locales.results[Lang.l]} - ${Lang.deDateFormat.format(now)}\n"
+          "${locale.resultsLabel} - ${Lang.deDateFormat.format(now)}\n"
           "$gameLocale - n: ${Spieler.numberOfGamesPlayed}\n";
       int maxCounts = Spieler.gruppe.map((x) => x.punkte.length).max;
       playerNames = StringBuffer();

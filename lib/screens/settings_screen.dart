@@ -4,12 +4,17 @@ import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
 //import 'package:http/http.dart' as http;
 //import 'package:package_info_plus/package_info_plus.dart';
+
+// Legacy
 import 'package:punktspiel/locales.dart';
+
+import 'package:punktspiel/generated/l10n.dart';
 import 'package:punktspiel/styles.dart';
 
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
 
 class SettingsPage extends StatelessWidget {
+  final S locale = S();
   SettingsPage({super.key});
   
   final ValueNotifier<String> selectedLanguage =
@@ -40,7 +45,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset : true,
-      appBar: Themes.cardboardAppBar(Locales.settingsTitle[Lang.l]),
+      appBar: Themes.cardboardAppBar(locale.settingsLabel),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(17),
         child: _content(),

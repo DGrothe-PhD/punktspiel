@@ -181,9 +181,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _MyHomePageState();
-  TableExampleApp punkteTabelle = const TableExampleApp();
+  TableExampleApp punkteTabelle = TableExampleApp();
   SettingsPage settingsPage = SettingsPage();
-  HelpScreen helpPage = const HelpScreen();
+  HelpScreen helpPage = HelpScreen();
 
   final ValueNotifier<int> _counter = ValueNotifier(0);
 
@@ -362,8 +362,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             child: TabBar(
               tabs: [
-                Tab(text: Locales.overviewTabTitle[Lang.l]),
-                Tab(text: Locales.gameModeTabTitle[Lang.l]),
+                Tab(text: S.of(context).overviewTabTitle),
+                Tab(text: S.of(context).gameModeTabTitle),
               ],
               labelColor: Colors.black,
               unselectedLabelColor: Colors.black87,
@@ -452,7 +452,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context, dontEdit, _) {
                   if(dontEdit){return const Text("⏳");}
                   return ExpansionTile(
-                    title: Text(Locales.furtherSettingsTitle[Lang.l]),
+                    title: Text(S.of(context).furtherSettingsLabel),
                     //subtitle: Text('foo'),
                     controlAffinity: ListTileControlAffinity.trailing,
                     children: <Widget>[buildGamesMenu(), const Text("✍️ tbd")],
@@ -535,10 +535,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               messenger.hideCurrentSnackBar();
                               messenger.showSnackBar(
                                 SnackBar(
-                                  content: Text(Locales.deletePlayer[Lang.l].format([removedName]),),
+                                  content: Text(S.of(context).deletePlayer(removedName),),
                                   //duration: const Duration(seconds: 2),
                                   action: SnackBarAction(
-                                    label: Locales.undo[Lang.l],
+                                    label: S.of(context).undo,
                                     onPressed: () {
                                       if (!mounted) return;
                                         // Reinsert
@@ -622,8 +622,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 second: Spieler.playerNames,
                 builder: (context, whoseTurn, theMembers, _) {
                   return Text((whoseTurn < theMembers.length)
-                    ? Locales.opener[Lang.l]
-                        .format([theMembers[whoseTurn].truncate(10)])
+                    ? S.of(context).openerLabel(theMembers[whoseTurn].truncate(10))
                     : "< empty >");
                 },
               ),
@@ -727,7 +726,7 @@ class _MyHomePageState extends State<MyHomePage> {
           style: Themes.cardButtonStyle(Themes.pumpkin,
               fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(135.0)),
           ),
-          child: Text(Locales.deleteAllResults[Lang.l]),
+          child: Text(S.of(context).deleteAllResults),
         ),
         ],),
         const SizedBox(height: 10),
@@ -757,7 +756,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: ValueListenableBuilder(
               valueListenable: _tableVisible,
               builder: (context, isVisible, _){
-                  return Text(isVisible ? Locales.hideTable[Lang.l] : Locales.showTable[Lang.l]);
+                  return Text(isVisible ? S.of(context).hideTable : S.of(context).showTable);
               }
             ),
           ),
@@ -768,7 +767,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget aboutMePage() => Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: Themes.cardboardAppBar(Locales.aboutTitle[Lang.l]),
+      appBar: Themes.cardboardAppBar(S.of(context).aboutTitle),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(17),
         child: Column(children: <Widget>[
@@ -809,7 +808,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentPage = settingsPage;
         break;
       case 2:
-        currentPage = const HelpScreen();
+        currentPage = HelpScreen();
         break;
       case 3:
         currentPage = aboutMePage();
