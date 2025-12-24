@@ -15,9 +15,16 @@
   "@submitPoints": {
     "description": "Button: submit points"
   },
-  "deleteLastEntry": "Effacer le dernier",
+  "deleteLastEntry": "Delete last entry",
   "@deleteLastEntry": {
     "description": "Button: Delete last entry (mostly only wearing a dust-bin symbol)"
+  },
+  "deletePlayer": "Delete player {name}?",
+  "@deletePlayer": {
+    "description": "Confirming question before deleting a player",
+    "placeholders": {
+       "name": {"type": "String"}
+    }
   },
   "noSecondEntry": "Points for {name} already submitted for this round.",
   "@noSecondEntry": {
@@ -32,8 +39,30 @@
   },
   "answerYes": "Yes",
   "answerNo": "No",
+  "undo": "Undo",
+  "close": "Close view",
+  "hideTable": "Back",
+  "showTable": "Show results",
+  "deleteAllResults": "Delete it all",
+  "nextRound": "Next Round",
+  "openerLabel": "{name} starts",
+  "@openerLabel": {
+    "description": "Which player starts placing a card or something.",
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "aboutTitle": "About this app",
+  "gameModeTabTitle": "Game mode",
+  "helpTitle": "How to use this app",
+  "overviewTabTitle": "Collecting points",
+  "resultsTitle": "Results",
   "playedRoundsLabel": "Played:",
   "playersLabel": "Players:",
+  "pointsLabel": "Points:",
+  "resultsLabel": "Results",
+  "settingsLabel": "Settings",
+  "furtherSettingsLabel": "More settings",
   "hintPointsMissing": "Hint: Missing results for {names}",
   "@hintPointsMissing": {
     "description": "List names who didn't get points in this round yet.",

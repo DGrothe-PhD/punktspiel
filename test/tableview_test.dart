@@ -3,10 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:punktspiel/main.dart';
 import 'package:punktspiel/calc.dart';
 
-// Legacy translation
-import 'package:punktspiel/locales.dart';
-
-// State of the art translation
 import 'package:punktspiel/generated/l10n.dart';
 
 void main() {
@@ -18,7 +14,7 @@ void main() {
 class PointsSubmittingTest{
   Finder? firstPlayer, numPointsField, submittingPointsButton, secondPlayer;
   Finder? tapAnchor;
-  S locale = S();
+  final S locale = S();
 
   Future givePoints({required WidgetTester tester, required int points}) 
     async {
@@ -59,7 +55,7 @@ class PointsSubmittingTest{
       // Define some variables for the DropdownButton and point submitting
       firstPlayer = find.text("Anna 🍂");
       expect(firstPlayer, findsOneWidget);// ☺
-      numPointsField = find.bySemanticsLabel(Locales.points[Lang.l]);
+      numPointsField = find.bySemanticsLabel(locale.pointsLabel);
       expect(numPointsField, findsOneWidget);
       submittingPointsButton = find.bySemanticsLabel(locale.submitPoints);
       expect(submittingPointsButton, findsOneWidget);
@@ -115,7 +111,7 @@ class PointsSubmittingTest{
       // Define some variables for the DropdownButton and point submitting
       firstPlayer = find.text("Anna 🍂");
       expect(firstPlayer, findsOneWidget);// ☺
-      numPointsField = find.bySemanticsLabel(Locales.points[Lang.l]);
+      numPointsField = find.bySemanticsLabel(locale.pointsLabel);
       expect(numPointsField, findsOneWidget);
       submittingPointsButton = find.bySemanticsLabel(locale.submitPoints);
       expect(submittingPointsButton, findsOneWidget);

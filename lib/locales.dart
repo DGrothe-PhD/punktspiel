@@ -45,27 +45,7 @@ class Lang{
 
 
 class Locales {
-  static const List<String> opener = ["%s fängt an", "%s starts", "%s commence"];
-  static const List<String> points = ["Punkte:", "Points:", "Points :"];
-  //
-  static const List<String> deletePlayer = ["Spieler %s löschen?", "Delete player %s?", "Effacer joueur/se %s ?"];
-  static const List<String> undo = ["Widerrufen", "Undo", "Annuler"];
-  static const List<String> deleteAllResults = ["Alles löschen", "Delete it all", "Tout effacer"];
-  //
-  static const List<String> close = ["Schließen", "Close view", "Fermer"];
-  static const List<String> results = ["Ergebnisse", "Results", "Les résultats"];
-  static const List<String> settingsTitle = ["Einstellungen", "Settings", "Configurer"];
-  static const List<String> furtherSettingsTitle = ["Weitere Einstellungen", "More settings", "Autres paramètres"];
-  static const List<String> nextRound = ["Neue Runde", "Next Round", "Encore une fois"];
-
-  static const List<String> overviewTabTitle = ["Punktevergabe", "Collecting points", "Donner les points"];
-  static const List<String> gameModeTabTitle = ["Spielmodus", "Game mode", "Mode de jeu"];
   static const List<String> clearNameField = ["Text löschen", "Clear field", "Effacer ce texte"];
-  static const List<String> helpTitle = ["Anleitung", "How to use this app", "Mode d'emploi"];
-  static const List<String> resultsTitle = ["Spielstand", "Results", "Les résultats"];
-  static const List<String> aboutTitle = ["Über die App", "About this app", "A propos de l'application"];
-  static const List<String> showTable = ["Spielstand", "Show results", "Les résultats"];
-  static const List<String> hideTable = ["Zurück", "Back", "Retourner"];
   static const List<String> pointsTotal = [
     "Punkte insgesamt:", "Sum of points:", "Somme de points :"
   ];
