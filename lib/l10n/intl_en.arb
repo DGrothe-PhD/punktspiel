@@ -11,6 +11,11 @@
       "name": {"type": "String"}
     }
   },
+  "isOffline": "Sorry, the website cannot be displayed.",
+  
+  "leastPointsWinning": "-- the least",
+  "mostPointsWinning": "++ the most",
+  
   "submitPoints": "Submit",
   "@submitPoints": {
     "description": "Button: submit points"
@@ -39,10 +44,17 @@
   },
   "answerYes": "Yes",
   "answerNo": "No",
+  "best": "Best game:",
   "undo": "Undo",
+  "clearNameField": "Clear field",
   "close": "Close view",
   "hideTable": "Back",
+  
+  "emailSubject": "Our game results",
+  "shareEverything": "Share all",
+  "shareResults": "Share results",
   "showTable": "Show results",
+  
   "deleteAllResults": "Delete it all",
   "nextRound": "Next Round",
   "openerLabel": "{name} starts",
@@ -57,10 +69,14 @@
   "helpTitle": "How to use this app",
   "overviewTabTitle": "Collecting points",
   "resultsTitle": "Results",
+  
+  "averagePointsLabel": "Average of points/game:",
   "playedRoundsLabel": "Played:",
   "playersLabel": "Players:",
   "pointsLabel": "Points:",
+  "pointsTotalLabel": "Sum of points:",
   "resultsLabel": "Results",
+  "zeroPointsLabel": "Games with zero points:",
   "settingsLabel": "Settings",
   "furtherSettingsLabel": "More settings",
   "hintPointsMissing": "Hint: Missing results for {names}",
@@ -85,6 +101,7 @@
       "name": {"type" : "String"}
     }
   },
+  "winFor": "Winning",
   "cantBeEmpty": "Cannot be empty",
   "@cantBeEmpty": {
     "description": "This field cannot be empty."

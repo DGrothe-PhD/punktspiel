@@ -69,12 +69,12 @@ class TableExampleApp extends StatelessWidget {
         locale.resultsTitle,
         actions: [
           IconButton(
-            tooltip: Locales.shareEverything[Lang.l],
+            tooltip: locale.shareEverything,
             icon: const Icon(Icons.offline_share),
             onPressed: () => TablePage.onShareTable(context),
           ),
           IconButton(
-            tooltip: Locales.shareResults[Lang.l],
+            tooltip: locale.shareResults,
             icon: const Icon(Icons.speaker_notes),
             onPressed: () => TablePage.onShareResults(context),
           ),
@@ -113,7 +113,7 @@ class TableExampleApp extends StatelessWidget {
 }
 
 class TablePage extends StatelessWidget {
-  final S locale = S();
+  static final S locale = S();
   final Features _features = Features();
   final List names = Spieler.names;
   static const String winningDecoration = "🎉";
@@ -216,17 +216,17 @@ class TablePage extends StatelessWidget {
         _writePlayerStats(player, player.sumPoints);
       }
 
-      gameResultText.write("\n${Locales.zeroPoints[Lang.l]}\n");
+      gameResultText.write("\n${locale.zeroPointsLabel}\n");
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player, player.countZeros);
       }
 
-      gameResultText.write("${Locales.averagePoints[Lang.l]}\n");
+      gameResultText.write("${locale.averagePointsLabel}\n");
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player, player.avgPoints);
       }
 
-      gameResultText.write("${Locales.best[Lang.l]}\n");
+      gameResultText.write("${locale.best}\n");
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player,
             Spieler.leastPointsWinning.value ? player.minPoints : player.maxPoints);
@@ -297,7 +297,7 @@ class TablePage extends StatelessWidget {
         gameResultText.isEmpty
             ? "Nichts/None/Rien"
             : "$headline\n$playerNames$gameResultText",
-        subject: Locales.emailSubject[Lang.l],
+        subject: locale.emailSubject,
         sharePositionOrigin:
             renderBox.localToGlobal(Offset.zero) & renderBox.size,
       );
@@ -323,7 +323,7 @@ class TablePage extends StatelessWidget {
     if (renderBox is RenderBox) {
       await Share.share(
         gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(headline),
-        subject: Locales.emailSubject[Lang.l],
+        subject: S.of(context).emailSubject,
         sharePositionOrigin: renderBox.localToGlobal(Offset.zero) & renderBox.size,
       );
     }
