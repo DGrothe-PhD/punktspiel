@@ -166,15 +166,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 (dontEdit || hasRuleSet)
                     ? null
                     : (value) {
-                        Spieler.updateLeastPointsWinning(value == Locales.pointsRule[Lang.l].first);
+                        Spieler.updateLeastPointsWinning(value == S.of(context).leastPointsWinning);
                       },
             //disabledHint: ,
-            itemBuilder: (context) => Locales.pointsRule[Lang.l]
+            itemBuilder: (context) => [S.of(context).leastPointsWinning, S.of(context).mostPointsWinning]
                 .map((rule) =>
                     PopupMenuItem<String>(value: rule, child: Text(rule)))
                 .toList(),
-            child: Text(
-                Locales.pointsRule[Lang.l][lPW ? 0 : 1]),
+            child: Text(lPW ? S.of(context).leastPointsWinning : S.of(context).mostPointsWinning),
             //menuWidth: 200,
           );
     });
@@ -439,7 +438,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.clear),
                         onPressed: () => _addNameController.clear(),
-                        tooltip: Locales.clearNameField[Lang.l],
+                        tooltip: S.of(context).clearNameField,
                       ),
                     ),
                     
@@ -590,7 +589,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 25.0,
               ),
             ),
-            Text(Locales.winFor[Lang.l]),
+            Text(S.of(context).winFor),
             const SizedBox(width: 20),
             SizedBox(
               width: 200,
@@ -907,14 +906,14 @@ class _MyHomePageState extends State<MyHomePage> {
   _launchKoFi() async {
     final Uri url = Uri.parse('https://ko-fi.com/danielagrothe');
     if (!await launchUrl(url, webOnlyWindowName: "Web Title")) {
-      _showAlertDialog(Locales.isOffline[Lang.l]);
+      _showAlertDialog(S.of(context).isOffline);
     }
   }
 
   _launchGitHub() async {
     final Uri url = Uri.parse('https://github.com/DGrothe-PhD/punktspiel/');
     if (!await launchUrl(url, webOnlyWindowName: "Project on GitHub")) {
-      _showAlertDialog(Locales.isOffline[Lang.l]);
+      _showAlertDialog(S.of(context).isOffline);
     }
   }
 }

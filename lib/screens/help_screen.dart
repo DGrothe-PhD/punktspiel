@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_html/flutter_html.dart';
-import 'package:punktspiel/locales.dart';
+
+import 'package:punktspiel/generated/l10n.dart';
 import 'package:punktspiel/styles.dart';
 
 class HelpScreen extends StatelessWidget {
-  const HelpScreen({super.key});
+  final S locale = S();
+  HelpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: Themes.cardboardAppBar(Locales.helpTitle[Lang.l]),
+        appBar: Themes.cardboardAppBar(locale.helpTitle),
         body: SingleChildScrollView(
           child: helpScreenContent(),
         ));
