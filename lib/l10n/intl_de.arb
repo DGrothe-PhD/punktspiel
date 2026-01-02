@@ -12,6 +12,7 @@
   "deletePlayer": "Spieler {name} löschen?",
   "noSecondEntry": "Punkte für {name} sind schon eingetragen.",
   "gotIt": "Verstanden!",
+  "areYouSure": "Are you sure?",
   "answerYes": "Ja",
   "answerNo": "Nein",
   "best": "Bestes Spiel:",
@@ -49,5 +50,10 @@
   "winFor": "Gewinn",
   "cantBeEmpty": "Feld darf nicht leer sein",
   "commasIgnored": "Hinweis: Kommas werden ignoriert.",
-  "foundDuplicateName": "Doppelte(n) Namen gefunden"
+  "foundDuplicateName": "Doppelte(n) Namen gefunden",
+  
+  "Rummy": "Rommee",
+  "Scrabble": "Scrabble",
+  "TableTennis": "Tischtennis",
+  "Miscellaneous": "Verschiedenes"
 }

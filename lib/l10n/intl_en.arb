@@ -42,6 +42,7 @@
   "@gotIt": {
     "description": "User confirms having read the message."
   },
+  "areYouSure": "Are you sure?",
   "answerYes": "Yes",
   "answerNo": "No",
   "best": "Best game:",
@@ -113,5 +114,10 @@
   "foundDuplicateName": "Found duplicate name(s)",
   "@foundDuplicateName": {
     "description": "Announcing we found duplicate name(s)."
-  }
+  },
+  
+  "Rummy": "Rummy",
+  "Scrabble": "Scrabble",
+  "TableTennis": "Table tennis",
+  "Miscellaneous": "Miscellaneous"
 }

@@ -4,7 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show ValueNotifier;
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
 import 'package:sprintf/sprintf.dart';
+
+// date is still local
 import 'package:punktspiel/locales.dart';
+
 import 'package:punktspiel/models/games.dart';
 //import 'package:intl/intl.dart';
 //import 'package:flutter/services.dart';
@@ -17,24 +20,46 @@ class Spieler{
   static bool hasMembers = false;
   static final Features _features = Features();
 
-  static String? _game;
-  static set game(String? value){
-    _game = value;
-    MySharedPreferences.saveGame(value);
+
+  //NEU
+  static GameKey? _gameKey;
+  //static String? gameKeyAsString;
+
+  static String? gameKeyAsString() => _gameKey?.toString().split('.').last ?? "Miscellaneous";
+
+  static String? gameKeyToString(GameKey? key) {
+    return key?.toString().split('.').last;
+  }
+
+  static GameKey? stringToGameKey(String? value) {
+    if (value == null) return null;
+    for (final k in GameKey.values) {
+      if (k.toString().split('.').last == value) {
+        return k;
+      }
+    }
+    return null;
+  }
+
+  static set game(GameKey? value){
+    _gameKey = value;
+    final String toStore = value?.toString().split('.').last ?? "Miscellaneous";
+    MySharedPreferences.saveGame(toStore);
     _checkWinningRule(value);
   }
-  static String? get game => _game;
+  static GameKey? get game => _gameKey;
 
-  static void _checkWinningRule(String? value) async {
-    if(value != null && _features.games.keys.contains(value)){
-      Game? found = _features.games.lookup(value);
-      if(found?.leastPointsWinning != null){
-        leastPointsWinning.value = found!.leastPointsWinning!;
+  static void _checkWinningRule(GameKey? value) async {
+    if(value != null && _features.games.containsKey(value)){
+      final Game found = _features.games[value]!;
+      //Game? found = _features.games.lookup(value);
+      if(found.leastPointsWinning != null){
+        leastPointsWinning.value = found.leastPointsWinning!;
         hasWinningRuleSet.value = true;
         return;
       }
     }
-    bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
+    final bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
     if(leastPointsWinningPreset != null){leastPointsWinning.value = leastPointsWinningPreset;}
     hasWinningRuleSet.value = false;
   }
@@ -62,9 +87,14 @@ class Spieler{
     try{
       // prefer the points winning rule if specified for that game
       String? gamePreset = await MySharedPreferences.getGame();
-      if(gamePreset != null){
-        _game = gamePreset;
-        _checkWinningRule(_game);
+      if (gamePreset != null) {
+        for (final k in GameKey.values) {
+          if (k.toString().split('.').last == gamePreset) {
+            _gameKey = k;
+            break;
+          }
+        }
+        _checkWinningRule(_gameKey);
       }
       else{
         bool? leastPointsWinningPreset = await MySharedPreferences.getLeastPointsWinning();
@@ -140,7 +170,7 @@ class Spieler{
     UserSettings settings = UserSettings(
       dateTime: Lang.deDateFormat.format(now),
       names: Spieler.names,
-      game: Spieler.game,
+      game: Spieler.gameKeyAsString(),
       numberOfGamesPlayed: Spieler.numberOfGamesPlayed,
       leastPointsWinning: Spieler.leastPointsWinning.value,
       sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
