@@ -6,9 +6,8 @@ class PointsEntryRow extends StatelessWidget {
   final TextEditingController controller;
   final bool enabled;
   final void Function(String) onChanged;
-  final S locale = S();
 
-  PointsEntryRow({
+  const PointsEntryRow({
     super.key,
     required this.controller,
     required this.enabled,
@@ -43,7 +42,7 @@ class PointsEntryRow extends StatelessWidget {
             onChanged: onChanged,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              labelText: locale.pointsLabel,
+              labelText: S.of(context).pointsLabel,
               isDense: true,
             ),
             keyboardType: const TextInputType.numberWithOptions(signed: true),

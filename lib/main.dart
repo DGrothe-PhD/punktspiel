@@ -19,7 +19,7 @@ import 'package:punktspiel/calc.dart';
 import 'package:punktspiel/models/games.dart';
 
 // Legacy translation
-import 'package:punktspiel/locales.dart';
+//import 'package:punktspiel/locales.dart';
 
 // State of the art translation
 import 'package:punktspiel/generated/l10n.dart';
@@ -30,7 +30,7 @@ import 'package:punktspiel/styles.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Spieler.settings();
-  Lang.initLanguage();
+  //Lang.initLanguage();
   runApp(const MyApp());
 }
 
@@ -43,6 +43,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //locale: appLocale,
+      supportedLocales: S.delegate.supportedLocales,
       debugShowCheckedModeBanner: false,
       home: const MyHomePage(title: 'Punktspiel'),
       localizationsDelegates: const [
@@ -51,7 +53,6 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: S.delegate.supportedLocales,
     );
   }
 }
@@ -180,9 +181,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _MyHomePageState();
-  TableExampleApp punkteTabelle = TableExampleApp();
+  TableExampleApp punkteTabelle = const TableExampleApp();
+  // ignore: prefer_const_constructors
   SettingsPage settingsPage = SettingsPage();
-  HelpScreen helpPage = HelpScreen();
+  HelpScreen helpPage = const HelpScreen();
 
   final ValueNotifier<int> _counter = ValueNotifier(0);
 
@@ -332,7 +334,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> deleteEverything() async {
-    final confirmedDelete = await _showYesNoDialog("Are you sure?");
+    final confirmedDelete = await _showYesNoDialog(S.of(context).areYouSure);
     if (confirmedDelete) {
       for (Teilnehmer t in Spieler.gruppe) {
         t.punkte.clear();
@@ -466,31 +468,45 @@ class _MyHomePageState extends State<MyHomePage> {
         //: const Text("⏳");
   }
 
-  String? _selectedGame;
+ String? _selectedGame;
 
   Widget buildGamesMenu() {
-    _selectedGame = Spieler.game ??
-        (_features.games.isNotEmpty ? _features.games.keys.first : null);
+
+    _selectedGame = Spieler.gameKeyAsString();
+    // final initSelection =  _selectedGame != null &&
+    //       _features.games.keys
+    //           .map((k) => k.toString().split('.').last)
+    //           .contains(_selectedGame)
+    //   ? _selectedGame
+    //   : null;
+
+    // ?? (_features.games.keys.isNotEmpty ? _features.games.keys.first : null);
     
     return DropdownButton<String>(
       key: const ValueKey('gameDropDown'),
       isExpanded: true,
       padding: edgeInsets,
-      value: _selectedGame != null && _features.games.keys.contains(_selectedGame)
-        ? _selectedGame : null,
+      value: _selectedGame != null &&
+              _features.games.keys
+                  .map((k) => k.toString().split('.').last)//TODO nimm Spieler.gameKeyAsString()
+                  .contains(_selectedGame)
+          ? _selectedGame
+          : null,
+      //value: _selectedGame != null && _features.games.keys.contains(_selectedGame) ? _selectedGame : null,
       onChanged: _features.games.isNotEmpty
           ? (String? value) {
               setState(() {
-                //_selectedGame = value;
-                Spieler.game = value;
+                _selectedGame = value;
+                Spieler.game = Spieler.stringToGameKey(value);
               });
             }
           : null,
-      items: _features.games.keys.map<DropdownMenuItem<String>>((String value) {
-        final game = _features.games.lookup(value);
+      items: _features.games.keys.map<DropdownMenuItem<String>>((GameKey key) {
+        final String value = Spieler.gameKeyToString(key)!;
+
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(game?.localName ?? game?.name ?? "unnamed" ),
+          child: Text(key.l10n(S.of(context))),
         );
       }).toList(),
     );
@@ -777,7 +793,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ElevatedButton.icon(
             icon: kofiIcon,
             onPressed: () {
-              _launchKoFi();
+              _launchKoFi(context);
             },
             style: Themes.cardButtonStyle(Themes.green,
                 fixedSize: Themes.buttonSize),
@@ -787,7 +803,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ElevatedButton.icon(
             icon: githubIcon,
             onPressed: () {
-              _launchGitHub();
+              _launchGitHub(context);
             },
             style: Themes.cardButtonStyle(Themes.pumpkin,
                 fixedSize: Themes.buttonSize),
@@ -807,7 +823,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentPage = settingsPage;
         break;
       case 2:
-        currentPage = HelpScreen();
+        currentPage = const HelpScreen();
         break;
       case 3:
         currentPage = aboutMePage();
@@ -900,17 +916,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //Stylings
 
-  _launchKoFi() async {
+  _launchKoFi(BuildContext context) async {
     final Uri url = Uri.parse('https://ko-fi.com/danielagrothe');
-    if (!await launchUrl(url, webOnlyWindowName: "Web Title")) {
+    if (!await launchUrl(url, webOnlyWindowName: "Web Title") && context.mounted) {
       _showAlertDialog(S.of(context).isOffline);
     }
   }
 
-  _launchGitHub() async {
+  _launchGitHub(BuildContext context) async {
     final Uri url = Uri.parse('https://github.com/DGrothe-PhD/punktspiel/');
-    if (!await launchUrl(url, webOnlyWindowName: "Project on GitHub")) {
-      _showAlertDialog(S.of(context).isOffline);
+    if (!await launchUrl(url, webOnlyWindowName: "Project on GitHub") && context.mounted) {
+        _showAlertDialog(S.of(context).isOffline);
     }
   }
 }

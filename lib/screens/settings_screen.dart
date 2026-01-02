@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 //import 'package:package_info_plus/package_info_plus.dart';
 
 // Legacy
-import 'package:punktspiel/locales.dart';
+//import 'package:punktspiel/locales.dart';
 
 import 'package:punktspiel/generated/l10n.dart';
 import 'package:punktspiel/styles.dart';
@@ -14,12 +14,14 @@ import 'package:punktspiel/styles.dart';
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
 
 class SettingsPage extends StatelessWidget {
-  final S locale = S();
-  SettingsPage({super.key});
+  const SettingsPage({super.key});
   
-  final ValueNotifier<String> selectedLanguage =
-      ValueNotifier(Lang.currentLanguageCode());
+  // zweiter Mitleser
+  //final ValueNotifier<String> selectedLanguage = ValueNotifier(Lang.currentLanguageCode());
+  // manuelle Liste
+  //final Map<String,String> availableLanguages = {"de": "Deutsch", "en" : "English", "fr": "Français"};
 
+/*
   Widget _selectLanguagesMenu() {
     return ValueListenableBuilder<String>(
       valueListenable: selectedLanguage,
@@ -29,23 +31,23 @@ class SettingsPage extends StatelessWidget {
             selectedLanguage.value = val;
             Lang.setLanguage(val);
 
-            MySharedPreferences.androidMessage.value += 
-              "${MySharedPreferences.androidMessage.value == "" ? "" : "\n"}[INFO] language changed\n";
+            //MySharedPreferences.androidMessage.value += 
+            //  "${MySharedPreferences.androidMessage.value == "" ? "" : "\n"}[INFO] language changed\n";
           },
-          itemBuilder: (context) => Lang.availableLanguages
-              .map((lang) => PopupMenuItem(value: lang, child: Text(lang)))
+          itemBuilder: (context) => availableLanguages.entries
+              .map((entry) => PopupMenuItem<String>(value: entry.key, child: Text(entry.value)))
               .toList(),
-          child: Text(value),
+          child: Text(Localizations.localeOf(context).languageCode),
         );
       },
     );
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset : true,
-      appBar: Themes.cardboardAppBar(locale.settingsLabel),
+      appBar: Themes.cardboardAppBar(S.of(context).settingsLabel),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(17),
         child: _content(),
@@ -63,13 +65,13 @@ class SettingsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-            const Text("Sprache/Language"),
-        Row(
+            const Text("Space for dreams."),
+        const Row(
           children: <Widget>[
-            const Icon(Icons.language),
+            Icon(Icons.language),
             SizedBox(
               width: 111,
-              child: _selectLanguagesMenu(),
+              child: Text("blank page"),//_selectLanguagesMenu(),
             ),
           ],
         ),

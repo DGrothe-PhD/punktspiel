@@ -5,14 +5,13 @@ import 'package:punktspiel/generated/l10n.dart';
 import 'package:punktspiel/styles.dart';
 
 class HelpScreen extends StatelessWidget {
-  final S locale = S();
-  HelpScreen({super.key});
+  const HelpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: Themes.cardboardAppBar(locale.helpTitle),
+        appBar: Themes.cardboardAppBar(S.of(context).helpTitle),
         body: SingleChildScrollView(
           child: helpScreenContent(),
         ));

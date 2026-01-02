@@ -12,6 +12,7 @@
   "deletePlayer": "Effacer joueur/se {name} ?",
   "noSecondEntry": "Les points pour {name} sont déjà inscrits.",
   "gotIt": "Compris !",
+  "areYouSure": "Are you sure?",
   "answerYes": "Oui",
   "answerNo": "Non",
   "best": "Le meilleur jeu :",
@@ -50,5 +51,9 @@
   "winFor": "Gagner",
   "cantBeEmpty": "Cela ne doit pas être vide.",
   "commasIgnored": "Remarque : les virgules sont ignorées.",
-  "foundDuplicateName": "Trouvé un/des double(s) nom(s)"
+  "foundDuplicateName": "Trouvé un/des double(s) nom(s)",
+  "Rummy": "Rami",
+  "Scrabble": "Scrabble",
+  "TableTennis": "Ping-pong",
+  "Miscellaneous": "Votre choix"
 }

@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown/markdown.dart' as md;
-import 'package:punktspiel/models/games.dart';
 //import 'package:flutter_html/flutter_html.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -10,7 +9,7 @@ import 'package:share_plus/share_plus.dart';
 import 'dart:io' show Platform;
 import 'package:punktspiel/calc.dart';
 
-// legacy
+// Datum
 import 'package:punktspiel/locales.dart';
 
 //
@@ -57,8 +56,7 @@ class StyleDecorator {
 BuildContext? tableContext;
 
 class TableExampleApp extends StatelessWidget {
-  final S locale = S();
-  TableExampleApp({super.key});
+  const TableExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,15 +64,15 @@ class TableExampleApp extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true, //maybe false if keyboard
       appBar: Themes.cardboardAppBar(
-        locale.resultsTitle,
+        S.of(context).resultsTitle,
         actions: [
           IconButton(
-            tooltip: locale.shareEverything,
+            tooltip: S.of(context).shareEverything,
             icon: const Icon(Icons.offline_share),
             onPressed: () => TablePage.onShareTable(context),
           ),
           IconButton(
-            tooltip: locale.shareResults,
+            tooltip: S.of(context).shareResults,
             icon: const Icon(Icons.speaker_notes),
             onPressed: () => TablePage.onShareResults(context),
           ),
@@ -101,7 +99,7 @@ class TableExampleApp extends StatelessWidget {
     UserSettings settings = UserSettings(
       dateTime: Lang.deDateFormat.format(now),
       names: Spieler.names,
-      game: Spieler.game,
+      game: Spieler.gameKeyAsString(),
       numberOfGamesPlayed: Spieler.numberOfGamesPlayed,
       leastPointsWinning: Spieler.leastPointsWinning.value,
       sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
@@ -113,8 +111,6 @@ class TableExampleApp extends StatelessWidget {
 }
 
 class TablePage extends StatelessWidget {
-  static final S locale = S();
-  final Features _features = Features();
   final List names = Spieler.names;
   static const String winningDecoration = "🎉";
   final now = DateTime.now();
@@ -150,9 +146,9 @@ class TablePage extends StatelessWidget {
   Widget build(BuildContext context) {
     try {
       gameResultText = StringBuffer();
-      final gameLocale = _features.games.lookup(Spieler.game ?? "")?.localName;
+      final gameLocale = Spieler.gameKeyAsString() ?? "";
       headline =
-          "${locale.resultsLabel} - ${Lang.deDateFormat.format(now)}\n"
+          "${S.of(context).resultsLabel} - ${Lang.deDateFormat.format(now)}\n"
           "$gameLocale - n: ${Spieler.numberOfGamesPlayed}\n";
       int maxCounts = Spieler.gruppe.map((x) => x.punkte.length).max;
       playerNames = StringBuffer();
@@ -216,17 +212,17 @@ class TablePage extends StatelessWidget {
         _writePlayerStats(player, player.sumPoints);
       }
 
-      gameResultText.write("\n${locale.zeroPointsLabel}\n");
+      gameResultText.write("\n${S.of(context).zeroPointsLabel}\n");
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player, player.countZeros);
       }
 
-      gameResultText.write("${locale.averagePointsLabel}\n");
+      gameResultText.write("${S.of(context).averagePointsLabel}\n");
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player, player.avgPoints);
       }
 
-      gameResultText.write("${locale.best}\n");
+      gameResultText.write("${S.of(context).best}\n");
       for (var player in Spieler.gruppe) {
         _writePlayerStats(player,
             Spieler.leastPointsWinning.value ? player.minPoints : player.maxPoints);
@@ -297,7 +293,7 @@ class TablePage extends StatelessWidget {
         gameResultText.isEmpty
             ? "Nichts/None/Rien"
             : "$headline\n$playerNames$gameResultText",
-        subject: locale.emailSubject,
+        subject: S.of(context).emailSubject,
         sharePositionOrigin:
             renderBox.localToGlobal(Offset.zero) & renderBox.size,
       );
