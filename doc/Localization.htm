@@ -1,0 +1,611 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Aptos;}
+@font-face
+	{font-family:"Aptos Display";}
+@font-face
+	{font-family:"Segoe UI Emoji";
+	panose-1:2 11 5 2 4 2 4 2 2 3;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:0cm;
+	line-height:107%;
+	font-size:11.0pt;
+	font-family:"Aptos",sans-serif;}
+h1
+	{mso-style-link:"Überschrift 1 Zchn";
+	margin-top:18.0pt;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:107%;
+	page-break-after:avoid;
+	font-size:20.0pt;
+	font-family:"Aptos Display",sans-serif;
+	color:#0F4761;
+	font-weight:normal;}
+h2
+	{mso-style-link:"Überschrift 2 Zchn";
+	margin-top:8.0pt;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:107%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Aptos Display",sans-serif;
+	color:#0F4761;
+	font-weight:normal;}
+h3
+	{mso-style-link:"Überschrift 3 Zchn";
+	margin-top:8.0pt;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:107%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Aptos",sans-serif;
+	color:#0F4761;
+	font-weight:normal;}
+span.berschrift1Zchn
+	{mso-style-name:"Überschrift 1 Zchn";
+	mso-style-link:"Überschrift 1";
+	font-family:"Aptos Display",sans-serif;
+	color:#0F4761;}
+span.berschrift2Zchn
+	{mso-style-name:"Überschrift 2 Zchn";
+	mso-style-link:"Überschrift 2";
+	font-family:"Aptos Display",sans-serif;
+	color:#0F4761;}
+span.berschrift3Zchn
+	{mso-style-name:"Überschrift 3 Zchn";
+	mso-style-link:"Überschrift 3";
+	font-family:"Times New Roman",serif;
+	color:#0F4761;}
+.MsoChpDefault
+	{font-size:11.0pt;}
+.MsoPapDefault
+	{margin-bottom:8.0pt;
+	line-height:107%;}
+@page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:2.0cm 70.85pt 35.45pt 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+@page WordSection2
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 70.85pt 35.45pt 70.85pt;}
+div.WordSection2
+	{page:WordSection2;}
+@page WordSection3
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 70.85pt 35.45pt 70.85pt;}
+div.WordSection3
+	{page:WordSection3;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=DE style='word-wrap:break-word'>
+
+<div class=WordSection1>
+
+<h1>Minimale Lösung zur Übersetzung von App-UI</h1>
+
+<p class=MsoNormal>Startpunkt: Einfache App</p>
+
+<p class=MsoNormal>Vorbereitete Schritte: App strings von der lokalen
+Benutzeroberfläche (etwa „Häufige Fragen“, „Einstellungen“, <b>ggf. generell offline
+Verfügbares</b>) sind bereits in arb-Files untergebracht.</p>
+
+<p class=MsoNormal>User soll die App in seiner Sprache sehen, falls verfügbar.</p>
+
+<p class=MsoNormal>Optional: App-Inhalte auf der Webseite dort lokalisiert
+verwalten.</p>
+
+<h2>Code – Minimale Lösung</h2>
+
+<p class=MsoNormal style='margin-bottom:0cm'><b>Wie wäre eine minimale Lösung. </b></p>
+
+<p class=MsoNormal><b>Angenommen, eine App hätte von vornherein nur </b></p>
+
+<div style='border:solid #B3E5A1 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>class MyApp extends StatelessWidget {</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  const MyApp({super.key});</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  //final TableExampleApp punkteTabelle
+= const TableExampleApp();</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  // This widget is the root of your
+application.</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  @override</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  Widget build(BuildContext context) {</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>    return MaterialApp(</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>      //locale: appLocale,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>      supportedLocales:
+S.delegate.supportedLocales,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>      debugShowCheckedModeBanner:
+false,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>      home: const MyHomePage(title:
+'Testapp'),</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>      localizationsDelegates: const [</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>        S.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>       
+GlobalMaterialLocalizations.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>        </span><span style='font-family:
+Consolas'>GlobalWidgetsLocalizations.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+style='font-family:Consolas'>        GlobalCupertinoLocalizations.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+style='font-family:Consolas'>      ],</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+style='font-family:Consolas'>    );</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+style='font-family:Consolas'>  }</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+style='font-family:Consolas'>}</span></p>
+
+<p class=MsoNormal style='border:none;padding:0cm'>&nbsp;</p>
+
+<p class=MsoNormal style='border:none;padding:0cm'>Weiter unten im Code tauchen
+dann Widgets auf wie</p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>Column(children: [</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>Text(S.of(context).theWeekday),</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>Text(S.of(context).someOtherText),</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+style='font-family:Consolas'>...</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+style='font-family:Consolas'>]</span></p>
+
+<p class=MsoNormal style='border:none;padding:0cm'>Angezeigt:
+&quot;Montag&quot;, &quot;Was möchten Sie fragen?&quot;</p>
+
+<p class=MsoNormal style='border:none;padding:0cm'>Shared Preferences speichert
+nur Zahlen, keine Sprache.</p>
+
+<p class=MsoNormal style='border:none;padding:0cm'>&nbsp;</p>
+
+<p class=MsoNormal style='border:none;padding:0cm'><b>Wer oder was wählt dann
+die Sprache aus?</b></p>
+
+</div>
+
+<p class=MsoNormal>Sehr gut, <b>jetzt sind wir auf der richtigen Flughöhe</b> <span
+style='font-family:"Segoe UI Emoji",sans-serif'>&#128077;</span><br>
+Du hast völlig recht: <i>global verteilte Listenables</i> wären Murks – und das
+brauchen wir <b>alles nicht</b>.</p>
+
+<p class=MsoNormal>Du stellst jetzt <b>die richtige Grundfrage</b>:</p>
+
+<p class=MsoNormal><b>Wenn ich in Flutter locale: NICHT setze – wer entscheidet
+dann die Sprache?</b></p>
+
+<p class=MsoNormal>Die Antwort ist <b>überraschend simpel</b> und genau das ist
+die <b>minimale, saubere Lösung</b>.</p>
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+<p class=MsoNormal><b><span style='font-family:"Segoe UI Emoji",sans-serif'>&#9989;</span>
+Kurzantwort (die Essenz)</b></p>
+
+<p class=MsoNormal><b>Flutter selbst wählt die Sprache automatisch – anhand der
+System­sprache des Geräts.</b></p>
+
+<p class=MsoNormal>Du musst <b>nichts speichern</b>, <b>nichts verwalten</b>, <b>keine
+globale Variable haben</b>.</p>
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+<p class=MsoNormal><b><span style='font-family:"Segoe UI Emoji",sans-serif'>&#128269;</span>Was
+passiert konkret in DEINEM Minimal-Setup?</b></p>
+
+<p class=MsoNormal><b><span lang=EN-US>Du hast:</span></b></p>
+
+<div style='border:solid #B3E5A1 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>MaterialApp(</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  supportedLocales:
+S.delegate.supportedLocales,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  localizationsDelegates: const [</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>    S.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>   
+GlobalMaterialLocalizations.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>   
+GlobalWidgetsLocalizations.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>   
+GlobalCupertinoLocalizations.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  ],</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>)</span></p>
+
+</div>
+
+<p class=MsoNormal><b><span lang=EN-US>Und im UI:</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span lang=EN-US>Text(S.of(context).theWeekday)</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span lang=EN-US>Text(S.of(context).someOtherText)</span></p>
+
+<p class=MsoNormal><b>Ergebnis:</b></p>
+
+</div>
+
+<span style='font-size:11.0pt;line-height:107%;font-family:"Aptos",sans-serif'><br
+clear=all style='page-break-before:auto'>
+</span>
+
+<div class=WordSection2>
+
+<ul style='margin-top:0cm' type=disc>
+ <li class=MsoNormal>Gerätssprache = <b>Deutsch</b><br>
+     &#8594; Flutter wählt Locale('de')<br>
+     &#8594; S.of(context) liefert <b>Deutsch</b></li>
+ <li class=MsoNormal>Gerätssprache = <b>Englisch</b><br>
+     &#8594; Locale('en')<br>
+     &#8594; Englischer Text</li>
+</ul>
+
+</div>
+
+<span style='font-size:11.0pt;line-height:107%;font-family:"Segoe UI Emoji",sans-serif'><br
+clear=all style='page-break-before:auto'>
+</span>
+
+<div class=WordSection3>
+
+<p class=MsoNormal><span style='font-family:"Segoe UI Emoji",sans-serif'>&#128073;</span>
+<b>Ganz ohne dein Zutun</b></p>
+
+<p class=MsoNormal><b><span style='font-family:"Segoe UI Emoji",sans-serif'>&#129504;</span>
+Wer genau trifft die Entscheidung?</b></p>
+
+<p class=MsoNormal>Flutter macht intern:</p>
+
+<ol style='margin-top:0cm' start=1 type=1>
+ <li class=MsoNormal>OS meldet z. B.:</li>
+</ol>
+
+<p class=MsoNormal><span lang=FR>Locales: [de-DE, en-US, …]</span></p>
+
+<ol style='margin-top:0cm' start=2 type=1>
+ <li class=MsoNormal>Flutter sucht <b>die erste Übereinstimmung</b> in:</li>
+</ol>
+
+<p class=MsoNormal>supportedLocales</p>
+
+<ol style='margin-top:0cm' start=3 type=1>
+ <li class=MsoNormal>S.delegate.load(locale) wird aufgerufen</li>
+ <li class=MsoNormal>S.of(context) greift <b>automatisch</b> auf diese Locale
+     zu</li>
+</ol>
+
+<p class=MsoNormal><span style='font-family:"Segoe UI Emoji",sans-serif'>&#128204;</span>
+<b>Das ist sauberes, idiomatisches Flutter</b></p>
+
+<p class=MsoNormal><b>&nbsp;</b></p>
+
+<h2>App-weise auswählen?</h2>
+
+<p class=MsoNormal><b>Super. Dann: möchte ich aber haben, dass man (wie beim
+iPhone) über Settings &gt; Apps &gt; Punktspiel &gt; Sprache &gt; verfügbar:
+DE, EN, FR sich das einzeln auswählen kann. Flexibel.</b></p>
+
+<p class=MsoNormal>Perfekt – <b>genau das ist der „richtige“ Weg</b> <span
+style='font-family:"Segoe UI Emoji",sans-serif'>&#128077;</span><br>
+Und die gute Nachricht vorweg:</p>
+
+<p class=MsoNormal><b>Das, was du beschreibst, wird von iOS und Android bereits
+bereitgestellt.<br>
+Du musst dafür in Flutter fast nichts tun.</b></p>
+
+<p class=MsoNormal>Ich erkläre <b>präzise</b>, <b>minimal</b> und <b>ohne
+Architekturballast</b>.</p>
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+<p class=MsoNormal><b><span style='font-family:"Segoe UI Emoji",sans-serif'>&#129504;</span>
+Grundprinzip (wichtig)</b></p>
+
+<p class=MsoNormal><b>App-spezifische Spracheinstellungen werden vom
+Betriebssystem verwaltet</b>,<br>
+nicht von deiner App.</p>
+
+<p class=MsoNormal>Flutter <b>liest nur</b>, entscheidet aber <b>nicht selbst</b>.</p>
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+<h3><span style='font-family:"Segoe UI Emoji",sans-serif'>&#127822;</span> iOS:
+Settings &gt; App &gt; Sprache</h3>
+
+<p class=MsoNormal><b>Voraussetzung</b></p>
+
+<ul style='margin-top:0cm' type=disc>
+ <li class=MsoNormal>iOS 13+</li>
+ <li class=MsoNormal>App hat <b>lokalisierte Ressourcen</b></li>
+</ul>
+
+<p class=MsoNormal><b>Was Flutter dafür braucht</b></p>
+
+<p class=MsoNormal><b>Nichts zusätzliches</b>, außer:</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span style='font-family:Consolas'>MaterialApp(</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span style='font-family:Consolas'> 
+supportedLocales: S.delegate.supportedLocales,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span style='font-family:Consolas'> 
+localizationsDelegates: const [</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span style='font-family:Consolas'>   
+S.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span style='font-family:Consolas'>   
+GlobalMaterialLocalizations.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span style='font-family:Consolas'>   
+GlobalWidgetsLocalizations.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span style='font-family:Consolas'>   
+GlobalCupertinoLocalizations.delegate,</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span style='font-family:Consolas'> 
+],</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm'><span style='font-family:Consolas'>)</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:"Segoe UI Emoji",sans-serif'>&#128073;</span>
+<b>Genau das hast du bereits</b></p>
+
+<p class=MsoNormal><b>Ergebnis</b></p>
+
+<p class=MsoNormal>iOS zeigt automatisch:</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'>Einstellungen</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'>  &#8594; Punktspiel</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'>     &#8594; Sprache</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'>        &#8594; Deutsch</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'>        &#8594; English</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'>        &#8594; Français</p>
+
+<p class=MsoNormal><span style='font-family:"Segoe UI Emoji",sans-serif'>&#127881;</span>
+<b>Ohne eigenen Code</b></p>
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+<h3><span style='font-family:"Segoe UI Emoji",sans-serif'>&#9888;&#65039;</span>
+iOS-Fallstrick (wichtig!)</h3>
+
+<p class=MsoNormal>Du <b>MUSST</b> in Xcode die Sprachen deklarieren.</p>
+
+<p class=MsoNormal><b><span lang=EN-US>ios/Runner/Info.plist</span></b></p>
+
+<div style='border:solid #B3E5A1 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>&lt;key&gt;CFBundleLocalizations&lt;/key&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>&lt;array&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  &lt;string&gt;de&lt;/string&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  &lt;string&gt;en&lt;/string&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=EN-US style='font-family:Consolas'>  </span><span style='font-family:Consolas'>&lt;string&gt;fr&lt;/string&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+style='font-family:Consolas'>&lt;/array&gt;</span></p>
+
+</div>
+
+<p class=MsoNormal><span style='font-family:"Segoe UI Emoji",sans-serif'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Segoe UI Emoji",sans-serif'>&#128204;</span>
+<b>Das ist der entscheidende Punkt</b>, den viele vergessen.</p>
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+<h3><span style='font-family:"Segoe UI Emoji",sans-serif'>&#129302;</span>
+Android: App-spezifische Sprache</h3>
+
+<p class=MsoNormal><b>Android 13+ (API 33)</b></p>
+
+<ul style='margin-top:0cm' type=disc>
+ <li class=MsoNormal>Android zeigt automatisch:</li>
+</ul>
+
+<p class=MsoNormal style='margin-bottom:0cm'>Einstellungen</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'> &#8594; Apps</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'>   &#8594; Punktspiel</p>
+
+<p class=MsoNormal style='margin-bottom:0cm'>     &#8594; Sprache</p>
+
+<p class=MsoNormal><b>Flutter-Seite</b></p>
+
+<p class=MsoNormal>Ebenfalls <b>nichts weiter nötig</b>, solange:</p>
+
+<p class=MsoNormal><span lang=EN-US>supportedLocales:
+S.delegate.supportedLocales,</span></p>
+
+<p class=MsoNormal><span lang=EN-US>gesetzt ist.</span></p>
+
+<h3><span style='font-family:"Segoe UI Emoji",sans-serif'>&#9888;&#65039;</span>
+Android-Fallstrick</h3>
+
+<p class=MsoNormal>In android/app/src/main/AndroidManifest.xml:</p>
+
+<div style='border:solid #B3E5A1 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=FR style='font-family:Consolas'>&lt;application</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=FR style='font-family:Consolas'> 
+android:localeConfig=&quot;@xml/locales_config&quot;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=FR style='font-family:Consolas'>  </span><span style='font-family:Consolas'>...&gt;</span></p>
+
+</div>
+
+<p class=MsoNormal><span lang=FR>android/app/src/main/res/xml/locales_config.xml</span></p>
+
+<div style='border:solid #B3E5A1 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=FR style='font-family:Consolas'>&lt;?xml version=&quot;1.0&quot;
+encoding=&quot;utf-8&quot;?&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=FR style='font-family:Consolas'>&lt;locale-config
+xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=FR style='font-family:Consolas'>  &lt;locale
+android:name=&quot;de&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=FR style='font-family:Consolas'>  &lt;locale
+android:name=&quot;en&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=FR style='font-family:Consolas'>  &lt;locale
+android:name=&quot;fr&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='margin-bottom:0cm;border:none;padding:0cm'><span
+lang=FR style='font-family:Consolas'>&lt;/locale-config&gt;</span></p>
+
+</div>
+
+<p class=MsoNormal><span lang=FR>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Segoe UI Emoji",sans-serif'>&#128204;</span>
+<b>Ohne das zeigt Android die Sprachwahl nicht an.</b></p>
+
+</div>
+
+</body>
+
+</html>
