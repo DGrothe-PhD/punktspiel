@@ -18,9 +18,6 @@ import 'package:punktspiel/utils/listenables.dart';
 import 'package:punktspiel/calc.dart';
 import 'package:punktspiel/models/games.dart';
 
-// Legacy translation
-//import 'package:punktspiel/locales.dart';
-
 // State of the art translation
 import 'package:punktspiel/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -34,10 +31,8 @@ void main() {
   runApp(const MyApp());
 }
 
-// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  //final TableExampleApp punkteTabelle = const TableExampleApp();
 
   // This widget is the root of your application.
   @override
@@ -230,7 +225,8 @@ class _MyHomePageState extends State<MyHomePage> {
     messenger.hideCurrentSnackBar();
       messenger.showSnackBar(
       SnackBar(
-        content: Text(s.pointSubmitFeedback(selectedPlayerName.value, selectedPlayerPoints)),
+        content: Text(selectedPlayerPoints == 1 ? s.onePointFeedback(selectedPlayerName.value) 
+            : s.pointSubmitFeedback(selectedPlayerName.value, selectedPlayerPoints)),
          // Locales.submitFeedback[Lang.l].format([selectedPlayerName.value, selectedPlayerPoints])),
         backgroundColor: const Color.fromARGB(255, 68, 146, 72),
         behavior: SnackBarBehavior.floating,
@@ -471,8 +467,7 @@ class _MyHomePageState extends State<MyHomePage> {
  String? _selectedGame;
 
   Widget buildGamesMenu() {
-
-    _selectedGame = Spieler.gameKeyAsString();
+    _selectedGame = Spieler.gameKeyAsString() ?? "Miscellaneous";
     // final initSelection =  _selectedGame != null &&
     //       _features.games.keys
     //           .map((k) => k.toString().split('.').last)
@@ -488,7 +483,7 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: edgeInsets,
       value: _selectedGame != null &&
               _features.games.keys
-                  .map((k) => k.toString().split('.').last)//TODO nimm Spieler.gameKeyAsString()
+                  .map((k) => Spieler.gameKeyToString(k))
                   .contains(_selectedGame)
           ? _selectedGame
           : null,

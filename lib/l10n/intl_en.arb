@@ -87,7 +87,14 @@
       "names": {"type": "String"}
     }
   },
-  "pointSubmitFeedback": "{name} gets {points} point(s).",
+  "onePointFeedback": "{name} gets one point.",
+  "@onePointFeedback": {
+    "description": "Typically a snack bar message announcing one point was given.",
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "pointSubmitFeedback": "{name} gets {points} points.",
   "@pointSubmitFeedback": {
     "description": "Typically a snack bar message announcing points were given.",
     "placeholders": {
