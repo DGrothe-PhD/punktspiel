@@ -16,6 +16,7 @@ import 'package:punktspiel/locales.dart';
 import 'package:punktspiel/generated/l10n.dart';
 
 import 'package:punktspiel/styles.dart';
+import 'package:punktspiel/widgets/font_scale.dart';
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
 
 class StyleDecorator {
@@ -240,29 +241,44 @@ class TablePage extends StatelessWidget {
                 {onShareResults(tableContext ?? context)},
             onRightSwipe: (details) =>
                 {onShareTable(tableContext ?? context)},
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              primary: true,
-              //physics: const NeverScrollableScrollPhysics(),
-              child: SelectableText.rich(
-                TextSpan(
-                  text: headline,
-                  style: StyleDecorator.monoStil,
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: playerNames.toString(),
-                      style: StyleDecorator.textstil,
-                    ),
-                    TextSpan(
-                      text: gameResultText.toString(),
-                    ),
-                  ],
+            child: FontScaleProvider(
+              // minimal: sichtbare Steuerung oberhalb des Textes
+              // wenn du die Steuerung woanders haben willst, setze showControl: false
+              /*initialScale: 1.0,
+              minScale: 0.8,
+              maxScale: 1.6,
+              divisions: 8,*/
+              showControl: true,
+              child: 
+               SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                primary: true,
+                //physics: const NeverScrollableScrollPhysics(),
+                //? TableView einbauen?
+                child: Builder(
+                  builder: (ctx) => SelectableText.rich(
+                  TextSpan(
+                    text: headline,
+                    style: scaledTextStyle(StyleDecorator.monoStil, ctx),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: playerNames.toString(),
+                        style: scaledTextStyle(StyleDecorator.textstil, ctx),
+                      ),
+                      TextSpan(
+                        text: gameResultText.toString(),
+                        style: scaledTextStyle(StyleDecorator.textstil, ctx),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.justify,
                 ),
-                textAlign: TextAlign.justify,
+                ),
               ),
             ),
           ),
-        ),
+          ),
+       // ),
         const SizedBox(height: 80),
       ]));
     } catch (exception) {

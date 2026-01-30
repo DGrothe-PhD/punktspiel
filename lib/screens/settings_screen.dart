@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 //import 'package:http/http.dart' as http;
 //import 'package:package_info_plus/package_info_plus.dart';
 
-// Legacy
-//import 'package:punktspiel/locales.dart';
-
 import 'package:punktspiel/generated/l10n.dart';
 import 'package:punktspiel/styles.dart';
 
@@ -15,34 +12,7 @@ import 'package:punktspiel/preferences/mysharedpreferences.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
-  
-  // zweiter Mitleser
-  //final ValueNotifier<String> selectedLanguage = ValueNotifier(Lang.currentLanguageCode());
-  // manuelle Liste
-  //final Map<String,String> availableLanguages = {"de": "Deutsch", "en" : "English", "fr": "Français"};
 
-/*
-  Widget _selectLanguagesMenu() {
-    return ValueListenableBuilder<String>(
-      valueListenable: selectedLanguage,
-      builder: (context, value, child) {
-        return PopupMenuButton<String>(
-          onSelected: (val) {
-            selectedLanguage.value = val;
-            Lang.setLanguage(val);
-
-            //MySharedPreferences.androidMessage.value += 
-            //  "${MySharedPreferences.androidMessage.value == "" ? "" : "\n"}[INFO] language changed\n";
-          },
-          itemBuilder: (context) => availableLanguages.entries
-              .map((entry) => PopupMenuItem<String>(value: entry.key, child: Text(entry.value)))
-              .toList(),
-          child: Text(Localizations.localeOf(context).languageCode),
-        );
-      },
-    );
-  }
-*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(

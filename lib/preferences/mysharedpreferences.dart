@@ -46,16 +46,6 @@ class MySharedPreferences {
   static final ValueNotifier<String> androidMessage = ValueNotifier("");
   static SharedPreferencesAsync? prefs = safeGetInstanceAsync();
 
-  /*static Future<SharedPreferences?> safeGetInstance() async {
-    try {
-      return await SharedPreferences.getInstance();
-    } catch (_) {
-      androidMessage.value += "\nCould not retrieve locally saved data. Android issue.";
-      return null;
-    }
-  }*/
-
-  // Testing another option
   static SharedPreferencesAsync? safeGetInstanceAsync() {
     try {
       return SharedPreferencesAsync();
@@ -84,25 +74,27 @@ class MySharedPreferences {
     }*/
   }
 
-  // Language
-  /*/  static Future<void> saveLanguage(String code) async{
-    final SharedPreferences? prefs = await safeGetInstance();
+  static Future<void> saveTextScale(double value) async{
+    _safeGetInstanceAsyncRetryIf();
     if(prefs == null){
-      androidMessage.value += "setting languageCode";
+      androidMessage.value += "setting textScale";
       return;
     }
-    await prefs.setString('languageCode', code);
+    await prefs?.setDouble('textScale', value).catchError(
+      (err) {androidMessage.value += '$err getting textScale';}
+    );
   }
-  
-  static Future<String?> getLanguage() async{
-    final SharedPreferences? prefs = await safeGetInstance();
+
+  static Future<double?> getTextScale() async{
+    _safeGetInstanceAsyncRetryIf();
     if(prefs == null){
-      androidMessage.value += 'getting languageCode';
-      return "de";
+      androidMessage.value += 'getting textScale';
+      return 1.0;
     }
-    return prefs.getString('languageCode');
+    return prefs?.getDouble('textScale').catchError(
+      (err) {androidMessage.value += '$err getting textScale'; return 1.0;}
+    );
   }
-  */
 
   static Future<void> saveLanguage(String code) async{
     _safeGetInstanceAsyncRetryIf();
