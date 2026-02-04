@@ -249,35 +249,39 @@ class TablePage extends StatelessWidget {
               maxScale: 1.6,
               divisions: 8,*/
               showControl: true,
-              child: 
-               SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                primary: true,
-                //physics: const NeverScrollableScrollPhysics(),
-                //? TableView einbauen?
-                child: Builder(
-                  builder: (ctx) => SelectableText.rich(
-                  TextSpan(
-                    text: headline,
-                    style: scaledTextStyle(StyleDecorator.monoStil, ctx),
-                    children: <TextSpan>[
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  primary: true,
+                  //physics: const NeverScrollableScrollPhysics(),
+                  //? TableView einbauen?
+                  child: Builder(
+                    builder: (ctx) => SelectableText.rich(
                       TextSpan(
-                        text: playerNames.toString(),
-                        style: scaledTextStyle(StyleDecorator.textstil, ctx),
+                        text: headline,
+                        style: scaledTextStyle(StyleDecorator.monoStil, ctx),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: playerNames.toString(),
+                            style:
+                                scaledTextStyle(StyleDecorator.textstil, ctx),
+                          ),
+                          TextSpan(
+                            text: gameResultText.toString(),
+                            style:
+                                scaledTextStyle(StyleDecorator.textstil, ctx),
+                          ),
+                        ],
                       ),
-                      TextSpan(
-                        text: gameResultText.toString(),
-                        style: scaledTextStyle(StyleDecorator.textstil, ctx),
-                      ),
-                    ],
+                      textAlign: TextAlign.justify,
+                    ),
                   ),
-                  textAlign: TextAlign.justify,
-                ),
                 ),
               ),
             ),
           ),
-          ),
+        ),
        // ),
         const SizedBox(height: 80),
       ]));

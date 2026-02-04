@@ -43,6 +43,7 @@
   "resultsLabel": "Ergebnisse",
   "zeroPointsLabel": "Spiele punktlos:",
   "settingsLabel": "Einstellungen",
+  "textSize": "Schriftgröße",
   "furtherSettingsLabel": "Weitere Einstellungen",
   "hintPointsMissing": "Hinweis: Punkte fehlen für {names}",
   "onePointFeedback": "{name} bekommt einen Punkt.",

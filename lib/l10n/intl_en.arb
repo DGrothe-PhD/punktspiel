@@ -79,6 +79,7 @@
   "resultsLabel": "Results",
   "zeroPointsLabel": "Games with zero points:",
   "settingsLabel": "Settings",
+  "textSize": "Type size",
   "furtherSettingsLabel": "More settings",
   "hintPointsMissing": "Hint: Missing results for {names}",
   "@hintPointsMissing": {

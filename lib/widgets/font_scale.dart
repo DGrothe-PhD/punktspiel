@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter/foundation.dart' show ValueNotifier;
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
+import 'package:punktspiel/generated/l10n.dart';
 
 /// Inherited widget: liefert den aktuellen Skalierungsfaktor.
 class FontScale extends InheritedWidget {
@@ -72,17 +73,11 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
   void initState() {
     super.initState();
     getTextScale();
-    //_scale = widget.initialScale.clamp(widget.minScale, widget.maxScale);
   }
-
-  // ? Es updated noch nicht, liest aber den Wert ausm Speicher korrekt aus.
-  // ? "Baut zu früh", oder holt Lasagne ausm Ofen bevor er lief.
-  // ? Sollte wohl so alalong
-  // ? static final ValueNotifier<bool> leastPointsWinning = ValueNotifier(true);
 
   @override
   Widget build(BuildContext context) {
-    getTextScale();
+    //getTextScale();
     final control = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Column(
@@ -92,7 +87,7 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
             children: [
               const Icon(Icons.text_fields, size: 18),
               const SizedBox(width: 8),
-              const Text('Textgröße'), //TODO localize
+              Text(S.of(context).textSize),
               const Spacer(),
               ValueListenableBuilder(
                 valueListenable: widgetScale,

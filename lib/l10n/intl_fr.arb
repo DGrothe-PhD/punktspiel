@@ -44,6 +44,7 @@
   "resultsLabel": "Les résultats",
   "zeroPointsLabel": "Joué zéro points:",
   "settingsLabel": "Configurer",
+  "textSize": "Taille des caractères",
   "furtherSettingsLabel": "Autres paramètres",
   "hintPointsMissing": "Remarque : il manque des points pour {names}",
   "onePointFeedback": "{name} reçoit un point.",
