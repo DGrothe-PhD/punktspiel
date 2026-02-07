@@ -116,11 +116,21 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
 
     // Wickle child zuerst in FontScale, zusätzlich die (optionale) Steuerung
     Widget body = ValueListenableBuilder(
-        valueListenable: widgetScale,
-        builder: (context, scale, _) => FontScale(
-              scale: scale ?? 1.0,
-              child: widget.child,
-    ));
+      valueListenable: widgetScale,
+      builder: (context, scale, _) => 
+        InteractiveViewer(
+          boundaryMargin: const EdgeInsets.all(20.0),
+          minScale: 0.5, // Minimum scale (zoom out)
+          maxScale: 2.0, // Maximum scale (zoom in)
+          panEnabled: true,
+          scaleEnabled: true,
+          child: 
+          FontScale(
+            scale: scale ?? 1.0,
+            child: widget.child,
+          )
+      ),
+    );
 
     if (!widget.showControl) return body;
 
