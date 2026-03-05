@@ -75,6 +75,15 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
     getTextScale();
   }
 
+  final TransformationController _controller = TransformationController();
+  
+  @override
+  void dispose() {
+    _controller.dispose(); // ← WICHTIG
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     //getTextScale();
@@ -118,7 +127,10 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
     Widget body = ValueListenableBuilder(
       valueListenable: widgetScale,
       builder: (context, scale, _) => 
+        Column(
+          children:[
         InteractiveViewer(
+          transformationController: _controller,
           boundaryMargin: const EdgeInsets.all(20.0),
           minScale: 0.5, // Minimum scale (zoom out)
           maxScale: 2.0, // Maximum scale (zoom in)
@@ -130,6 +142,22 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
             child: widget.child,
           )
       ),
+      Row(
+        spacing: 11,
+        children: [
+          const SizedBox(width: 11),
+          FloatingActionButton.small(
+            onPressed: () => _scrollUp(),
+            child: const Icon(Icons.arrow_upward),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.small(
+            onPressed: () => _scrollDown(),
+            child: const Icon(Icons.arrow_downward),
+          ),
+        ],
+      ),
+          ])
     );
 
     if (!widget.showControl) return body;
@@ -141,6 +169,14 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
         body,
       ],
     );
+  }
+
+  void _scrollDown(){
+    _controller.value = _controller.value.clone()..translate(0.0, -50.0);
+  }
+
+  void _scrollUp(){
+    _controller.value = _controller.value.clone()..translate(0.0, 50.0);
   }
 }
 

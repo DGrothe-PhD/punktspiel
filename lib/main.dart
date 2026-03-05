@@ -13,6 +13,7 @@ import 'package:punktspiel/screens/table_screen.dart';
 import 'package:punktspiel/widgets/points_entry_row.dart';
 // Utils
 import 'package:punktspiel/utils/listenables.dart';
+import 'package:punktspiel/preferences/mysharedpreferences.dart';
 
 // Backend and styles
 import 'package:punktspiel/calc.dart';
@@ -26,6 +27,8 @@ import 'package:punktspiel/styles.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  //! TODO implement init() tidying things up, 23.02.26 see tech debt issue
+  //await MySharedPreferences.init();
   Spieler.settings();
   //Lang.initLanguage();
   runApp(const MyApp());
