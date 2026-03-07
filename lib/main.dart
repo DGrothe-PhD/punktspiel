@@ -509,6 +509,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+
   Widget _reorderPlayersView() => Expanded(
         child: Align(
           alignment: Alignment.topCenter,
@@ -519,6 +520,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   shrinkWrap: true,
                   // Optional, für Hot Reload Stabilität
                   key: const ValueKey('reorderable_list'),
+                  onReorderStart: (index){
+                    HapticFeedback.selectionClick();
+                  },
+                  /*onReorderEnd: (index){
+                  },*/
                   onReorder: (int oldIndex, int newIndex) {
                     if (newIndex > oldIndex) newIndex -= 1;
                     String item = theMembers[oldIndex];
@@ -526,9 +532,30 @@ class _MyHomePageState extends State<MyHomePage> {
                     //Now we have updated things in the background - them to the UI, not the old state.
                     namesFieldController.text = Spieler.playerNames.value.join(", ");
                   },
+
+                  proxyDecorator: (child, index, animation) {
+                    HapticFeedback.selectionClick();
+
+                    return Material(
+                      color: Colors.transparent,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 197, 234, 201).withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(7),
+                          boxShadow: const [
+                            BoxShadow(blurRadius: 2, color: Colors.white70)
+                          ],
+                        ),
+                        child: child,
+                      ),
+                    );
+                  },
+
                   children: [
                     for (int index = 0; index < theMembers.length; index++)
                       ListTile(
+                        tileColor: Themes.greenishColor,
                         key: ValueKey(index),
                         title: Text(theMembers[index]),
                         trailing: IconButton(
