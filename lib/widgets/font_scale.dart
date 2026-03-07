@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter/foundation.dart' show ValueNotifier;
+import 'package:punktspiel/styles.dart';
 import 'package:punktspiel/preferences/mysharedpreferences.dart';
 import 'package:punktspiel/generated/l10n.dart';
 
@@ -108,6 +109,8 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
           ValueListenableBuilder(
             valueListenable: widgetScale,
             builder: (context, scale, _) => Slider.adaptive(
+              activeColor: Themes.sunflowerColor,
+              inactiveColor: Themes.greenishColor,
               value: widgetScale.value ?? 1.0,
               min: widget.minScale,
               max: widget.maxScale,
@@ -147,11 +150,17 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
         children: [
           const SizedBox(width: 11),
           FloatingActionButton.small(
+            elevation: 5,
+            backgroundColor: Themes.greenishColor,
+            shape: Themes.cardShape,
             onPressed: () => _scrollUp(),
             child: const Icon(Icons.arrow_upward),
           ),
           const SizedBox(height: 8),
           FloatingActionButton.small(
+            elevation: 5,
+            backgroundColor: Themes.greenishColor,
+            shape: Themes.cardShape,
             onPressed: () => _scrollDown(),
             child: const Icon(Icons.arrow_downward),
           ),

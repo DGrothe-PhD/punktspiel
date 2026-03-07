@@ -22,11 +22,9 @@ import 'package:punktspiel/preferences/mysharedpreferences.dart';
 
 class StyleDecorator {
   static const double spacing = -0.4;
-  static final textstil = TextStyle(
+  static const textstil = TextStyle(
     fontSize: 12.0,
-    color:
-        const Color.fromARGB(255, 27, 26, 26), // fontWeight: FontWeight.bold,
-    backgroundColor: Themes.active,
+    color: Color.fromARGB(255, 27, 26, 26), // fontWeight: FontWeight.bold,
     letterSpacing: spacing, //-1.1,
   );
   static const monoStil = TextStyle(
@@ -86,7 +84,7 @@ class TableExampleApp extends StatelessWidget {
         child: TablePage(S.of(context)),
       ),
       floatingActionButton: Spieler.filledFullRound()
-          ? FloatingActionButton(
+          ? FloatingActionButton.small(
               onPressed: storeData,
               backgroundColor: Themes.pumpkinColor,
               shape: Themes.cardShape,
@@ -257,32 +255,17 @@ class TablePage extends StatelessWidget {
           child: Column(children: <Widget>[
         //TODO Ich mag die Buttons hier haben,
         //TODO aber die Methoden funktionieren besser in font_scale mit mathematischen Tricks.
-        /*
-            Row(
-        spacing: 11,
-        children: [
-          const SizedBox(width: 11),
-          FloatingActionButton.small(
-            onPressed: () => _scrollUp(),
-            child: const Icon(Icons.arrow_upward),
-          ),
-          const SizedBox(height: 8),
-          FloatingActionButton.small(
-            onPressed: () => _scrollDown(),
-            child: const Icon(Icons.arrow_downward),
-          ),
-        ],
-      ),*/
-      Row(
+        const SizedBox(height: 5),
+        Row(
           children: [
             ElevatedButton(
               onPressed: _scrollToLeft,
-              style: ButtonStyle(backgroundColor: Themes.pumpkin),
+              style: Themes.cardButtonStyle(Themes.greenish),
               child: const Icon(Icons.first_page),
             ),
             ElevatedButton(
               onPressed: _scrollToRight,
-              style: ButtonStyle(backgroundColor: Themes.pumpkin),
+              style: Themes.cardButtonStyle(Themes.greenish),
               child: const Icon(Icons.last_page),
             ),
           ],
