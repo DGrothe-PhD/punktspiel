@@ -173,11 +173,13 @@ class _FontScaleProviderState extends State<FontScaleProvider> {
 
   void _scrollDown(){
     _controller.value = _controller.value.clone()..translate(0.0, -50.0);
+    // TODO lets do some funny math.
   }
 
   void _scrollUp(){
     _controller.value = _controller.value.clone()..translate(0.0, 50.0);
   }
+
 }
 
 /// Hilfsfunktion: skaliert eine vorhandene TextStyle (falls fontSize gesetzt).

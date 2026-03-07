@@ -490,7 +490,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   .contains(_selectedGame)
           ? _selectedGame
           : null,
-      //value: _selectedGame != null && _features.games.keys.contains(_selectedGame) ? _selectedGame : null,
       onChanged: _features.games.isNotEmpty
           ? (String? value) {
               setState(() {

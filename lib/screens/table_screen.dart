@@ -8,6 +8,7 @@ import 'package:swipe_to/swipe_to.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io' show Platform;
 import 'package:punktspiel/calc.dart';
+import 'package:punktspiel/models/games.dart' show GameKeyL10n;
 
 // Datum
 import 'package:punktspiel/locales.dart';
@@ -23,7 +24,8 @@ class StyleDecorator {
   static const double spacing = -0.4;
   static final textstil = TextStyle(
     fontSize: 12.0,
-    color: const Color.fromARGB(255, 27, 26, 26), // fontWeight: FontWeight.bold,
+    color:
+        const Color.fromARGB(255, 27, 26, 26), // fontWeight: FontWeight.bold,
     backgroundColor: Themes.active,
     letterSpacing: spacing, //-1.1,
   );
@@ -81,7 +83,7 @@ class TableExampleApp extends StatelessWidget {
       ),
       //drawer: ElevatedButton(child: const Column(children:[Text("tbd")]), onPressed: () {},),
       body: SingleChildScrollView(
-        child: TablePage(),
+        child: TablePage(S.of(context)),
       ),
       floatingActionButton: Spieler.filledFullRound()
           ? FloatingActionButton(
@@ -96,7 +98,8 @@ class TableExampleApp extends StatelessWidget {
   }
 
   void storeData() {
-    var now = DateTime.now();// no elevated button? Then "now" becomes obsolete.
+    var now =
+        DateTime.now(); // no elevated button? Then "now" becomes obsolete.
     UserSettings settings = UserSettings(
       dateTime: Lang.deDateFormat.format(now),
       names: Spieler.names,
@@ -105,49 +108,67 @@ class TableExampleApp extends StatelessWidget {
       leastPointsWinning: Spieler.leastPointsWinning.value,
       sumOfPoints: Spieler.gruppe.map((i) => i.punkte.sum).toList(),
     );
-    
+
     //settings.verboseTesting();
     MySharedPreferences.saveData(settings);
   }
 }
 
 class TablePage extends StatelessWidget {
+  final S locale;
   final List names = Spieler.names;
   static const String winningDecoration = "🎉";
   final now = DateTime.now();
-  TablePage({super.key});
+  TablePage(this.locale, {super.key});
 
   static String headline = "";
   static const int columnWidth = 11;
   static StringBuffer playerNames = StringBuffer();
   static StringBuffer gameResultText = StringBuffer();
+  static final ScrollController _scrollController = ScrollController();
 
   String floatString(num? value) {
-    if(value == null){
+    if (value == null) {
       return "--";
-    }
-    else if(value is int){
+    } else if (value is int) {
       return value.toString();
     }
-      return value.toStringAsFixed(2);
+    return value.toStringAsFixed(2);
   }
 
   void _writePlayerStats(Teilnehmer player, num? stat,
       {bool isLastLine = false}) {
     /// usage: for loop: _writePlayerStats(player, player.countZeros);
     if (player == Spieler.gruppe.last) {
-      gameResultText.write(" ${floatString(stat)}\xA0".padLeft(columnWidth, " "));
+      gameResultText
+          .write(" ${floatString(stat)}\xA0".padLeft(columnWidth, " "));
       if (!isLastLine) gameResultText.write("\n");
     } else {
       gameResultText.write(" ${floatString(stat)} |".padLeft(columnWidth, " "));
     }
   }
 
+  void _scrollToRight() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _scrollToLeft() {
+    _scrollController.animateTo(
+      _scrollController.position.minScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     try {
       gameResultText = StringBuffer();
-      final gameLocale = Spieler.gameKeyAsString() ?? "";
+      final gameLocale = Spieler.game?.l10n(locale) ?? "";
       headline =
           "${S.of(context).resultsLabel} - ${Lang.deDateFormat.format(now)}\n"
           "$gameLocale - n: ${Spieler.numberOfGamesPlayed}\n";
@@ -225,23 +246,57 @@ class TablePage extends StatelessWidget {
 
       gameResultText.write("${S.of(context).best}\n");
       for (var player in Spieler.gruppe) {
-        _writePlayerStats(player,
-            Spieler.leastPointsWinning.value ? player.minPoints : player.maxPoints);
+        _writePlayerStats(
+            player,
+            Spieler.leastPointsWinning.value
+                ? player.minPoints
+                : player.maxPoints);
       }
 
       return Center(
           child: Column(children: <Widget>[
-            const SizedBox(height: 17),
+        //TODO Ich mag die Buttons hier haben,
+        //TODO aber die Methoden funktionieren besser in font_scale mit mathematischen Tricks.
+        /*
+            Row(
+        spacing: 11,
+        children: [
+          const SizedBox(width: 11),
+          FloatingActionButton.small(
+            onPressed: () => _scrollUp(),
+            child: const Icon(Icons.arrow_upward),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.small(
+            onPressed: () => _scrollDown(),
+            child: const Icon(Icons.arrow_downward),
+          ),
+        ],
+      ),*/
+      Row(
+          children: [
+            ElevatedButton(
+              onPressed: _scrollToLeft,
+              style: ButtonStyle(backgroundColor: Themes.pumpkin),
+              child: const Icon(Icons.first_page),
+            ),
+            ElevatedButton(
+              onPressed: _scrollToRight,
+              style: ButtonStyle(backgroundColor: Themes.pumpkin),
+              child: const Icon(Icons.last_page),
+            ),
+          ],
+        ),
+        const SizedBox(height: 17),
         WidgetAnimator(
           incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
             duration: const Duration(milliseconds: 2000),
           ),
           child: SwipeTo(
-            onLeftSwipe: (details) =>
-                {onShareResults(tableContext ?? context)},
-            onRightSwipe: (details) =>
-                {onShareTable(tableContext ?? context)},
+            onLeftSwipe: (details) => {onShareResults(tableContext ?? context)},
+            onRightSwipe: (details) => {onShareTable(tableContext ?? context)},
             child: FontScaleProvider(
+              //scrollController: _scrollController,
               // minimal: sichtbare Steuerung oberhalb des Textes
               // wenn du die Steuerung woanders haben willst, setze showControl: false
               /*initialScale: 1.0,
@@ -250,10 +305,13 @@ class TablePage extends StatelessWidget {
               divisions: 8,*/
               showControl: true,
               child: SingleChildScrollView(
+                controller: _scrollController,
+                physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
-                  primary: true,
+                  primary: false,
                   //physics: const NeverScrollableScrollPhysics(),
                   //? TableView einbauen?
                   child: Builder(
@@ -282,7 +340,7 @@ class TablePage extends StatelessWidget {
             ),
           ),
         ),
-       // ),
+        // ),
         const SizedBox(height: 80),
       ]));
     } catch (exception) {
@@ -324,8 +382,9 @@ class TablePage extends StatelessWidget {
     final renderBox = context.findRenderObject();
     if (Platform.isWindows) {
       Clipboard.setData(ClipboardData(
-        text:
-          gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(headline)));
+          text: gameResultText.isEmpty
+              ? "Nichts/None/Rien"
+              : Spieler.report(headline)));
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -340,7 +399,8 @@ class TablePage extends StatelessWidget {
       await Share.share(
         gameResultText.isEmpty ? "Nichts/None/Rien" : Spieler.report(headline),
         subject: S.of(context).emailSubject,
-        sharePositionOrigin: renderBox.localToGlobal(Offset.zero) & renderBox.size,
+        sharePositionOrigin:
+            renderBox.localToGlobal(Offset.zero) & renderBox.size,
       );
     }
   }
