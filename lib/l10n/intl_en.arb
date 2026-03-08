@@ -103,6 +103,13 @@
       "points": {"type": "int"}
     }
   },
+  "deleteLastPointsFeedback": "Deleted last points of {name}.",
+  "@deleteLastPointsFeedback": {
+    "description": "Typically a snack bar message announcing points were deleted.",
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
   "noColon": "Without at least one colon, “{name}” is read as one name. Proceed anyway?",
   "@noColon": {
     "description": "Avoid colons here.",

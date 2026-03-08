@@ -230,7 +230,6 @@ class _MyHomePageState extends State<MyHomePage> {
       SnackBar(
         content: Text(selectedPlayerPoints == 1 ? s.onePointFeedback(selectedPlayerName.value) 
             : s.pointSubmitFeedback(selectedPlayerName.value, selectedPlayerPoints)),
-         // Locales.submitFeedback[Lang.l].format([selectedPlayerName.value, selectedPlayerPoints])),
         backgroundColor: const Color.fromARGB(255, 68, 146, 72),
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
@@ -324,12 +323,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void deleteLastEntry() {
+    final messenger = ScaffoldMessenger.of(context);
+    final s = S.of(context);
     bool rowWasJustFilled = Spieler.filledFullRound();
-    Spieler.deleteLastEntry(selectedPlayerName.value);
-    //TODO #108 snack bar maybe with undo
+    if (Spieler.deleteLastEntry(selectedPlayerName.value) >0){
+      // only proceed if okay
+      return;
+    }
+    
     if (rowWasJustFilled) {
       _decrementCounter();
     }
+    messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(
+      SnackBar(
+        content: Text(s.deleteLastPointsFeedback(selectedPlayerName.value)),
+        backgroundColor: Themes.pumpkinColor,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),),
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   Future<void> deleteEverything() async {

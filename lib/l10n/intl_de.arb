@@ -48,6 +48,7 @@
   "hintPointsMissing": "Hinweis: Punkte fehlen für {names}",
   "onePointFeedback": "{name} bekommt einen Punkt.",
   "pointSubmitFeedback": "{name} bekommt {points} Punkte.",
+  "deleteLastPointsFeedback": "Letzten Eintrag von {name} gelöscht.",
   "noColon": "Ohne Komma wird „{name}“ als ein Name gelesen, korrekt?",
   "winFor": "Gewinn",
   "cantBeEmpty": "Feld darf nicht leer sein",

@@ -198,10 +198,11 @@ class Spieler{
     return sumPoints;
   }
 
-  static void deleteLastEntry(String name){
+  static int deleteLastEntry(String name){
     int index = gruppe.indexWhere((element) => element.name == name);
-    if(index == -1) return;
+    if(index == -1) return 4;
     gruppe[index].popPointsEntry();
+    return 0;
   }
   static bool filledFullRound(){
     var crunchedData = gruppe.map((x) => x.punkte.length);
