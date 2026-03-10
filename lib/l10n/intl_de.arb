@@ -12,7 +12,7 @@
   "deletePlayer": "Spieler {name} löschen?",
   "noSecondEntry": "Punkte für {name} sind schon eingetragen.",
   "gotIt": "Verstanden!",
-  "areYouSure": "Are you sure?",
+  "areYouSure": "Sind Sie sicher, alle heutigen Spieldaten zu löschen?",
   "answerYes": "Ja",
   "answerNo": "Nein",
   "best": "Bestes Spiel:",

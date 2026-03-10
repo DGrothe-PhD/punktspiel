@@ -42,7 +42,7 @@
   "@gotIt": {
     "description": "User confirms having read the message."
   },
-  "areYouSure": "Are you sure?",
+  "areYouSure": "Are you sure of deleting all of today's game data?",
   "answerYes": "Yes",
   "answerNo": "No",
   "best": "Best game:",
