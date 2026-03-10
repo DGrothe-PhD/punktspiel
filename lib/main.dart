@@ -100,11 +100,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final double buttonHeight = 30;
 
   int selectedPlayerPoints = 0;
-  final ValueNotifier<int> whoseTurnIndex = ValueNotifier(0);//check
-  final ValueNotifier<int> whoseFirstTurnIndex = ValueNotifier(0);//check
-  final ValueNotifier<String> selectedPlayerName = ValueNotifier(Spieler.names.first);
+  final ValueNotifier<int> whoseTurnIndex = ValueNotifier(0); //check
+  final ValueNotifier<int> whoseFirstTurnIndex = ValueNotifier(0); //check
+  final ValueNotifier<String> selectedPlayerName =
+      ValueNotifier(Spieler.names.first);
 
-  final ValueNotifier<bool> _dontEditNames = ValueNotifier(false);//check
+  final ValueNotifier<bool> _dontEditNames = ValueNotifier(false); //check
   final ValueNotifier<bool> _gamesStarted = ValueNotifier(false);
   final ValueNotifier<bool> _tableVisible = ValueNotifier(false);
   final Features _features = Features();
@@ -123,31 +124,31 @@ class _MyHomePageState extends State<MyHomePage> {
     ]);
   }
 
-   Widget buildSelectableNamesMenu() {
+  Widget buildSelectableNamesMenu() {
     if (!Spieler.playerNames.value.contains(selectedPlayerName.value)) {
       //firstOrNull can be done from dart >= 3.0.0
-      selectedPlayerName.value = Spieler.playerNames.value.isNotEmpty 
-      ? Spieler.playerNames.value.first : "";
+      selectedPlayerName.value = Spieler.playerNames.value.isNotEmpty
+          ? Spieler.playerNames.value.first
+          : "";
     }
 
     return ValueListenableBuilder2(
-      first: selectedPlayerName,
-      second: Spieler.playerNames,
-      builder: (context, theName, theMembers, _) {
-        return DropdownButton<String>(
-          key: const ValueKey('playerNameDropDown'),
-          isExpanded: true,
-          padding: edgeInsets,
-          value: theName,
-          onChanged: (String? value) {
-            selectedPlayerName.value = value ?? "";
-          },
-          items: theMembers.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(value: value, child: Text(value));
-          }).toList(),
-        );
-      }
-    );
+        first: selectedPlayerName,
+        second: Spieler.playerNames,
+        builder: (context, theName, theMembers, _) {
+          return DropdownButton<String>(
+            key: const ValueKey('playerNameDropDown'),
+            isExpanded: true,
+            padding: edgeInsets,
+            value: theName,
+            onChanged: (String? value) {
+              selectedPlayerName.value = value ?? "";
+            },
+            items: theMembers.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(value: value, child: Text(value));
+            }).toList(),
+          );
+        });
   }
 
 //no ValueListenableBuilder here, it's changing every few hours in most use cases.
@@ -161,21 +162,26 @@ class _MyHomePageState extends State<MyHomePage> {
             key: const ValueKey('winningRuleDropDown'),
             padding:
                 const EdgeInsets.symmetric(horizontal: 3), // Adjust padding
-            onSelected:
-                (dontEdit || hasRuleSet)
-                    ? null
-                    : (value) {
-                        Spieler.updateLeastPointsWinning(value == S.of(context).leastPointsWinning);
-                      },
+            onSelected: (dontEdit || hasRuleSet)
+                ? null
+                : (value) {
+                    Spieler.updateLeastPointsWinning(
+                        value == S.of(context).leastPointsWinning);
+                  },
             //disabledHint: ,
-            itemBuilder: (context) => [S.of(context).leastPointsWinning, S.of(context).mostPointsWinning]
+            itemBuilder: (context) => [
+              S.of(context).leastPointsWinning,
+              S.of(context).mostPointsWinning
+            ]
                 .map((rule) =>
                     PopupMenuItem<String>(value: rule, child: Text(rule)))
                 .toList(),
-            child: Text(lPW ? S.of(context).leastPointsWinning : S.of(context).mostPointsWinning),
+            child: Text(lPW
+                ? S.of(context).leastPointsWinning
+                : S.of(context).mostPointsWinning),
             //menuWidth: 200,
           );
-    });
+        });
   }
 
   _MyHomePageState();
@@ -188,13 +194,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     _counter.value++;
-    whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) % Spieler.playerNames.value.length;
+    whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) %
+        Spieler.playerNames.value.length;
   }
 
   void _decrementCounter() {
     if (_counter.value > 0) {
       _counter.value--;
-      whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) % Spieler.playerNames.value.length;
+      whoseTurnIndex.value = (whoseFirstTurnIndex.value + _counter.value) %
+          Spieler.playerNames.value.length;
     }
   }
 
@@ -206,8 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
       var namesList = namesFieldController.text.split(",");
       if (namesList.length < 2) {
         bool onlyOnePlayer = await _showYesNoDialog(
-          S.of(context).noColon(namesFieldController.text)
-        );
+            S.of(context).noColon(namesFieldController.text));
         if (!onlyOnePlayer) {
           numberFieldController.clear();
           selectedPlayerPoints = 0;
@@ -226,14 +233,18 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     Spieler.addPoints(selectedPlayerName.value, selectedPlayerPoints);
     messenger.hideCurrentSnackBar();
-      messenger.showSnackBar(
+    messenger.showSnackBar(
       SnackBar(
-        content: Text(selectedPlayerPoints == 1 ? s.onePointFeedback(selectedPlayerName.value) 
-            : s.pointSubmitFeedback(selectedPlayerName.value, selectedPlayerPoints)),
+        content: Text(selectedPlayerPoints == 1
+            ? s.onePointFeedback(selectedPlayerName.value)
+            : s.pointSubmitFeedback(
+                selectedPlayerName.value, selectedPlayerPoints)),
         backgroundColor: const Color.fromARGB(255, 68, 146, 72),
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -265,7 +276,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void setOpener() {
-    whoseFirstTurnIndex.value = Spieler.playerNames.value.indexOf(selectedPlayerName.value);
+    whoseFirstTurnIndex.value =
+        Spieler.playerNames.value.indexOf(selectedPlayerName.value);
     whoseTurnIndex.value = whoseFirstTurnIndex.value;
   }
 
@@ -326,22 +338,24 @@ class _MyHomePageState extends State<MyHomePage> {
     final messenger = ScaffoldMessenger.of(context);
     final s = S.of(context);
     bool rowWasJustFilled = Spieler.filledFullRound();
-    if (Spieler.deleteLastEntry(selectedPlayerName.value) >0){
+    if (Spieler.deleteLastEntry(selectedPlayerName.value) > 0) {
       // only proceed if okay
       return;
     }
-    
+
     if (rowWasJustFilled) {
       _decrementCounter();
     }
     messenger.hideCurrentSnackBar();
-      messenger.showSnackBar(
+    messenger.showSnackBar(
       SnackBar(
         content: Text(s.deleteLastPointsFeedback(selectedPlayerName.value)),
         backgroundColor: Themes.pumpkinColor,
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -411,78 +425,79 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _GameModeContent() {
     return Column(
-            children: [
-              Container(
-                margin: edgeInsets,
-                height: 100,
-                //width: 100,
-                child: Form(
-                  key: _formKey,
-                  child: ValueListenableBuilder(
-                    valueListenable: _dontEditNames, 
-                    builder: (context, dontEdit, _) {
-                  return TextFormField(
-                    controller: _addNameController,
-                    readOnly: dontEdit,
-                    enabled: !dontEdit,
-                    onTap: () => _gamesStarted.value = false,
-                    //only if we need it.
-                    //onTapOutside: (_) => closeKbd(),
-                    onFieldSubmitted: (newText) {
-                      final isValid =
-                          _formKey.currentState?.validate() ?? false;
-                      if (isValid) {
-                        Spieler.addNewPlayer(newText);
-                        _addNameController.clear();
-                        namesFieldController.text = Spieler.playerNames.value.join(", ");
-                      }
-                    },
-                    validator: nameValidator,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Themes.greenishColor)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Themes.active)),
-                      errorStyle: const TextStyle(color: Colors.red),
-                      focusedErrorBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red)),
-                      labelText: S.of(context).playersLabel,
-                      isDense: true,
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () => _addNameController.clear(),
-                        tooltip: S.of(context).clearNameField,
-                      ),
+      children: [
+        Container(
+          margin: edgeInsets,
+          height: 100,
+          //width: 100,
+          child: Form(
+            key: _formKey,
+            child: ValueListenableBuilder(
+              valueListenable: _dontEditNames,
+              builder: (context, dontEdit, _) {
+                return TextFormField(
+                  controller: _addNameController,
+                  readOnly: dontEdit,
+                  enabled: !dontEdit,
+                  onTap: () => _gamesStarted.value = false,
+                  //only if we need it.
+                  //onTapOutside: (_) => closeKbd(),
+                  onFieldSubmitted: (newText) {
+                    final isValid = _formKey.currentState?.validate() ?? false;
+                    if (isValid) {
+                      Spieler.addNewPlayer(newText);
+                      _addNameController.clear();
+                      namesFieldController.text =
+                          Spieler.playerNames.value.join(", ");
+                    }
+                  },
+                  validator: nameValidator,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Themes.greenishColor)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Themes.active)),
+                    errorStyle: const TextStyle(color: Colors.red),
+                    focusedErrorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red)),
+                    labelText: S.of(context).playersLabel,
+                    isDense: true,
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () => _addNameController.clear(),
+                      tooltip: S.of(context).clearNameField,
                     ),
-                    
-                  );},),
-                ),
-              ),
-              const SizedBox(height: 5),
-              _reorderPlayersView(),
-              //const Expanded(child: Text("")),//Flexible space.
-              ValueListenableBuilder<bool>(
-                valueListenable: _dontEditNames,
-                builder: (context, dontEdit, _) {
-                  if(dontEdit){return const Text("⏳");}
-                  return ExpansionTile(
-                    title: Text(S.of(context).furtherSettingsLabel),
-                    //subtitle: Text('foo'),
-                    controlAffinity: ListTileControlAffinity.trailing,
-                    children: <Widget>[buildGamesMenu(), const Text("✍️ tbd")],
-                  );
-                }
-              ),
-              const SizedBox(
-                  height:
-                      64), //! TODO consider moving this up when stuff happens.
-            ],
-          );
-        //: const Text("⏳");
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        _reorderPlayersView(),
+        //const Expanded(child: Text("")),//Flexible space.
+        ValueListenableBuilder<bool>(
+            valueListenable: _dontEditNames,
+            builder: (context, dontEdit, _) {
+              if (dontEdit) {
+                return const Text("⏳");
+              }
+              return ExpansionTile(
+                title: Text(S.of(context).furtherSettingsLabel),
+                //subtitle: Text('foo'),
+                controlAffinity: ListTileControlAffinity.trailing,
+                children: <Widget>[buildGamesMenu(), const Text("✍️ tbd")],
+              );
+            }),
+        const SizedBox(
+            height: 64), //! TODO consider moving this up when stuff happens.
+      ],
+    );
+    //: const Text("⏳");
   }
 
- String? _selectedGame;
+  String? _selectedGame;
 
   Widget buildGamesMenu() {
     _selectedGame = Spieler.gameKeyAsString() ?? "Miscellaneous";
@@ -494,7 +509,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //   : null;
 
     // ?? (_features.games.keys.isNotEmpty ? _features.games.keys.first : null);
-    
+
     return DropdownButton<String>(
       key: const ValueKey('gameDropDown'),
       isExpanded: true,
@@ -524,7 +539,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
   Widget _reorderPlayersView() => Expanded(
         child: Align(
           alignment: Alignment.topCenter,
@@ -535,7 +549,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   shrinkWrap: true,
                   // Optional, für Hot Reload Stabilität
                   key: const ValueKey('reorderable_list'),
-                  onReorderStart: (index){
+                  onReorderStart: (index) {
                     HapticFeedback.selectionClick();
                   },
                   /*onReorderEnd: (index){
@@ -545,7 +559,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     String item = theMembers[oldIndex];
                     Spieler.movePlayer(item, newIndex);
                     //Now we have updated things in the background - them to the UI, not the old state.
-                    namesFieldController.text = Spieler.playerNames.value.join(", ");
+                    namesFieldController.text =
+                        Spieler.playerNames.value.join(", ");
                   },
 
                   proxyDecorator: (child, index, animation) {
@@ -556,7 +571,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 150),
                         decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 197, 234, 201).withValues(alpha: 0.15),
+                          color: const Color.fromARGB(255, 197, 234, 201)
+                              .withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(7),
                           boxShadow: const [
                             BoxShadow(blurRadius: 2, color: Colors.white70)
@@ -583,28 +599,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
                               // Optimistic approach: remove that item and insert on undo.
                               removedPlayer = Spieler.removePlayer(removedName);
-                              namesFieldController.text = Spieler.playerNames.value.join(", ");
+                              namesFieldController.text =
+                                  Spieler.playerNames.value.join(", ");
 
                               // Closing other snack bars to keep clean
                               messenger.hideCurrentSnackBar();
                               messenger.showSnackBar(
                                 SnackBar(
-                                  content: Text(S.of(context).deletePlayer(removedName),),
+                                  content: Text(
+                                    S.of(context).deletePlayer(removedName),
+                                  ),
                                   //duration: const Duration(seconds: 2),
                                   action: SnackBarAction(
                                     label: S.of(context).undo,
                                     onPressed: () {
                                       if (!mounted) return;
-                                        // Reinsert
+                                      // Reinsert
                                       Spieler.insertPlayer(
-                                        removedPlayer ?? Teilnehmer(name: removedName),
-                                        removedIndex);
-                                      namesFieldController.text = Spieler.playerNames.value.join(", ");
-                                },
-                              ),
-                            ),
-                          );
-                        }),
+                                          removedPlayer ??
+                                              Teilnehmer(name: removedName),
+                                          removedIndex);
+                                      namesFieldController.text =
+                                          Spieler.playerNames.value.join(", ");
+                                    },
+                                  ),
+                                ),
+                              );
+                            }),
                       ),
                   ],
                 );
@@ -624,6 +645,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return null;
   }
+
   //! ### setState tangled up
   Widget _HomeContent() {
     return Column(
@@ -676,8 +698,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 second: Spieler.playerNames,
                 builder: (context, whoseTurn, theMembers, _) {
                   return Text((whoseTurn < theMembers.length)
-                    ? S.of(context).openerLabel(theMembers[whoseTurn].truncate(10))
-                    : "< empty >");
+                      ? S
+                          .of(context)
+                          .openerLabel(theMembers[whoseTurn].truncate(10))
+                      : "< empty >");
                 },
               ),
             ),
@@ -691,9 +715,9 @@ class _MyHomePageState extends State<MyHomePage> {
             second: namesFieldController,
             builder: (context, dontEdit, textEntry, _) {
               return TextField(
-                controller: namesFieldController,//this.
-                readOnly: dontEdit,// && !_weAreDebugging,
-                enabled: !dontEdit,// || _weAreDebugging,
+                controller: namesFieldController, //this.
+                readOnly: dontEdit, // && !_weAreDebugging,
+                enabled: !dontEdit, // || _weAreDebugging,
                 onTap: () => _gamesStarted.value = false,
                 onSubmitted: (newText) => _finishEditingNames(newText),
                 decoration: InputDecoration(
@@ -761,28 +785,39 @@ class _MyHomePageState extends State<MyHomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          ElevatedButton(
-          onPressed: submitPoints,
-          style: Themes.cardButtonStyle(
-            WidgetStateProperty.resolveWith((states) {
-              if (states.contains(WidgetState.hovered)) {
-                return Colors.yellow.shade300;
-              }
-              return Themes.sunflowerColor;
-            }),
-            fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(117.0)),
-          ),
-          child: Text(S.of(context).submitPoints),
+            ValueListenableBuilder<bool>(
+                valueListenable: _gamesStarted,
+                builder: (context, gamesRunning, _) {
+                  return ElevatedButton(
+                    onPressed: gamesRunning ? submitPoints : null,
+                    style: Themes.cardButtonStyle(
+                      WidgetStateProperty.resolveWith((states) {
+                        if (states.contains(WidgetState.disabled)) {
+                          return Colors.grey; // disabled-Farbe
+                        }
+                        if (states.contains(WidgetState.hovered)) {
+                          return Colors.yellow.shade300;
+                        }
+                        return Themes.sunflowerColor;
+                      }),
+                      fixedSize: WidgetStateProperty.all<Size>(
+                          const Size.fromWidth(117.0)),
+                    ),
+                    child: Text(S.of(context).submitPoints),
+                  );
+                }),
+            const SizedBox(width: 20),
+            ElevatedButton(
+              onPressed: deleteEverything,
+              style: Themes.cardButtonStyle(
+                Themes.pumpkin,
+                fixedSize:
+                    WidgetStateProperty.all<Size>(const Size.fromWidth(135.0)),
+              ),
+              child: Text(S.of(context).deleteAllResults),
+            ),
+          ],
         ),
-        const SizedBox(width: 20),
-        ElevatedButton(
-          onPressed: deleteEverything,
-          style: Themes.cardButtonStyle(Themes.pumpkin,
-              fixedSize: WidgetStateProperty.all<Size>(const Size.fromWidth(135.0)),
-          ),
-          child: Text(S.of(context).deleteAllResults),
-        ),
-        ],),
         const SizedBox(height: 10),
       ],
     );
@@ -791,13 +826,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget myHomePage() {
     return Stack(children: <Widget>[
       ValueListenableBuilder(
-        valueListenable: _tableVisible,
-        builder: (context, isVisible, _) {
-          if (isVisible) {
-            return punkteTabelle;
-          }
+          valueListenable: _tableVisible,
+          builder: (context, isVisible, _) {
+            if (isVisible) {
+              return punkteTabelle;
+            }
             return _TabbedContent();
-      }),
+          }),
       Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
@@ -806,13 +841,14 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: const Icon(Icons.table_view),
             onPressed: togglePointsView,
             style: Themes.cardButtonStyle(Themes.green,
-              fixedSize: Themes.mediumButtonWidth),
+                fixedSize: Themes.mediumButtonWidth),
             label: ValueListenableBuilder(
-              valueListenable: _tableVisible,
-              builder: (context, isVisible, _){
-                  return Text(isVisible ? S.of(context).hideTable : S.of(context).showTable);
-              }
-            ),
+                valueListenable: _tableVisible,
+                builder: (context, isVisible, _) {
+                  return Text(isVisible
+                      ? S.of(context).hideTable
+                      : S.of(context).showTable);
+                }),
           ),
         ),
       )
@@ -826,8 +862,8 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.all(17),
         child: Column(children: <Widget>[
           const Text(
-                "A local app to add points when playing cards or similar games in a group.\n" +
-                    "Designed for the fun of it and for learning!"),
+              "A local app to add points when playing cards or similar games in a group.\n" +
+                  "Designed for the fun of it and for learning!"),
           const SizedBox(height: 7),
           ElevatedButton.icon(
             icon: kofiIcon,
@@ -957,15 +993,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _launchKoFi(BuildContext context) async {
     final Uri url = Uri.parse('https://ko-fi.com/danielagrothe');
-    if (!await launchUrl(url, webOnlyWindowName: "Web Title") && context.mounted) {
+    if (!await launchUrl(url, webOnlyWindowName: "Web Title") &&
+        context.mounted) {
       _showAlertDialog(S.of(context).isOffline);
     }
   }
 
   _launchGitHub(BuildContext context) async {
     final Uri url = Uri.parse('https://github.com/DGrothe-PhD/punktspiel/');
-    if (!await launchUrl(url, webOnlyWindowName: "Project on GitHub") && context.mounted) {
-        _showAlertDialog(S.of(context).isOffline);
+    if (!await launchUrl(url, webOnlyWindowName: "Project on GitHub") &&
+        context.mounted) {
+      _showAlertDialog(S.of(context).isOffline);
     }
   }
 }
