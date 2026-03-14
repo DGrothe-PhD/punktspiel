@@ -162,6 +162,14 @@ class Spieler{
     if(playerIndex < 0){return null;}
     return gruppe[playerIndex].participatingGames;
   }
+
+  static String listInactivePlayers(){
+    return getInactivePlayers().map((i) => i.name).join(", ");
+  }
+
+  static List<Teilnehmer> getInactivePlayers(){
+    return gruppe.where((i) => !i.participatingGames).toList();
+  }
   
   static Teilnehmer? removePlayer(String name) {
     final newList = List<String>.from(playerNames.value);

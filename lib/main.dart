@@ -213,6 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> submitPoints() async {
     final messenger = ScaffoldMessenger.of(context);
     final s = S.of(context);
+
     // Validating names list
     if (!_dontEditNames.value) {
       var namesList = namesFieldController.text.split(",");
@@ -226,6 +227,11 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
       _dontEditNames.value = true;
+    }
+
+    // Leave points empty on inactive players
+    if (Spieler.filledFullRound()) {
+      Spieler.getInactivePlayers().forEach((i) => i.addPoints(0));
     }
 
     // Validating and submitting points
@@ -801,6 +807,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 }),
         ],),
+        Text(Spieler.listInactivePlayers().isNotEmpty ? "Passive: ${Spieler.listInactivePlayers()}."
+        : "..."),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
