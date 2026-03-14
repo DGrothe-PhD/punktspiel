@@ -150,6 +150,18 @@ class Spieler{
     gruppe.insert(newIndex, member);
     _storeData();
   }
+
+  static void toggleActiveRole(String name){
+    int playerIndex = gruppe.indexWhere((member) => member.name == name);
+    if(playerIndex < 0){return;}
+    gruppe[playerIndex].toggleActiveRole();
+  }
+
+  static bool? getActiveRole(String name){
+    int playerIndex = gruppe.indexWhere((member) => member.name == name);
+    if(playerIndex < 0){return null;}
+    return gruppe[playerIndex].participatingGames;
+  }
   
   static Teilnehmer? removePlayer(String name) {
     final newList = List<String>.from(playerNames.value);
@@ -253,6 +265,7 @@ class Teilnehmer{
   String name = "";
   String firstName = "";
   String lastName = "";
+  bool participatingGames = true;
   List<int> punkte = [] ;
   Teilnehmer({required this.name}){
     int index = name.indexOf(" ");
@@ -272,6 +285,10 @@ class Teilnehmer{
     if (punkte.isNotEmpty){
       punkte.removeLast();
     }
+  }
+
+  void toggleActiveRole(){
+    participatingGames = !participatingGames;
   }
 
   num get sumPoints => punkte.sum;

@@ -136,17 +136,21 @@ class _MyHomePageState extends State<MyHomePage> {
         first: selectedPlayerName,
         second: Spieler.playerNames,
         builder: (context, theName, theMembers, _) {
-          return DropdownButton<String>(
-            key: const ValueKey('playerNameDropDown'),
-            isExpanded: true,
-            padding: edgeInsets,
-            value: theName,
-            onChanged: (String? value) {
-              selectedPlayerName.value = value ?? "";
-            },
-            items: theMembers.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(value: value, child: Text(value));
-            }).toList(),
+          return Expanded(
+            flex: 7,
+            child: DropdownButton<String>(
+              key: const ValueKey('playerNameDropDown'),
+              //isExpanded: true,
+              padding: edgeInsets,
+              value: theName,
+              onChanged: (String? value) {
+                selectedPlayerName.value = value ?? "";
+              },
+              items: theMembers.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                    value: value, child: Text(value));
+              }).toList(),
+            ),
           );
         });
   }
@@ -781,7 +785,22 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
+        Row(children: [
         buildSelectableNamesMenu(),
+            ValueListenableBuilder(
+                valueListenable: selectedPlayerName,
+                builder: (context, theName, _) {
+                  return Expanded(
+                    flex: 3,
+                    child: Spieler.getActiveRole(theName) == null ?
+                    const Text("n/a")// okay if selectedPlayerName is not set (changing data)
+                    : Checkbox(
+                        value: Spieler.getActiveRole(theName),
+                        onChanged: toggleActiveRole
+                    ),
+                  );
+                }),
+        ],),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -1005,5 +1024,12 @@ class _MyHomePageState extends State<MyHomePage> {
         context.mounted) {
       _showAlertDialog(S.of(context).isOffline);
     }
+  }
+
+  void toggleActiveRole(bool? value) {
+    // Either setstate or build an array of booleans to listen to.
+    setState(() {
+      Spieler.toggleActiveRole(selectedPlayerName.value);
+    });
   }
 }
