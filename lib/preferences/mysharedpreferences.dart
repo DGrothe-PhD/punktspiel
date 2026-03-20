@@ -96,6 +96,28 @@ class MySharedPreferences {
     );
   }
 
+  static Future<void> saveAudioPreference(int value) async{
+    _safeGetInstanceAsyncRetryIf();
+    if(prefs == null){
+      androidMessage.value += "setting audioPreference";
+      return;
+    }
+    await prefs?.setInt('audioLevel', value).catchError(
+      (err) {androidMessage.value += '$err getting audioLevel';}
+    );
+  }
+
+  static Future<int?> getAudioPreference() async{
+    _safeGetInstanceAsyncRetryIf();
+    if(prefs == null){
+      androidMessage.value += 'getting audioPreference';
+      return 2;
+    }
+    return prefs?.getInt('audioLevel').catchError(
+      (err) {androidMessage.value += '$err getting audioLevel'; return 2;}
+    );
+  }
+
   static Future<void> saveLanguage(String code) async{
     _safeGetInstanceAsyncRetryIf();
     if(prefs == null){

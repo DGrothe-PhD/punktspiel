@@ -45,6 +45,8 @@ class SettingsPage extends StatelessWidget {
             ),
           ],
         ),
+        // TODO make user select sound level: 0 to 2 here.
+        // TODO This should stick to verbose names such as: None, Patient, Full or something good.
         const SizedBox(height: 177),
         /*availableVersionInfo.isNotEmpty
             ? Text(availableVersionInfo)
