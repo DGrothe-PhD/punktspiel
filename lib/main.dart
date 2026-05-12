@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 // Screens
@@ -27,7 +29,6 @@ import 'package:punktspiel/styles.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  //! TODO implement init() tidying things up, 23.02.26 see tech debt issue
   //await MySharedPreferences.init();
   Spieler.settings();
   //Lang.initLanguage();
@@ -75,6 +76,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final now = DateTime.now();
+  
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   //Each editable field needs their controller.
   //Otherwise, stuff happens, such as that a name appears in a number field.
@@ -96,6 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
     width: 25.0,
     height: 25.0,
   );
+  static AudioPlayer? _player;
+
   final EdgeInsets edgeInsets = const EdgeInsets.all(11);
   final double buttonHeight = 30;
 
@@ -108,11 +112,19 @@ class _MyHomePageState extends State<MyHomePage> {
   final ValueNotifier<bool> _dontEditNames = ValueNotifier(false); //check
   final ValueNotifier<bool> _gamesStarted = ValueNotifier(false);
   final ValueNotifier<bool> _tableVisible = ValueNotifier(false);
+  int audioLevel = 2;
   final Features _features = Features();
 
   @override
   void initState() {
     super.initState();
+    try{
+      _player = AudioPlayer();
+    }
+    catch(exception){
+      debugHint.value = exception.toString();
+    }
+    _loadPreferences();
     if (Spieler.hasMembers) {
       namesFieldController.text = Spieler.names.join(", ");
       _gamesStarted.value = true;
@@ -122,6 +134,23 @@ class _MyHomePageState extends State<MyHomePage> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+  }
+
+  void _loadPreferences() async {
+    final int? value = await MySharedPreferences.getAudioPreference();
+    setState(() {
+      audioLevel = value ?? 2;
+    });
+  }
+
+  @override
+  void dispose() {
+    if(_player != null){_player!.dispose();}
+    numberFieldController.dispose();
+    namesFieldController.dispose();
+    _addNameController.dispose();
+    selectableNamesMenuController.dispose();
+    super.dispose();
   }
 
   Widget buildSelectableNamesMenu() {
@@ -242,6 +271,8 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
     Spieler.addPoints(selectedPlayerName.value, selectedPlayerPoints);
+    playSubmitSound();
+
     messenger.hideCurrentSnackBar();
     messenger.showSnackBar(
       SnackBar(
@@ -264,6 +295,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (Spieler.filledFullRound()) {
       _incrementCounter();
+    }
+  }
+
+  final ValueNotifier<String> debugHint = ValueNotifier("");
+  final ValueNotifier<int> silentCounter = ValueNotifier(0);
+
+  void playSubmitSound() async {
+    try{
+      if (audioLevel == 0) return;
+      _player ??= AudioPlayer();
+      if (_player != null) {
+        await _player!.play(AssetSource('audio/clingsound.m4a'));
+        //await _player!.setAsset('assets/audio/clingsound.m4a');
+      }
+    }
+    catch(exception){
+      if(silentCounter.value <3){
+      debugHint.value = exception.toString();
+      }
+      else{
+        debugHint.value = "${silentCounter.value} occ.";
+      }
+      silentCounter.value++;
     }
   }
 
@@ -809,6 +863,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ],),
         Text(Spieler.listInactivePlayers().isNotEmpty ? "Passive: ${Spieler.listInactivePlayers()}."
         : "..."),
+        ValueListenableBuilder<String>(
+          valueListenable: debugHint,
+          builder: (context, message, _){
+            return Text(message);
+          },
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
