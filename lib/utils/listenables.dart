@@ -17,6 +17,17 @@ class ValueListenableBuilder2<A, B> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: Listenable.merge([first, second]),
+      builder: (context, child) {
+        return builder(context, first.value, second.value, child);
+      },
+      child: child,
+    );
+  }
+  /*
+  @override
+  Widget build(BuildContext context) {
     return ValueListenableBuilder<A>(
       valueListenable: first,
       builder: (context, a, _) {
@@ -28,7 +39,7 @@ class ValueListenableBuilder2<A, B> extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 }
 
 class ValueListenableBuilder3<A, B, C> extends StatelessWidget {

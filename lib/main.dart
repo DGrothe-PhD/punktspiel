@@ -29,7 +29,6 @@ import 'package:punktspiel/styles.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  //await MySharedPreferences.init();
   Spieler.settings();
   //Lang.initLanguage();
   runApp(const MyApp());
@@ -106,8 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int selectedPlayerPoints = 0;
   final ValueNotifier<int> whoseTurnIndex = ValueNotifier(0); //check
   final ValueNotifier<int> whoseFirstTurnIndex = ValueNotifier(0); //check
-  final ValueNotifier<String> selectedPlayerName =
-      ValueNotifier(Spieler.names.first);
+  final ValueNotifier<String> selectedPlayerName = ValueNotifier(Spieler.names.first);
 
   final ValueNotifier<bool> _dontEditNames = ValueNotifier(false); //check
   final ValueNotifier<bool> _gamesStarted = ValueNotifier(false);
@@ -165,20 +163,29 @@ class _MyHomePageState extends State<MyHomePage> {
         first: selectedPlayerName,
         second: Spieler.playerNames,
         builder: (context, theName, theMembers, _) {
+          if (!theMembers.contains(theName)) {
+            WidgetsBinding.instance.addPostFrameCallback((_){
+            selectedPlayerName.value = theMembers.isNotEmpty
+                ? theMembers.first
+                : "";
+            });
+          }
+
           return Expanded(
             flex: 7,
             child: DropdownButton<String>(
               key: const ValueKey('playerNameDropDown'),
               //isExpanded: true,
               padding: edgeInsets,
-              value: theName,
+              value: theMembers.contains(theName) ? theName : null,
               onChanged: (String? value) {
                 selectedPlayerName.value = value ?? "";
               },
-              items: theMembers.map<DropdownMenuItem<String>>((String value) {
+              items: /*theMembers.isNotEmpty && !theMembers.any((element) => element.isEmpty) ?*/
+              theMembers.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                     value: value, child: Text(value));
-              }).toList(),
+              }).toList()/* : null*/,
             ),
           );
         });
